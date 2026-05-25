@@ -1,0 +1,1695 @@
+ <!DOCTYPE html>
+
+<html lang="ko">
+
+<head>
+
+<meta charset="UTF-8"/>
+
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+
+<title>BioSignal X</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+
+--bg:#06080b;--card:#0e1219;--card2:#12171f;--line:#1c2230;--line2:#242d3e;
+
+--t1:#f0f3f8;--t2:#8a95a8;--t3:#4a5468;
+
+--green:#00d68f;--green-d:#00b878;--green-g:rgba(0,214,143,.13);--green-g2:rgba(0,214,143,.07);
+
+--blue:#2f7cf6;--blue-g:rgba(47,124,246,.13);
+
+--red:#ff4d67;--red-g:rgba(255,77,103,.12);
+
+--amber:#ffb020;--amber-g:rgba(255,176,32,.12);
+
+--purple:#8b5cf6;--purple-g:rgba(139,92,246,.12);
+
+--cyan:#06c;
+
+--r8:8px;--r14:14px;--r20:20px;--r28:28px;--rp:9999px;
+
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased;}
+
+html,body{height:100dvh;font-family:'Inter',sans-serif;background:var(--bg);color:var(--t1);overflow:hidden;}
+
+.screen{position:fixed;inset:0;display:none;flex-direction:column;}
+
+.screen.active{display:flex;}
+
+
+
+/* ═══ LOGIN ═══ */
+
+#s-login{
+
+background:radial-gradient(ellipse 70% 50% at 80% 10%,rgba(0,214,143,.11) 0%,transparent 55%),
+
+radial-gradient(ellipse 60% 45% at 15% 85%,rgba(47,124,246,.11) 0%,transparent 55%),
+
+var(--bg);
+
+justify-content:flex-end;overflow-y:auto;
+
+}
+
+.login-hero{flex:1;display:flex;flex-direction:column;justify-content:center;padding:56px 24px 28px;position:relative;}
+
+.login-logo{font-size:38px;font-weight:900;letter-spacing:-2px;line-height:1;margin-bottom:16px;}
+
+.login-logo span{color:var(--green);}
+
+.login-tagline{font-size:15px;color:var(--t2);line-height:1.75;margin-bottom:28px;}
+
+.login-tags{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:0;}
+
+.login-tag{font-size:11px;font-weight:600;padding:5px 11px;border-radius:var(--rp);border:1px solid var(--line2);color:var(--t3);background:rgba(255,255,255,.02);}
+
+.login-tag.hi{border-color:rgba(0,214,143,.3);color:var(--green);background:var(--green-g2);}
+
+.login-form{background:rgba(12,16,22,.96);border:1px solid var(--line2);border-radius:32px 32px 0 0;padding:28px 24px calc(28px + env(safe-area-inset-bottom,0px));backdrop-filter:blur(28px);}
+
+.lf-title{font-size:18px;font-weight:800;letter-spacing:-.5px;margin-bottom:4px;}
+
+.lf-sub{font-size:12px;color:var(--t3);margin-bottom:18px;}
+
+.lf-inp{width:100%;padding:15px 16px;background:#090c10;border:1px solid var(--line);border-radius:var(--r14);font-size:14px;font-family:inherit;color:var(--t1);outline:none;transition:.2s;}
+
+.lf-inp:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(0,214,143,.09);}
+
+.lf-inp+.lf-inp{margin-top:8px;}
+
+.lf-btn{width:100%;padding:16px;margin-top:12px;background:var(--green);color:#000;border:none;border-radius:var(--rp);font-size:15px;font-weight:800;font-family:inherit;cursor:pointer;transition:.15s;letter-spacing:-.3px;}
+
+.lf-btn:active{transform:scale(.98);background:var(--green-d);}
+
+.lf-disc{margin-top:13px;font-size:10px;color:var(--t3);text-align:center;line-height:1.7;}
+
+
+
+/* ═══ APP SHELL ═══ */
+
+#s-app{background:var(--bg);}
+
+.top-bar{height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid var(--line);background:rgba(6,8,11,.96);backdrop-filter:blur(20px);flex-shrink:0;z-index:100;}
+
+.tb-logo{font-size:22px;font-weight:900;letter-spacing:-1px;}
+
+.tb-logo span{color:var(--green);}
+
+.tb-right{display:flex;align-items:center;gap:8px;}
+
+.tb-live{display:flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:var(--green);background:var(--green-g2);border:1px solid rgba(0,214,143,.2);border-radius:var(--rp);padding:4px 10px;}
+
+.tb-live-dot{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:livepulse 1.4s ease-in-out infinite;}
+
+@keyframes livepulse{0%,100%{opacity:.35;}50%{opacity:1;}}
+
+.tb-logout{font-size:11px;color:var(--t3);background:none;border:1px solid var(--line);border-radius:var(--r8);cursor:pointer;padding:4px 9px;font-family:inherit;}
+
+
+
+/* ═══ CONTENT ═══ */
+
+.content{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:calc(72px + env(safe-area-inset-bottom,0px));}
+
+.content::-webkit-scrollbar{width:0;}
+
+.view{display:none;flex-direction:column;animation:fadein .2s ease;}
+
+.view.active{display:flex;}
+
+@keyframes fadein{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
+
+
+
+/* 섹션 */
+
+.sec{padding:20px 18px 0;}
+
+.sec-hdr{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:14px;}
+
+.sec-hdr-left h2{font-size:26px;font-weight:900;letter-spacing:-1.2px;line-height:1;}
+
+.sec-hdr-left p{font-size:12px;color:var(--t2);margin-top:2px;}
+
+.sec-more{font-size:12px;font-weight:600;color:var(--green);cursor:pointer;}
+
+
+
+/* ═══ TRENDING CARDS (가로 스크롤) ═══ */
+
+.trend-scroll{display:flex;gap:12px;overflow-x:auto;padding-bottom:4px;padding-right:18px;}
+
+.trend-scroll::-webkit-scrollbar{display:none;}
+
+.trend-card{min-width:200px;background:linear-gradient(165deg,#121820,#0a0e14);border:1px solid var(--line2);border-radius:var(--r28);padding:18px;position:relative;overflow:hidden;flex-shrink:0;cursor:pointer;transition:.15s;}
+
+.trend-card:active{border-color:var(--line2);}
+
+.tc-rank{position:absolute;top:14px;right:16px;font-size:40px;font-weight:900;color:rgba(255,255,255,.055);line-height:1;}
+
+.tc-top{display:flex;align-items:center;gap:10px;margin-bottom:13px;}
+
+.tc-icon{width:44px;height:44px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:var(--t2);font-family:'Inter',sans-serif;flex-shrink:0;}
+
+.tc-name{font-size:18px;font-weight:800;letter-spacing:-.5px;line-height:1.1;}
+
+.tc-drug{font-size:11px;color:var(--t2);margin-top:2px;}
+
+.phase-pill{display:inline-flex;padding:3px 9px;border-radius:var(--rp);font-size:10px;font-weight:700;margin-top:8px;}
+
+.ph1{background:var(--purple-g);color:#b895ff;}
+
+.ph2{background:var(--blue-g);color:#74a9ff;}
+
+.ph3{background:var(--amber-g);color:#ffc760;}
+
+.ph4{background:var(--green-g);color:var(--green);}
+
+.tc-stat{margin-top:12px;font-size:28px;font-weight:900;letter-spacing:-1.5px;line-height:1;}
+
+.tc-stat.up{color:var(--green);}
+
+.tc-stat.dn{color:var(--red);}
+
+.tc-desc{margin-top:10px;font-size:12px;color:var(--t2);line-height:1.6;}
+
+.tc-date{margin-top:8px;font-size:10px;font-weight:700;color:var(--amber);background:var(--amber-g);border-radius:var(--rp);display:inline-block;padding:2px 8px;}
+
+/* 결과 뱃지 */
+
+.tc-result{margin-top:10px;padding:8px 10px;border-radius:12px;font-size:11px;font-weight:700;line-height:1.5;}
+
+.tc-result.success{background:var(--green-g);color:var(--green);border:1px solid rgba(0,214,143,.18);}
+
+.tc-result.fail{background:var(--red-g);color:var(--red);border:1px solid rgba(255,77,103,.18);}
+
+
+
+/* ═══ ALERT BOX ═══ */
+
+.alert-box{margin:16px 18px 0;background:linear-gradient(135deg,rgba(0,214,143,.08),rgba(47,124,246,.06));border:1px solid rgba(0,214,143,.18);border-radius:var(--r20);padding:18px;}
+
+.ab-title{font-size:15px;font-weight:800;letter-spacing:-.4px;margin-bottom:8px;}
+
+.ab-list{display:flex;flex-direction:column;gap:6px;}
+
+.ab-item{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--t2);line-height:1.6;}
+
+.ab-ic{font-size:14px;flex-shrink:0;margin-top:1px;}
+
+
+
+/* ═══ COMMUNITY ═══ */
+
+.comm-tabs{display:flex;gap:6px;padding:14px 18px 0;overflow-x:auto;}
+
+.comm-tabs::-webkit-scrollbar{display:none;}
+
+.ctab{padding:6px 14px;border-radius:var(--rp);border:1px solid var(--line2);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;background:rgba(255,255,255,.02);color:var(--t3);transition:.15s;white-space:nowrap;flex-shrink:0;}
+
+.ctab.on{background:var(--green-g);color:var(--green);border-color:rgba(0,214,143,.28);}
+
+.feed{padding:12px 18px;display:flex;flex-direction:column;gap:10px;}
+
+.post{background:var(--card);border:1px solid var(--line);border-radius:var(--r20);padding:16px;cursor:pointer;transition:.15s;}
+
+.post:active{border-color:var(--line2);}
+
+.post-top{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+
+.av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#1a2535,#0c1015);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--t2);flex-shrink:0;}
+
+.post-name{font-size:13px;font-weight:700;}
+
+.post-time{font-size:10px;color:var(--t3);margin-top:1px;}
+
+.post-badge{margin-left:auto;padding:4px 10px;border-radius:var(--rp);font-size:10px;font-weight:700;flex-shrink:0;}
+
+.pb-bull{background:var(--green-g);color:var(--green);}
+
+.pb-bear{background:var(--red-g);color:var(--red);}
+
+.pb-q{background:var(--blue-g);color:#74a9ff;}
+
+.pb-an{background:var(--amber-g);color:var(--amber);}
+
+.pb-news{background:var(--purple-g);color:#b895ff;}
+
+.post-title{font-size:16px;font-weight:800;letter-spacing:-.4px;line-height:1.4;margin-bottom:7px;}
+
+.post-body{font-size:13px;color:var(--t2);line-height:1.7;margin-bottom:10px;}
+
+.post-ref{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:var(--r8);padding:7px 10px;margin-bottom:10px;}
+
+.pr-name{font-size:11px;font-weight:700;color:var(--t1);}
+
+.pr-drug{font-size:10px;color:var(--t2);}
+
+.post-stats{display:flex;gap:16px;font-size:12px;color:var(--t3);}
+
+.ps-btn{display:flex;align-items:center;gap:4px;cursor:pointer;background:none;border:none;font-family:inherit;font-size:12px;color:var(--t3);transition:.15s;}
+
+.ps-btn:active{color:var(--green);}
+
+/* 글쓰기 모달 */
+
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:500;display:none;align-items:flex-end;backdrop-filter:blur(5px);}
+
+.modal-bg.open{display:flex;}
+
+.modal-sheet{background:var(--card2);border:1px solid var(--line2);border-radius:24px 24px 0 0;padding:20px;width:100%;max-height:80dvh;overflow-y:auto;padding-bottom:calc(20px + env(safe-area-inset-bottom,0px));}
+
+.modal-handle{width:36px;height:3px;background:var(--line2);border-radius:2px;margin:0 auto 14px;}
+
+.modal-title{font-size:16px;font-weight:800;letter-spacing:-.4px;margin-bottom:12px;}
+
+.modal-cats{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:11px;}
+
+.mc{padding:6px 13px;border-radius:var(--rp);border:1px solid var(--line);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;background:rgba(255,255,255,.02);color:var(--t2);}
+
+.mc.sel{background:var(--green-g);color:var(--green);border-color:rgba(0,214,143,.28);}
+
+.modal-inp{width:100%;padding:12px 14px;background:#090c10;border:1px solid var(--line);border-radius:var(--r14);font-size:13px;font-family:inherit;color:var(--t1);outline:none;margin-bottom:8px;transition:.2s;}
+
+.modal-inp:focus{border-color:var(--green);}
+
+.modal-ta{height:80px;resize:none;line-height:1.6;}
+
+.modal-sub{width:100%;padding:13px;background:var(--green);color:#000;border:none;border-radius:var(--rp);font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;}
+
+.modal-cancel{width:100%;padding:10px;margin-top:6px;background:transparent;border:1px solid var(--line);border-radius:var(--rp);font-size:12px;color:var(--t2);cursor:pointer;font-family:inherit;}
+
+
+
+/* ═══ TRENDING VIEW ═══ */
+
+.phase-section{padding:0 18px;}
+
+.ps-hdr{display:flex;align-items:center;gap:9px;padding:18px 0 10px;}
+
+.ps-pill{font-size:9px;font-weight:700;padding:3px 10px;border-radius:var(--rp);}
+
+.ps-title{font-size:13px;font-weight:800;letter-spacing:-.3px;}
+
+.ps-count{font-size:11px;color:var(--t3);}
+
+.ps-divider{height:1px;background:var(--line);margin-bottom:2px;}
+
+.trial-list{display:flex;flex-direction:column;gap:8px;padding-bottom:10px;}
+
+.trow{background:var(--card);border:1px solid var(--line);border-radius:var(--r14);padding:13px;display:flex;align-items:flex-start;gap:11px;cursor:pointer;transition:.15s;position:relative;overflow:hidden;}
+
+.trow::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:2px 0 0 2px;}
+
+.trow.ph1::before{background:var(--purple);}
+
+.trow.ph2::before{background:var(--blue);}
+
+.trow.ph3::before{background:var(--amber);}
+
+.trow:active{border-color:var(--line2);}
+
+.trow-num{font-size:13px;font-weight:800;color:var(--t3);min-width:20px;text-align:right;margin-top:2px;}
+
+.trow-body{flex:1;min-width:0;}
+
+.trow-company{font-size:13px;font-weight:800;letter-spacing:-.3px;margin-bottom:2px;}
+
+.trow-drug{font-size:11px;color:var(--green);}
+
+.trow-ind{font-size:10px;color:var(--t3);margin-top:2px;}
+
+.trow-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;}
+
+.trow-status{font-size:9px;font-weight:700;padding:2px 8px;border-radius:var(--rp);}
+
+.trs-r{background:var(--green-g);color:var(--green);}
+
+.trs-a{background:var(--blue-g);color:#74a9ff;}
+
+.trs-c{background:rgba(255,255,255,.05);color:var(--t2);}
+
+.trs-t{background:var(--red-g);color:var(--red);}
+
+.trow-enroll{font-size:10px;color:var(--t3);}
+
+.trow-result{font-size:9px;font-weight:700;padding:2px 7px;border-radius:var(--rp);}
+
+.trr-s{background:var(--green-g);color:var(--green);}
+
+.trr-f{background:var(--red-g);color:var(--red);}
+
+.trr-u{background:var(--amber-g);color:var(--amber);}
+
+/* API 연결 표시 */
+
+.api-bar{display:flex;align-items:center;justify-content:space-between;margin:0 18px;padding:8px 12px;background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:var(--r8);margin-top:14px;}
+
+.api-status{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:600;}
+
+.api-dot{width:6px;height:6px;border-radius:50%;}
+
+
+
+/* ═══ EXPLORE (ClinicalTrials 실시간) ═══ */
+
+.explore-top{padding:14px 18px;border-bottom:1px solid var(--line);}
+
+.explore-hint{background:var(--blue-g);border:1px solid rgba(47,124,246,.2);border-radius:var(--r8);padding:8px 11px;font-size:11px;color:var(--t2);line-height:1.6;margin-bottom:10px;}
+
+.explore-filters{display:flex;gap:6px;margin-bottom:10px;overflow-x:auto;}
+
+.explore-filters::-webkit-scrollbar{display:none;}
+
+.ef{padding:5px 12px;border-radius:var(--rp);border:1px solid var(--line2);font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;background:rgba(255,255,255,.02);color:var(--t3);transition:.15s;white-space:nowrap;flex-shrink:0;}
+
+.ef.on{background:var(--green-g);color:var(--green);border-color:rgba(0,214,143,.28);}
+
+.srch-wrap{position:relative;}
+
+.srch-inp{width:100%;padding:11px 14px 11px 36px;background:#090c10;border:1px solid var(--line);border-radius:var(--rp);font-size:13px;font-family:inherit;color:var(--t1);outline:none;transition:.2s;}
+
+.srch-inp:focus{border-color:var(--green);}
+
+.srch-ic{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:13px;opacity:.3;pointer-events:none;}
+
+.explore-list{padding:12px 18px;display:flex;flex-direction:column;gap:8px;}
+
+.ex-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r14);padding:13px;cursor:pointer;transition:.15s;}
+
+.ex-card:active{border-color:var(--line2);}
+
+.ec-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:6px;}
+
+.ec-title{font-size:12px;font-weight:700;line-height:1.4;flex:1;min-width:0;color:var(--t1);}
+
+.ec-meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+
+.ec-tag{font-size:10px;color:var(--t2);}
+
+.ec-status{font-size:9px;font-weight:700;padding:2px 7px;border-radius:var(--rp);}
+
+.ec-nct{font-size:9px;color:var(--t3);font-family:monospace;margin-top:4px;}
+
+.explore-loading{padding:20px;text-align:center;font-size:12px;color:var(--t3);}
+
+
+
+/* ═══ ALERTS ═══ */
+
+.notif-bar{padding:12px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;}
+
+.nb-title{font-size:16px;font-weight:800;letter-spacing:-.4px;}
+
+.nb-clear{font-size:11px;font-weight:600;color:var(--green);cursor:pointer;background:none;border:none;font-family:inherit;}
+
+.notif-list{padding:12px 18px;display:flex;flex-direction:column;gap:8px;}
+
+.ncard{background:var(--card);border:1px solid var(--line);border-radius:var(--r20);padding:14px;display:flex;gap:11px;align-items:flex-start;cursor:pointer;transition:.15s;position:relative;}
+
+.ncard.unread{border-color:rgba(0,214,143,.22);background:rgba(0,214,143,.025);}
+
+.ncard:active{border-color:var(--line2);}
+
+.n-icon{width:40px;height:40px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+
+.ni-success{background:var(--green-g);}
+
+.ni-fail{background:var(--red-g);}
+
+.ni-upcoming{background:var(--amber-g);}
+
+.ni-update{background:var(--blue-g);}
+
+.ni-comm{background:var(--purple-g);}
+
+.n-body{flex:1;min-width:0;}
+
+.n-title{font-size:13px;font-weight:700;line-height:1.4;margin-bottom:3px;}
+
+.n-desc{font-size:11px;color:var(--t2);line-height:1.55;margin-bottom:4px;}
+
+.n-meta{display:flex;align-items:center;gap:7px;}
+
+.n-time{font-size:9px;color:var(--t3);}
+
+.n-badge{font-size:8px;font-weight:700;padding:2px 7px;border-radius:var(--rp);}
+
+.nb-success{background:var(--green-g);color:var(--green);}
+
+.nb-fail{background:var(--red-g);color:var(--red);}
+
+.nb-upcoming{background:var(--amber-g);color:var(--amber);}
+
+.nb-update{background:var(--blue-g);color:#74a9ff;}
+
+.n-unread{position:absolute;top:12px;right:12px;width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 7px var(--green);}
+
+
+
+/* ═══ BOTTOM NAV ═══ */
+
+.nav{position:fixed;left:0;right:0;bottom:0;height:calc(60px + env(safe-area-inset-bottom,0px));background:rgba(7,10,13,.97);backdrop-filter:blur(24px);border-top:1px solid var(--line);display:flex;justify-content:space-around;align-items:flex-start;padding-top:9px;z-index:200;}
+
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;color:var(--t3);min-width:44px;position:relative;transition:.15s;}
+
+.nav-item:active{opacity:.6;}
+
+.nav-icon{font-size:22px;line-height:1;}
+
+.nav-lb{font-size:10px;font-weight:600;}
+
+.nav-item.on{color:var(--green);}
+
+.nav-item.on .nav-icon{filter:drop-shadow(0 0 6px rgba(0,214,143,.5));}
+
+.nav-badge{position:absolute;top:-1px;right:0;min-width:14px;height:14px;background:var(--red);border-radius:7px;font-size:8px;font-weight:800;color:#fff;display:none;align-items:center;justify-content:center;padding:0 3px;}
+
+.nav-badge.show{display:flex;}
+
+
+
+/* ═══ FAB ═══ */
+
+.fab{position:fixed;right:20px;bottom:calc(74px + env(safe-area-inset-bottom,0px));width:58px;height:58px;border-radius:50%;background:var(--green);color:#000;border:none;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:300;box-shadow:0 8px 32px rgba(0,214,143,.32);cursor:pointer;z-index:190;transition:.15s;}
+
+.fab:active{transform:scale(.94);}
+
+
+
+/* TOAST */
+
+.toast{position:fixed;bottom:calc(70px + env(safe-area-inset-bottom,0px) + 8px);left:50%;transform:translateX(-50%) translateY(8px);background:rgba(8,11,15,.96);color:var(--t1);border:1px solid var(--line2);padding:9px 18px;border-radius:var(--rp);font-size:12px;font-weight:600;opacity:0;transition:.25s;z-index:999;white-space:nowrap;max-width:86vw;text-align:center;backdrop-filter:blur(14px);}
+
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+.disc-strip{display:none;background:rgba(255,176,32,.04);border-top:1px solid rgba(255,176,32,.1);padding:4px 14px;font-size:9px;color:var(--t3);text-align:center;flex-shrink:0;}
+
+.disc-strip.show{display:block;}
+
+.disc-strip strong{color:var(--amber);}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- ═══ LOGIN ═══ -->
+
+<div class="screen active" id="s-login">
+
+<div class="login-hero">
+
+<div class="login-logo">Bio<span>Signal</span> X</div>
+
+<p class="login-tagline">바이오 임상 발표 알림 · 1/2/3상 분류<br>커뮤니티 분석 · 실시간 추적</p>
+
+<div class="login-tags">
+
+<span class="login-tag hi">ClinicalTrials API</span>
+
+<span class="login-tag hi">실시간 알림</span>
+
+<span class="login-tag">발표 예정 캘린더</span>
+
+<span class="login-tag">커뮤니티</span>
+
+<span class="login-tag">전문용어 번역</span>
+
+</div>
+
+</div>
+
+<div class="login-form">
+
+<div class="lf-title">접속하기</div>
+
+<div class="lf-sub">개인정보는 서버에 저장되지 않습니다</div>
+
+<input class="lf-inp" type="email" placeholder="이메일 주소" value="investor@biosignal.io">
+
+<input class="lf-inp" type="password" placeholder="비밀번호" value="••••••••">
+
+<button class="lf-btn" onclick="doLogin()">임상 인텔리전스 시작하기 →</button>
+
+<div class="lf-disc">⚠ 임상 정보 제공 목적 · 투자 권유 아님 · 책임은 사용자 본인에게 있습니다</div>
+
+</div>
+
+</div>
+
+
+
+<!-- ═══ APP ═══ -->
+
+<div class="screen" id="s-app">
+
+<div class="top-bar">
+
+<div class="tb-logo">Bio<span>Signal</span> X</div>
+
+<div class="tb-right">
+
+<div class="tb-live"><div class="tb-live-dot"></div>LIVE</div>
+
+<button class="tb-logout" onclick="doLogout()">나가기</button>
+
+</div>
+
+</div>
+
+<div class="content" id="main-content">
+
+
+
+<!-- ① HOME VIEW -->
+
+<div class="view active" id="v-home">
+
+<!-- Trending Cards -->
+
+<div class="sec" style="padding-bottom:16px;">
+
+<div class="sec-hdr">
+
+<div class="sec-hdr-left"><h2>Trending Trials</h2><p>임상 발표 예정 · 최신 결과</p></div>
+
+<span class="sec-more" onclick="goNav('trending')">전체 →</span>
+
+</div>
+
+<div class="trend-scroll" id="trend-scroll"></div>
+
+</div>
+
+<!-- Alert Info -->
+
+<div class="alert-box">
+
+<div class="ab-title">🔔 실시간 임상 알림 시스템</div>
+
+<div class="ab-list">
+
+<div class="ab-item"><span class="ab-ic">✅</span>Primary Endpoint 달성 여부 즉시 알림</div>
+
+<div class="ab-item"><span class="ab-ic">📊</span>p-value · ORR · HR 자동 해석 — 어려운 용어를 쉬운 말로</div>
+
+<div class="ab-item"><span class="ab-ic">⚠️</span>임상 실패·중단 긴급 알림</div>
+
+<div class="ab-item"><span class="ab-ic">📅</span>발표 예정일 D-7, D-1 사전 알림</div>
+
+</div>
+
+</div>
+
+<!-- Community Preview -->
+
+<div class="sec" style="margin-top:20px;">
+
+<div class="sec-hdr">
+
+<div class="sec-hdr-left"><h2>Community</h2><p>임상 발표 전 투자자 토론</p></div>
+
+<span class="sec-more" onclick="goNav('community')">더 보기 →</span>
+
+</div>
+
+<div id="home-comm-preview"></div>
+
+</div>
+
+<!-- Upcoming -->
+
+<div class="sec" style="margin-top:16px;padding-bottom:8px;">
+
+<div class="sec-hdr">
+
+<div class="sec-hdr-left"><h2>Upcoming Results</h2><p>곧 발표 예정 임상</p></div>
+
+</div>
+
+<div id="home-upcoming"></div>
+
+</div>
+
+</div>
+
+
+
+<!-- ② COMMUNITY VIEW -->
+
+<div class="view" id="v-community">
+
+<div class="comm-tabs" id="comm-tabs">
+
+<button class="ctab on" onclick="filterComm('all',this)">전체</button>
+
+<button class="ctab" onclick="filterComm('bull',this)">📈 Bullish</button>
+
+<button class="ctab" onclick="filterComm('bear',this)">📉 Bearish</button>
+
+<button class="ctab" onclick="filterComm('q',this)">❓ 질문</button>
+
+<button class="ctab" onclick="filterComm('an',this)">📊 분석</button>
+
+<button class="ctab" onclick="filterComm('news',this)">📰 뉴스</button>
+
+</div>
+
+<div class="feed" id="comm-feed"></div>
+
+</div>
+
+
+
+<!-- ③ EXPLORE (ClinicalTrials API) -->
+
+<div class="view" id="v-explore">
+
+<div class="explore-top">
+
+<div class="explore-hint">💡 <strong style="color:#74a9ff">ClinicalTrials.gov API</strong> 실시간 검색 — NCT ID, 기업명, 약물명, 질환명으로 검색하세요</div>
+
+<div class="explore-filters" id="explore-phase-filters">
+
+<button class="ef on" onclick="setEPhase('',this)">전체</button>
+
+<button class="ef" onclick="setEPhase('PHASE1',this)">Phase 1</button>
+
+<button class="ef" onclick="setEPhase('PHASE2',this)">Phase 2</button>
+
+<button class="ef" onclick="setEPhase('PHASE3',this)">Phase 3</button>
+
+</div>
+
+<div class="explore-filters" id="explore-status-filters">
+
+<button class="ef on" onclick="setEStatus('',this)">전체 상태</button>
+
+<button class="ef" onclick="setEStatus('RECRUITING',this)">모집중</button>
+
+<button class="ef" onclick="setEStatus('COMPLETED',this)">완료</button>
+
+<button class="ef" onclick="setEStatus('ACTIVE_NOT_RECRUITING',this)">진행중</button>
+
+</div>
+
+<div class="srch-wrap">
+
+<span class="srch-ic">🔍</span>
+
+<input class="srch-inp" id="srch-inp" placeholder="예: osimertinib, 한미약품, lung cancer..." oninput="onExploreSearch(this.value)" autocomplete="off">
+
+</div>
+
+</div>
+
+<div class="api-bar">
+
+<div class="api-status" id="api-status"><div class="api-dot" style="background:var(--t3)" id="api-dot"></div><span id="api-txt" style="font-size:10px;font-weight:600;color:var(--t3)">대기 중</span></div>
+
+<button onclick="retryAPI()" style="font-size:10px;font-weight:700;color:var(--green);background:var(--green-g2);border:1px solid rgba(0,214,143,.2);border-radius:var(--rp);padding:3px 9px;cursor:pointer;font-family:inherit;">다시 연결</button>
+
+</div>
+
+<div class="explore-list" id="explore-list"><div class="explore-loading">🔄 임상 데이터 로딩 중...</div></div>
+
+</div>
+
+
+
+<!-- ④ TRENDING VIEW -->
+
+<div class="view" id="v-trending">
+
+<div id="trending-body"></div>
+
+</div>
+
+
+
+<!-- ⑤ ALERTS VIEW -->
+
+<div class="view" id="v-alerts">
+
+<div class="notif-bar">
+
+<div class="nb-title">🔔 알림</div>
+
+<button class="nb-clear" onclick="clearAllNotifs()">모두 읽음</button>
+
+</div>
+
+<div class="notif-list" id="notif-list"></div>
+
+</div>
+
+
+
+</div>
+
+<!-- FAB -->
+
+<button class="fab" id="fab-btn" onclick="fabAction()">+</button>
+
+<!-- Bottom Nav -->
+
+<div class="nav">
+
+<div class="nav-item on" id="nav-home" onclick="goNav('home')"><div class="nav-icon">🏠</div><div class="nav-lb">Home</div></div>
+
+<div class="nav-item" id="nav-community" onclick="goNav('community')"><div class="nav-icon">💬</div><div class="nav-lb">Community</div></div>
+
+<div class="nav-item" id="nav-explore" onclick="goNav('explore')"><div class="nav-icon">🔎</div><div class="nav-lb">Explore</div></div>
+
+<div class="nav-item" id="nav-trending" onclick="goNav('trending')"><div class="nav-icon">🔥</div><div class="nav-lb">Trending</div></div>
+
+<div class="nav-item" id="nav-alerts" onclick="goNav('alerts')">
+
+<div class="nav-icon">🔔</div><div class="nav-lb">Alerts</div>
+
+<div class="nav-badge show" id="notif-badge">3</div>
+
+</div>
+
+</div>
+
+<div class="disc-strip show" id="disc"><strong>⚠ Research Only</strong> — BioSignal X는 정보 제공 목적이며 투자 권유가 아닙니다.</div>
+
+</div>
+
+
+
+<!-- 글쓰기 모달 -->
+
+<div class="modal-bg" id="modal-write">
+
+<div class="modal-sheet">
+
+<div class="modal-handle"></div>
+
+<div class="modal-title">새 글 작성</div>
+
+<div class="modal-cats">
+
+<button class="mc sel" onclick="selCat('bull',this)">📈 Bullish</button>
+
+<button class="mc" onclick="selCat('bear',this)">📉 Bearish</button>
+
+<button class="mc" onclick="selCat('q',this)">❓ 질문</button>
+
+<button class="mc" onclick="selCat('an',this)">📊 분석</button>
+
+<button class="mc" onclick="selCat('news',this)">📰 뉴스</button>
+
+</div>
+
+<input class="modal-inp" id="w-ref" placeholder="관련 기업·약물명 (예: 한미약품, 오시머티닙)">
+
+<textarea class="modal-inp modal-ta" id="w-body" placeholder="임상 결과나 예측을 공유하세요. 분석 근거나 출처를 함께 작성하면 더 좋습니다."></textarea>
+
+<button class="modal-sub" onclick="submitPost()">게시하기</button>
+
+<button class="modal-cancel" onclick="closeModal()">취소</button>
+
+</div>
+
+</div>
+
+
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+/* ══════════════════════════════════════
+
+데이터베이스
+
+══════════════════════════════════════ */
+
+const TRIALS = [
+
+// ─── Phase 3 ───
+
+{id:'NCT05558748',co:'유한양행',ticker:'YHB',drug:'레이저티닙+아미반타맙',ind:'비소세포폐암 1차',ph:3,st:'active',enroll:1040,upDate:'2026-Q2',upcoming:true,result:null,
+
+plain:'EGFR 변이 폐암 1차 치료. 화학항암제 없이 표적+면역 조합으로 생존기간 연장 검증 중.',statChg:'+34%'},
+
+{id:'NCT05698394',co:'한미약품',ticker:'HMB',drug:'에페글레나타이드',ind:'비만/2형 당뇨',ph:3,st:'recruiting',enroll:1120,upDate:'2026-Q3',upcoming:true,result:null,
+
+plain:'GLP-1 수용체 작용제. 주 1회 주사로 체중 감소 효과 검증. 위고비(세마글루타이드)와 경쟁.',statChg:'+21%'},
+
+{id:'NCT04515303',co:'AstraZeneca',ticker:'AZN',drug:'오시머티닙',ind:'비소세포폐암 3기',ph:3,st:'completed',enroll:216,upDate:'2024-01',upcoming:false,
+
+result:{v:'success',hl:'PFS 39.1개월 vs 5.6개월',key:'암 진행 없이 생존한 기간이 위약 대비 약 7배 길었습니다. Hazard Ratio 0.23 (p<0.001).',data:[{n:'PFS 중앙값',v:'39.1개월',c:'vs 5.6개월'},{n:'HR',v:'0.23',c:'p<0.001'},{n:'OS HR',v:'0.49',c:'미성숙'}]},
+
+plain:'수술 불가 3기 비소세포폐암에서 방사선 치료 후 오시머티닙 유지요법의 재발 지연 효과를 입증.',statChg:'+82%'},
+
+{id:'NCT03669159',co:'Daiichi Sankyo/AZ',ticker:'DSK',drug:'트라스투주맙 데룩스테칸',ind:'HER2-low 유방암',ph:3,st:'completed',enroll:557,upDate:'2022-06',upcoming:false,
+
+result:{v:'success',hl:'PFS 9.9개월 vs 5.1개월',key:'HER2가 낮게 발현된 유방암에서 표적치료 효과를 처음으로 입증한 역사적 임상.',data:[{n:'PFS',v:'9.9개월',c:'vs 5.1개월'},{n:'OS',v:'23.4개월',c:'vs 16.8개월'},{n:'ORR',v:'52.3%',c:'vs 16.3%'}]},
+
+plain:'HER2-low 유방암 환자에서 ADC(항체-약물 접합체)의 획기적 효과 입증. 새로운 치료 패러다임.',statChg:'+47%'},
+
+{id:'NCT04592250',co:'BMS',ticker:'BMY',drug:'니볼루맙+이필리무맙',ind:'간세포암 1차',ph:3,st:'completed',enroll:668,upDate:'2024-09',upcoming:false,
+
+result:{v:'success',hl:'OS HR 0.79 (p=0.0209)',key:'이중 면역항암제 조합이 기존 표준치료 대비 생존기간을 유의미하게 연장.',data:[{n:'OS HR',v:'0.79',c:'p=0.0209'},{n:'ORR',v:'36%',c:'vs 13%'},{n:'완전관해',v:'7%',c:'vs 1%'}]},
+
+plain:'간암 1차 치료에서 면역항암제 이중 조합이 기존 표준치료보다 더 오래 생존하게 한다는 것을 입증.',statChg:'+19%'},
+
+{id:'NCT05908734',co:'Merck/MSD',ticker:'MRK',drug:'펨브롤리주맙+화학요법',ind:'삼중음성유방암',ph:3,st:'recruiting',enroll:1180,upDate:'2027-Q1',upcoming:true,result:null,
+
+plain:'면역항암제+화학요법 조합으로 수술 전 완전관해율 개선 목표.',statChg:'+28%'},
+
+// ─── Phase 2 ───
+
+{id:'NCT05607511',co:'Moderna',ticker:'MRNA',drug:'mRNA-4157+펨브롤리주맙',ind:'흑색종 보조요법',ph:2,st:'active',enroll:157,upDate:'2025-Q4',upcoming:true,
+
+result:{v:'partial',hl:'RFS HR 0.44 (재발 56% 감소)',key:'개인 맞춤형 mRNA 암백신이 면역항암제와 조합 시 흑색종 재발을 크게 줄임. Phase 3 진행 중.',data:[{n:'RFS HR',v:'0.44',c:'p=0.031'},{n:'원격전이',v:'65% 감소',c:'HR 0.35'}]},
+
+plain:'수술 후 흑색종 재발 방지를 위한 맞춤형 암백신. 개인 암세포 돌연변이를 학습해 면역반응 유도.',statChg:'+58%'},
+
+{id:'NCT05096442',co:'Relay Therapeutics',ticker:'RLAY',drug:'RLY-4008',ind:'FGFR2 담도암',ph:2,st:'active',enroll:210,upDate:'2025-Q4',upcoming:true,result:null,
+
+plain:'FGFR2 융합 돌연변이 담도암 표적 치료제. 기존 약물 내성 극복 설계.',statChg:'+41%'},
+
+{id:'NCT05425081',co:'제넥신',ticker:'GNX',drug:'GX-I7',ind:'고형암 면역증강',ph:2,st:'recruiting',enroll:60,upDate:'2025-Q4',upcoming:true,result:null,
+
+plain:'IL-7 기반 면역증강제로 항암 효과 강화. 면역세포 증식 유도.',statChg:'+15%'},
+
+{id:'NCT05220722',co:'대웅제약',ticker:'DWP',drug:'DWP-450',ind:'위식도역류질환',ph:2,st:'active',enroll:280,upDate:'2025-Q3',upcoming:true,result:null,
+
+plain:'P-CAB 계열 신약. 1회 복용으로 빠른 위산 억제 효과. 기존 PPI 대체제.',statChg:'+9%'},
+
+// ─── Phase 1 ───
+
+{id:'NCT05610566',co:'BioNTech',ticker:'BNTX',drug:'BNT323 (ADC)',ind:'HER2 발현 고형암',ph:1,st:'recruiting',enroll:115,upDate:'2025-Q3',upcoming:false,result:null,
+
+plain:'BioNTech ADC 항암제. HER2 발현 고형암 독성 및 용량 탐색.',statChg:'+12%'},
+
+{id:'NCT05566275',co:'셀트리온',ticker:'CEL',drug:'CT-P59',ind:'항바이러스(인플루엔자)',ph:1,st:'active',enroll:48,upDate:'2025-Q2',upcoming:false,result:null,
+
+plain:'독감 치료용 단클론항체. 인플루엔자 바이러스 중화 효과 안전성 확인 단계.',statChg:'+7%'},
+
+{id:'NCT05602285',co:'ABL Bio',ticker:'ABL',drug:'ABL301',ind:'파킨슨병',ph:1,st:'recruiting',enroll:36,upDate:'2025-Q3',upcoming:false,result:null,
+
+plain:'이중항체 기술로 파킨슨병 원인 단백질(알파시뉴클레인) 제거. 혈뇌장벽 투과 설계.',statChg:'+22%'},
+
+];
+
+
+
+const POSTS_DB = [
+
+{id:1,user:'JP',name:'Jason_Park',time:'13분 전',cat:'bull',title:'유한양행 레이저티닙+아미반타맙 이번에 진짜 기대됨',body:'MARIPOSA-2 데이터 봤는데 OS 수치가 예상 웃돌 가능성 있음. 기존 표준치료 대비 HR 0.5 이하 나오면 게임체인저될 듯.',ref:{ph:3,co:'유한양행',drug:'레이저티닙+아미반타맙'},likes:248,comments:84,cat:'bull'},
+
+{id:2,user:'KH',name:'Kim_Hyun',time:'38분 전',cat:'an',title:'한미약품 에페글레나타이드 위고비 대비 차별화 포인트 분석',body:'체중감량률은 비슷할 수 있지만 주사 간격(주 1회 vs 주 1회)은 동등. 관건은 심혈관 아웃컴 데이터. CVOT 결과 따라 운명 갈릴 듯.',ref:{ph:3,co:'한미약품',drug:'에페글레나타이드'},likes:133,comments:42,cat:'an'},
+
+{id:3,user:'LH',name:'이현우',time:'2시간 전',cat:'bull',title:'LAURA Trial 심층 분석 — PFS 39.1개월의 의미',body:'HR 0.23이면 위약 대비 사망/진행 위험이 77% 낮다는 것. 3기 NSCLC 표준치료 완전히 바뀔 것. AZ 파이프라인 최고 데이터 중 하나.',ref:{ph:3,co:'AstraZeneca',drug:'오시머티닙'},likes:89,comments:24,cat:'bull'},
+
+{id:4,user:'PJ',name:'박지수',time:'5시간 전',cat:'news',title:'DESTINY-Breast04 FDA 최종 승인 — HER2-low 시대 열렸다',body:'HER2-low 유방암 환자 수만 명에게 새 치료 기회. OS 23.4개월 vs 16.8개월. 항체-약물접합체(ADC)의 패러다임 전환을 이끈 임상.',ref:{ph:3,co:'Daiichi Sankyo/AZ',drug:'트라스투주맙 데룩스테칸'},likes:156,comments:67,cat:'news'},
+
+{id:5,user:'CH',name:'최현식',time:'어제',cat:'bear',title:'Moderna mRNA-4157 Phase 2 — 샘플 수 157명 과신 금물',body:'HR 0.44 인상적이나 표본 크기가 너무 작음. Phase 3에서 replication 안 될 가능성도 열어둬야. 흑색종 특성상 선택편향 위험도 있음.',ref:{ph:2,co:'Moderna',drug:'mRNA-4157+펨브롤리주맙'},likes:34,comments:19,cat:'bear'},
+
+{id:6,user:'YS',name:'윤상철',time:'2일 전',cat:'q',title:'ABL Bio 파킨슨 Phase 1 — 혈뇌장벽 투과율 어떻게 봄?',body:'이중항체 BBB 투과 플랫폼 기술이 검증되면 알츠하이머 파이프라인도 재평가 가능. 근데 Phase 1 단계에서 너무 기대하는 거 아닌지?',ref:{ph:1,co:'ABL Bio',drug:'ABL301'},likes:72,comments:8,cat:'q'},
+
+];
+
+
+
+const NOTIFS_DB = [
+
+{id:'n1',type:'success',icon:'✅',cls:'ni-success',title:'임상 성공 🎉 LAURA Trial',desc:'AstraZeneca 오시머티닙 — 3기 NSCLC Phase 3. PFS 39.1개월 (HR 0.23, p<0.001). 위약 대비 7배 향상.',time:'2시간 전',badge:'nb-success',badgeText:'Phase 3 성공',unread:true},
+
+{id:'n2',type:'upcoming',icon:'📅',cls:'ni-upcoming',title:'발표 예정 알림 — 유한양행',desc:'레이저티닙+아미반타맙 Phase 3 MARIPOSA 결과 2026-Q2 발표 예정.',time:'6시간 전',badge:'nb-upcoming',badgeText:'D-30 발표 예정',unread:true},
+
+{id:'n3',type:'success',icon:'✅',cls:'ni-success',title:'임상 성공 — DESTINY-Breast04',desc:'T-DXd HER2-low 유방암 Phase 3. PFS 9.9개월 vs 5.1개월. FDA 승인 완료.',time:'어제',badge:'nb-success',badgeText:'Phase 3 성공',unread:true},
+
+{id:'n4',type:'update',icon:'🔄',cls:'ni-update',title:'Moderna mRNA-4157 업데이트',desc:'흑색종 재발 위험 44% 감소 (HR 0.44). Phase 3 진행 결정.',time:'2일 전',badge:'nb-update',badgeText:'Phase 2→3 진행',unread:false},
+
+{id:'n5',type:'comm',icon:'💬',cls:'ni-comm',title:'팔로우 임상 커뮤니티 반응',desc:'한미약품 에페글레나타이드 게시글에 새 댓글 42개 달림.',time:'3일 전',badge:'',badgeText:'',unread:false},
+
+];
+
+
+
+/* ══════════════════════════════════════
+
+화면 / 탭 전환
+
+══════════════════════════════════════ */
+
+function showScreen(id){
+
+document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('active');s.style.display='none';});
+
+const el=document.getElementById(id);el.style.display='flex';
+
+requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('active')));
+
+}
+
+function doLogin(){
+
+showScreen('s-app');
+
+initHome();renderComm('all');renderTrending();loadExplore();renderNotifs();
+
+toast('BioSignal X 접속 완료 👋');
+
+}
+
+function doLogout(){showScreen('s-login');}
+
+
+
+const VIEWS={home:'v-home',community:'v-community',explore:'v-explore',trending:'v-trending',alerts:'v-alerts'};
+
+const NAVS={home:'nav-home',community:'nav-community',explore:'nav-explore',trending:'nav-trending',alerts:'nav-alerts'};
+
+function goNav(t){
+
+document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+
+document.querySelectorAll('.nav-item').forEach(v=>v.classList.remove('on'));
+
+document.getElementById(VIEWS[t]).classList.add('active');
+
+document.getElementById(NAVS[t]).classList.add('on');
+
+if(t==='alerts')markAllRead();
+
+}
+
+
+
+/* ══════════════════════════════════════
+
+HOME
+
+══════════════════════════════════════ */
+
+function initHome(){
+
+renderTrendCards();
+
+renderHomeComm();
+
+renderHomeUpcoming();
+
+}
+
+
+
+function renderTrendCards(){
+
+const scroll=document.getElementById('trend-scroll');
+
+const topTrials=TRIALS.filter(t=>t.result||t.upcoming).sort((a,b)=>{
+
+if(a.result&&!b.result)return -1;if(!a.result&&b.result)return 1;
+
+return b.ph-a.ph;
+
+}).slice(0,6);
+
+scroll.innerHTML=topTrials.map((t,i)=>{
+
+const phCls={1:'ph1',2:'ph2',3:'ph3',4:'ph4'}[t.ph]||'ph2';
+
+const isUp=parseFloat(t.statChg)>=0;
+
+let extra='';
+
+if(t.result){
+
+const v=t.result.v==='success';
+
+extra=`<div class="tc-result ${v?'success':'fail'}">${v?'✅':'❌'} ${esc(t.result.hl)}</div>`;
+
+} else if(t.upcoming){
+
+extra=`<div class="tc-date">📅 ${esc(t.upDate)}</div>`;
+
+}
+
+return `<div class="trend-card" onclick="showDetail('${t.id}')">
+
+<div class="tc-rank">#${i+1}</div>
+
+<div class="tc-top">
+
+<div class="tc-icon">${esc(t.ticker||t.co.substring(0,3))}</div>
+
+<div><div class="tc-name">${esc(t.co)}</div><div class="tc-drug">${esc(t.drug)}</div></div>
+
+</div>
+
+<span class="phase-pill ${phCls}">PHASE ${t.ph}</span>
+
+<div class="tc-stat ${isUp?'up':'dn'}">${esc(t.statChg)}</div>
+
+<div class="tc-desc">${esc(t.plain)}</div>
+
+${extra}
+
+</div>`;
+
+}).join('');
+
+}
+
+
+
+function renderHomeComm(){
+
+const cont=document.getElementById('home-comm-preview');
+
+cont.innerHTML=`<div class="feed" style="padding:0">
+
+${POSTS_DB.slice(0,2).map(p=>postHTML(p)).join('')}
+
+</div>`;
+
+}
+
+
+
+function renderHomeUpcoming(){
+
+const cont=document.getElementById('home-upcoming');
+
+const upcoming=TRIALS.filter(t=>t.upcoming&&!t.result).sort((a,b)=>b.ph-a.ph).slice(0,4);
+
+cont.innerHTML=upcoming.map(t=>{
+
+const phCls={1:'ph1',2:'ph2',3:'ph3'}[t.ph]||'ph2';
+
+return `<div style="background:var(--card);border:1px solid var(--line);border-radius:var(--r14);padding:14px;margin-bottom:8px;cursor:pointer;" onclick="showDetail('${t.id}')">
+
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:6px;">
+
+<div style="font-size:16px;font-weight:800;letter-spacing:-.4px">${esc(t.co)}</div>
+
+<div style="font-size:11px;color:var(--amber);font-weight:700;white-space:nowrap">${esc(t.upDate)}</div>
+
+</div>
+
+<div style="font-size:12px;color:var(--t2);margin-bottom:9px">${esc(t.drug)} · ${esc(t.ind)}</div>
+
+<div style="display:flex;align-items:center;justify-content:space-between;">
+
+<span class="phase-pill ${phCls}" style="margin-top:0">PHASE ${t.ph}</span>
+
+<button onclick="event.stopPropagation();watchAlert('${t.id}',this)" style="background:var(--blue-g);color:#74a9ff;border:1px solid rgba(47,124,246,.25);padding:6px 14px;border-radius:var(--rp);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;" id="watch-${t.id}">🔔 알림 설정</button>
+
+</div>
+
+</div>`;
+
+}).join('');
+
+}
+
+
+
+function watchAlert(id,btn){
+
+btn.textContent='✅ 알림 ON';btn.style.background='var(--green-g)';btn.style.color='var(--green)';btn.style.borderColor='rgba(0,214,143,.28)';
+
+addNotif({id:'nw'+id,type:'upcoming',icon:'🔔',cls:'ni-upcoming',title:`알림 설정 완료`,desc:`${TRIALS.find(t=>t.id===id)?.co||'선택한 임상'}의 발표 결과를 알림으로 받습니다.`,time:'방금',badge:'nb-upcoming',badgeText:'알림 ON',unread:true});
+
+toast('🔔 알림이 설정되었습니다');
+
+}
+
+
+
+function showDetail(id){
+
+const t=TRIALS.find(x=>x.id===id);if(!t)return;
+
+if(t.result){
+
+const v=t.result.v==='success';
+
+const dataRows=t.result.data?.map(d=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line);"><span style="font-size:11px;color:var(--t2)">${esc(d.n)}</span><div style="text-align:right"><span style="font-size:12px;font-weight:800;color:${v?'var(--green)':'var(--red)'}">${esc(d.v)}</span><span style="font-size:10px;color:var(--t3);margin-left:5px">${esc(d.c)}</span></div></div>`).join('')||'';
+
+const html=`<div style="padding:16px 18px">
+
+<div style="font-size:11px;font-weight:700;color:${v?'var(--green)':'var(--red)'};margin-bottom:6px">${v?'✅ 임상 성공':'❌ 임상 실패/부분 성공'}</div>
+
+<div style="font-size:20px;font-weight:900;letter-spacing:-.6px;margin-bottom:4px">${esc(t.co)}</div>
+
+<div style="font-size:13px;color:var(--t2);margin-bottom:14px">${esc(t.drug)} · Phase ${t.ph}</div>
+
+<div style="background:${v?'var(--green-g)':'var(--red-g)'};border:1px solid ${v?'rgba(0,214,143,.2)':'rgba(255,77,103,.2)'};border-radius:var(--r14);padding:12px;margin-bottom:12px">
+
+<div style="font-size:13px;font-weight:800;color:${v?'var(--green)':'var(--red)'};margin-bottom:4px">${esc(t.result.hl)}</div>
+
+<div style="font-size:12px;color:var(--t1);line-height:1.6">${esc(t.result.key)}</div>
+
+</div>
+
+${dataRows?`<div style="margin-bottom:12px">${dataRows}</div>`:''}
+
+<div style="font-size:11px;color:var(--t2);line-height:1.65;padding:10px;background:rgba(255,255,255,.03);border-radius:var(--r8)">${esc(t.plain)}</div>
+
+<div style="margin-top:12px;font-size:10px;color:var(--t3)">NCT ID: ${t.id}</div>
+
+</div>`;
+
+showBottomSheet(html);
+
+} else {
+
+toast(`${t.co} — ${t.drug} · Phase ${t.ph} ${t.upcoming?'(발표 예정: '+t.upDate+')':'(진행 중)'}`);
+
+}
+
+}
+
+
+
+function showBottomSheet(html){
+
+let sheet=document.getElementById('detail-sheet');
+
+if(!sheet){
+
+const ov=document.createElement('div');ov.id='detail-sheet';
+
+ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:600;display:flex;align-items:flex-end;backdrop-filter:blur(5px);';
+
+ov.innerHTML=`<div style="background:var(--card2);border:1px solid var(--line2);border-radius:24px 24px 0 0;width:100%;max-height:82dvh;overflow-y:auto;padding-bottom:calc(16px + env(safe-area-inset-bottom,0px));">
+
+<div style="width:36px;height:3px;background:var(--line2);border-radius:2px;margin:14px auto 0;"></div>
+
+<div id="detail-inner"></div>
+
+</div>`;
+
+ov.addEventListener('click',e=>{if(e.target===ov)ov.remove();});
+
+document.body.appendChild(ov);sheet=ov;
+
+}
+
+document.getElementById('detail-inner').innerHTML=html;
+
+sheet.style.display='flex';
+
+}
+
+
+
+/* ══════════════════════════════════════
+
+COMMUNITY
+
+══════════════════════════════════════ */
+
+let commFilter='all';
+
+let userPosts=[];
+
+let selPostCat='bull';
+
+
+
+function filterComm(f,btn){
+
+commFilter=f;
+
+document.querySelectorAll('.ctab').forEach(b=>b.classList.remove('on'));
+
+btn.classList.add('on');
+
+renderComm(f);
+
+}
+
+
+
+function renderComm(filter){
+
+const feed=document.getElementById('comm-feed');
+
+const all=[...userPosts,...POSTS_DB];
+
+const filtered=filter==='all'?all:all.filter(p=>p.cat===filter);
+
+if(!filtered.length){feed.innerHTML='<div style="padding:28px;text-align:center;font-size:12px;color:var(--t3)">게시글이 없습니다.</div>';return;}
+
+feed.innerHTML=filtered.map(p=>postHTML(p)).join('');
+
+}
+
+
+
+function postHTML(p){
+
+const badgeCls={bull:'pb-bull',bear:'pb-bear',q:'pb-q',an:'pb-an',news:'pb-news'}[p.cat]||'pb-an';
+
+const badgeLabel={bull:'📈 Bullish',bear:'📉 Bearish',q:'❓ 질문',an:'📊 분석',news:'📰 뉴스'}[p.cat]||p.cat;
+
+const phCls={1:'ph1',2:'ph2',3:'ph3'}[p.ref?.ph||2]||'ph2';
+
+const avColor=['#00d68f','#2f7cf6','#ffb020','#8b5cf6','#ff4d67'][Math.abs(p.id||0)%5];
+
+return `<div class="post">
+
+<div class="post-top">
+
+<div class="av" style="color:${avColor};border-color:${avColor}22">${(p.user||'').substring(0,2)}</div>
+
+<div><div class="post-name">${esc(p.name)}</div><div class="post-time">${esc(p.time)}</div></div>
+
+<span class="post-badge ${badgeCls}">${badgeLabel}</span>
+
+</div>
+
+<div class="post-title">${esc(p.title)}</div>
+
+<div class="post-body">${esc(p.body)}</div>
+
+${p.ref?`<div class="post-ref"><span class="phase-pill ${phCls}" style="margin:0">PHASE ${p.ref.ph}</span><div><div class="pr-name">${esc(p.ref.co)}</div><div class="pr-drug">${esc(p.ref.drug)}</div></div></div>`:''}
+
+<div class="post-stats">
+
+<button class="ps-btn" onclick="likePost(this)">❤️ <span>${p.likes||0}</span></button>
+
+<button class="ps-btn">💬 ${p.comments||0}</button>
+
+<button class="ps-btn">🔁 ${Math.floor((p.likes||0)/8)}</button>
+
+</div>
+
+</div>`;
+
+}
+
+function likePost(btn){const s=btn.querySelector('span');const n=parseInt(s.textContent);btn._l=!btn._l;s.textContent=btn._l?n+1:n-1;btn.style.color=btn._l?'var(--red)':'var(--t3)';}
+
+
+
+/* ══════════════════════════════════════
+
+TRENDING
+
+══════════════════════════════════════ */
+
+function renderTrending(){
+
+const body=document.getElementById('trending-body');
+
+let html='';
+
+[3,2,1].forEach(ph=>{
+
+const list=TRIALS.filter(t=>t.ph===ph).sort((a,b)=>{if(a.result&&!b.result)return -1;if(!a.result&&b.result)return 1;return 0;});
+
+const phCls={3:'ph3',2:'ph2',1:'ph1'}[ph];
+
+const phLabel={3:'대규모 효능 검증',2:'탐색적 임상',1:'안전성 확인'}[ph];
+
+html+=`<div class="phase-section">
+
+<div class="ps-hdr">
+
+<span class="ps-pill ${phCls}">PHASE ${ph}</span>
+
+<span class="ps-title">${phLabel}</span>
+
+<span class="ps-count">${list.length}개 기업</span>
+
+</div>
+
+<div class="ps-divider"></div>
+
+<div class="trial-list" style="margin-top:8px;">
+
+${list.map((t,i)=>{
+
+const stLabel={recruiting:'모집중',active:'진행중',completed:'완료',terminated:'종료'}[t.st]||t.st;
+
+const stCls={recruiting:'trs-r',active:'trs-a',completed:'trs-c',terminated:'trs-t'}[t.st]||'trs-a';
+
+let resBadge='';
+
+if(t.result)resBadge=`<span class="trow-result ${t.result.v==='success'?'trr-s':'trr-f'}">${t.result.v==='success'?'✅ 성공':'❌ 실패/부분'}</span>`;
+
+else if(t.upcoming)resBadge=`<span class="trow-result trr-u">📅 ${t.upDate}</span>`;
+
+return `<div class="trow ph${ph}" onclick="showDetail('${t.id}')">
+
+<div class="trow-num">${i+1}</div>
+
+<div class="trow-body">
+
+<div class="trow-company">${esc(t.co)}</div>
+
+<div class="trow-drug">${esc(t.drug)}</div>
+
+<div class="trow-ind">${esc(t.ind)}</div>
+
+${resBadge?`<div style="margin-top:4px">${resBadge}</div>`:''}
+
+</div>
+
+<div class="trow-right">
+
+<span class="trow-status ${stCls}">${stLabel}</span>
+
+${t.enroll?`<span class="trow-enroll">👥${Number(t.enroll).toLocaleString()}</span>`:''}
+
+<span style="font-size:10px;font-weight:700;color:${parseFloat(t.statChg)>=0?'var(--green)':'var(--red)'}">${t.statChg}</span>
+
+</div>
+
+</div>`;
+
+}).join('')}
+
+</div>
+
+</div>`;
+
+});
+
+body.innerHTML=html;
+
+}
+
+
+
+/* ══════════════════════════════════════
+
+EXPLORE (ClinicalTrials API)
+
+══════════════════════════════════════ */
+
+const CT='https://clinicaltrials.gov/api/v2/studies';
+
+let ePhase='',eStatus='',eTimer=null,eTerm='';
+
+
+
+function setEPhase(v,btn){ePhase=v;document.querySelectorAll('#explore-phase-filters .ef').forEach(b=>b.classList.remove('on'));btn.classList.add('on');triggerExplore();}
+
+function setEStatus(v,btn){eStatus=v;document.querySelectorAll('#explore-status-filters .ef').forEach(b=>b.classList.remove('on'));btn.classList.add('on');triggerExplore();}
+
+function onExploreSearch(v){eTerm=v.trim();clearTimeout(eTimer);eTimer=setTimeout(triggerExplore,450);}
+
+function triggerExplore(){loadExplore();}
+
+function retryAPI(){loadExplore();}
+
+
+
+async function loadExplore(){
+
+const list=document.getElementById('explore-list');
+
+const dot=document.getElementById('api-dot'),txt=document.getElementById('api-txt');
+
+list.innerHTML='<div class="explore-loading">🔄 ClinicalTrials.gov 검색 중...</div>';
+
+dot.style.background='var(--amber)';txt.textContent='연결 중...';txt.style.color='var(--amber)';
+
+try{
+
+const p=new URLSearchParams({format:'json',pageSize:'18','fields':'NCTId,BriefTitle,OverallStatus,Phase,Condition,InterventionName,LeadSponsorName,EnrollmentCount,StartDate,PrimaryCompletionDate'});
+
+if(eTerm&&/^NCT\d{8}$/i.test(eTerm))p.set('query.id',eTerm.toUpperCase());
+
+else if(eTerm)p.set('query.term',eTerm);
+
+else p.set('query.cond','cancer');
+
+if(ePhase)p.set('filter.phase',ePhase);
+
+if(eStatus)p.set('filter.overallStatus',eStatus);
+
+const r=await fetch(`${CT}?${p.toString()}`);
+
+if(!r.ok)throw new Error('HTTP '+r.status);
+
+const d=await r.json();
+
+const studies=d.studies||[];
+
+dot.style.background='var(--green)';dot.style.boxShadow='0 0 6px var(--green)';
+
+txt.textContent=`🟢 연결됨 · ${(d.totalCount||studies.length).toLocaleString()}개`;txt.style.color='var(--green)';
+
+if(!studies.length){list.innerHTML='<div class="explore-loading">검색 결과가 없습니다.</div>';return;}
+
+list.innerHTML=studies.map(s=>{
+
+const ps=s.protocolSection||{};
+
+const id=(ps.identificationModule||{});const st=(ps.statusModule||{});const sp=(ps.sponsorCollaboratorsModule||{});
+
+const de=(ps.designModule||{});const co=(ps.conditionsModule||{});const iv=(ps.interventionsModule||{});
+
+const nct=id.nctId||'';const title=id.briefTitle||'제목 없음';
+
+const status=st.overallStatus||'';const phases=(de.phases||[]);
+
+const phN=phases.length?parseInt((phases[phases.length-1].replace('PHASE','')||'0'))||0:0;
+
+const phCls={1:'ph1',2:'ph2',3:'ph3',4:'ph4'}[phN]||'ph2';
+
+const stLabel={RECRUITING:'모집중',COMPLETED:'완료',ACTIVE_NOT_RECRUITING:'진행중',TERMINATED:'종료'}[status]||status;
+
+const stCls={RECRUITING:'trs-r',COMPLETED:'trs-c',ACTIVE_NOT_RECRUITING:'trs-a',TERMINATED:'trs-t'}[status]||'ec-status';
+
+const sponsor=(sp.leadSponsor||{}).name||'';
+
+const drug=((iv.interventions||[])[0]||{}).name||'';
+
+const enroll=((de.enrollmentInfo||{}).count)||0;
+
+return `<div class="ex-card" onclick="toast('${esc(nct)} — ${esc(title.substring(0,30))}...')">
+
+<div class="ec-top">
+
+<div class="ec-title">${esc(title)}</div>
+
+${phN?`<span class="phase-pill ${phCls}" style="margin:0;flex-shrink:0">PHASE ${phN}</span>`:''}
+
+</div>
+
+<div class="ec-meta">
+
+${sponsor?`<span class="ec-tag">🏢 ${esc(sponsor)}</span>`:''}
+
+${drug?`<span class="ec-tag">💊 ${esc(drug)}</span>`:''}
+
+<span class="ec-status ${stCls}">${stLabel}</span>
+
+${enroll?`<span class="ec-tag">👥${Number(enroll).toLocaleString()}</span>`:''}
+
+</div>
+
+<div class="ec-nct">${nct}</div>
+
+</div>`;
+
+}).join('');
+
+}catch(e){
+
+dot.style.background='var(--red)';txt.textContent='연결 실패 (CORS 등)';txt.style.color='var(--red)';
+
+list.innerHTML=`<div class="explore-loading" style="color:var(--t2)">⚠️ API 오류: ${esc(e.message)}<br><br>로컬 데이터로 전환합니다.</div>
+
+${TRIALS.map(t=>`<div class="ex-card" onclick="showDetail('${t.id}')"><div class="ec-top"><div class="ec-title">${esc(t.co)} — ${esc(t.drug)}</div><span class="phase-pill ph${t.ph}" style="margin:0;flex-shrink:0">PHASE ${t.ph}</span></div><div class="ec-meta"><span class="ec-tag">${esc(t.ind)}</span></div><div class="ec-nct">${t.id}</div></div>`).join('')}`;
+
+}
+
+}
+
+
+
+/* ══════════════════════════════════════
+
+ALERTS
+
+══════════════════════════════════════ */
+
+let notifs=[...NOTIFS_DB];
+
+function addNotif(n){notifs.unshift(n);updateBadge();renderNotifs();}
+
+function renderNotifs(){
+
+const list=document.getElementById('notif-list');
+
+list.innerHTML=notifs.map(n=>`<div class="ncard ${n.unread?'unread':''}" onclick="readNotif('${n.id}')">
+
+<div class="n-icon ${n.cls}">${n.icon}</div>
+
+<div class="n-body">
+
+<div class="n-title">${esc(n.title)}</div>
+
+<div class="n-desc">${esc(n.desc)}</div>
+
+<div class="n-meta">
+
+<span class="n-time">${esc(n.time)}</span>
+
+${n.badge?`<span class="n-badge ${n.badge}">${esc(n.badgeText)}</span>`:''}
+
+</div>
+
+</div>
+
+${n.unread?'<div class="n-unread"></div>':''}
+
+</div>`).join('');
+
+}
+
+function readNotif(id){const n=notifs.find(x=>x.id===id);if(n)n.unread=false;renderNotifs();updateBadge();}
+
+function markAllRead(){notifs.forEach(n=>n.unread=false);renderNotifs();updateBadge();}
+
+function clearAllNotifs(){notifs.forEach(n=>n.unread=false);renderNotifs();updateBadge();toast('모두 읽음 처리 완료');}
+
+function updateBadge(){
+
+const cnt=notifs.filter(n=>n.unread).length;
+
+const b=document.getElementById('notif-badge');
+
+if(cnt>0){b.textContent=cnt>9?'9+':String(cnt);b.classList.add('show');}else b.classList.remove('show');
+
+}
+
+
+
+/* ══════════════════════════════════════
+
+FAB / 글쓰기
+
+══════════════════════════════════════ */
+
+function fabAction(){
+
+const cur=document.querySelector('.view.active').id;
+
+if(cur==='v-community')openModal();
+
+else{openModal();}
+
+}
+
+function openModal(){document.getElementById('modal-write').classList.add('open');}
+
+function closeModal(){document.getElementById('modal-write').classList.remove('open');}
+
+function selCat(c,btn){selPostCat=c;document.querySelectorAll('.mc').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');}
+
+function submitPost(){
+
+const ref=document.getElementById('w-ref').value.trim();
+
+const body=document.getElementById('w-body').value.trim();
+
+if(!body){toast('내용을 입력하세요');return;}
+
+const match=TRIALS.find(t=>ref&&(t.co.includes(ref)||t.drug.includes(ref)));
+
+userPosts.unshift({id:'u'+Date.now(),user:'ME',name:'나 (게스트)',time:'방금',cat:selPostCat,
+
+title:ref||'새 게시글',body,ref:match?{ph:match.ph,co:match.co,drug:match.drug}:null,likes:0,comments:0});
+
+closeModal();document.getElementById('w-ref').value='';document.getElementById('w-body').value='';
+
+goNav('community');renderComm(commFilter);toast('게시 완료 ✅');
+
+}
+
+
+
+/* ══ 유틸 ══ */
+
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2200);}
+
+document.addEventListener('click',e=>{
+
+if(e.target===document.getElementById('modal-write'))closeModal();
+
+});
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+  // Supabase 서버 주소
+
+  const SUPABASE_URL = 'https://htxtvotxmukxjgsjdfpt.supabase.co';
+
+  
+
+  // Supabase에서 복사한 'Publishable key' (sb_publishable_로 시작하는 것)
+
+  const SUPABASE_KEY = 'sb_publishable_9xvntZXvBv5lBDuSzqEjNQ_HLRcihfK';
+
+  
+
+  // 클라이언트 생성
+
+  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+
+
+  // 데이터 저장 함수
+
+  async function saveData() {
+
+    const { data, error } = await supabase
+
+      .from('bio_data') // 본인이 만든 테이블 이름
+
+      .insert([{ bio_value: 36.5 }]); // 들어갈 데이터
+
+    
+
+    if (error) {
+
+      alert('저장 실패: ' + error.message);
+
+      console.error(error);
+
+    } else {
+
+      alert('저장 성공!');
+
+    }
+
+  }
+
+</script>
+
+
+
+<button onclick="saveData()">데이터 저장 테스트</button>
+</body></html>

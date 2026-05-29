@@ -956,6 +956,80 @@ svg{display:block;flex-shrink:0;}
   font-size:.75rem;color:var(--t3);line-height:1.5;margin-top:4px;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
 }
+
+/* ── New feature styles ── */
+.form-error { font-size:0.75rem; color:var(--error); margin-top:4px; display:none; }
+.form-error.show { display:block; }
+.input-shell.error { border-color:var(--error); }
+.pw-strength { height:3px; border-radius:2px; background:var(--border); margin-top:6px; overflow:hidden; }
+.pw-strength-fill { height:100%; border-radius:2px; transition:width 0.3s, background 0.3s; }
+.step-indicator { display:flex; gap:8px; margin-bottom:24px; }
+.step-dot { flex:1; height:3px; border-radius:2px; background:var(--border); }
+.step-dot.done { background:var(--success); }
+.step-dot.active { background:var(--primary); }
+.otp-input { letter-spacing:0.5em; text-align:center; font-family:var(--font-mono); font-size:1.5rem; }
+.otp-timer { font-family:var(--font-mono); font-size:0.75rem; color:var(--warning); text-align:center; }
+.status-badge-sm { font-size:0.5625rem; font-weight:600; padding:2px 6px; border-radius:var(--r-full); }
+.sbs-normal { background:var(--success-alpha); color:var(--success); }
+.sbs-caution { background:var(--warning-alpha); color:var(--warning); }
+.sbs-danger { background:var(--error-alpha); color:var(--error); }
+.post-disclaimer { font-size:0.5625rem; color:var(--t3); margin-top:8px; padding-top:6px; border-top:1px solid var(--border); line-height:1.5; }
+.data-timestamp { font-size:0.6875rem; color:var(--t3); padding:6px 0; }
+.comm-disclaimer { background:var(--warning-alpha); border:1px solid rgba(245,213,71,0.15); border-radius:var(--r-md); padding:8px 12px; font-size:0.6875rem; color:var(--t3); margin-bottom:8px; line-height:1.6; }
+.ocr-section { margin:16px 16px 0; background:var(--surface); border:1px solid var(--border); border-radius:var(--r-lg); padding:16px; }
+.ocr-chart-svg { width:100%; height:120px; margin-top:12px; }
+.prohibited-notice { margin:0 var(--sp-lg) var(--sp-sm); background:var(--error-alpha); border:1px solid rgba(255,58,92,0.15); border-radius:var(--r-md); padding:8px 12px; font-size:0.6875rem; color:var(--t3); line-height:1.6; }
+.notif-tabs { display:flex; gap:0; padding:0 var(--sp-lg); border-bottom:1px solid var(--border); overflow-x:auto; flex-shrink:0; background:var(--bg); }
+.notif-tabs::-webkit-scrollbar { display:none; }
+.notif-tab { padding:10px 12px; background:transparent; border:none; border-bottom:2px solid transparent; font-size:0.75rem; font-weight:500; color:var(--t3); transition:color var(--dur-base), border-color var(--dur-base); white-space:nowrap; flex-shrink:0; cursor:pointer; margin-bottom:-1px; }
+.notif-tab.on { color:var(--t1); border-bottom-color:var(--primary); }
+.notif-tab:hover:not(.on) { color:var(--t2); }
+.metric-chart { margin-top:12px; padding:12px; background:var(--bg); border:1px solid var(--border); border-radius:var(--r-lg); }
+.metric-chart-title { font-size:0.6875rem; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:var(--t3); margin-bottom:10px; }
+.metric-bar-row { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+.metric-bar-label { font-size:0.6875rem; color:var(--t2); width:80px; flex-shrink:0; }
+.metric-bar-track { flex:1; height:4px; background:var(--border); border-radius:2px; overflow:hidden; }
+.metric-bar-fill { height:100%; border-radius:2px; transition:width 0.6s var(--ease); }
+.metric-bar-fill.good { background:var(--success); }
+.metric-bar-fill.bad { background:var(--error); }
+.metric-bar-fill.neutral { background:var(--primary); }
+.metric-bar-val { font-family:var(--font-mono); font-size:0.625rem; font-weight:500; width:80px; flex-shrink:0; }
+.metric-bar-val.good { color:var(--success); }
+.metric-bar-val.bad { color:var(--error); }
+.metric-bar-val.neutral { color:var(--primary-hover); }
+/* Signup/Reset screens */
+#s-signup, #s-reset {
+  background:var(--bg);
+  align-items:center; justify-content:flex-start;
+  overflow-y:auto;
+  padding:var(--sp-lg);
+}
+#s-signup::before, #s-reset::before {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(91,107,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(91,107,255,0.04) 1px, transparent 1px);
+  background-size:48px 48px;
+}
+.signup-wrap { position:relative; z-index:1; width:100%; max-width:380px; padding-top:var(--sp-sm); }
+.back-btn { display:flex; align-items:center; gap:6px; background:none; border:none; color:var(--t2); font-size:0.8125rem; cursor:pointer; padding:8px 0; margin-bottom:var(--sp-md); }
+.back-btn:hover { color:var(--t1); }
+.tos-modal-body { max-height:60vh; overflow-y:auto; font-size:0.8125rem; color:var(--t2); line-height:1.8; white-space:pre-wrap; }
+.tos-modal-body h3 { color:var(--t1); font-size:0.9375rem; margin:16px 0 8px; }
+.step-content { display:none; }
+.step-content.active { display:block; }
+.pw-strength-label { font-size:0.6875rem; color:var(--t3); margin-top:4px; }
+.checkbox-row { display:flex; align-items:flex-start; gap:8px; margin-bottom:10px; cursor:pointer; }
+.checkbox-row .halo-check { margin-top:2px; }
+.checkbox-label { font-size:0.8125rem; color:var(--t2); line-height:1.5; }
+.checkbox-label a { color:var(--primary-hover); cursor:pointer; }
+.otp-display { display:flex; justify-content:center; gap:8px; margin:12px 0; }
+.otp-digit { width:40px; height:48px; background:var(--elevated); border:1px solid var(--border); border-radius:var(--r-md); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:1.25rem; font-weight:600; color:var(--primary-hover); }
+.success-state { text-align:center; padding:var(--sp-xl) var(--sp-lg); }
+.success-icon { font-size:3rem; margin-bottom:var(--sp-md); }
+.success-title { font-size:1.25rem; font-weight:600; color:var(--success); margin-bottom:8px; }
+.success-sub { font-size:0.875rem; color:var(--t2); }
+
 </style>
 </head>
 <body>
@@ -963,7 +1037,6 @@ svg{display:block;flex-shrink:0;}
 <!-- ═══════════════ LOGIN ═══════════════ -->
 <div class="screen active" id="s-login">
   <div class="login-wrap">
-
     <div class="login-brand">
       <div class="login-eyebrow">
         <span class="eyebrow-dot"></span>
@@ -973,49 +1046,39 @@ svg{display:block;flex-shrink:0;}
       <div class="login-sub">바이오 임상 발표 · 1/2/3상 분류 · 커뮤니티 분석</div>
     </div>
 
-    <!-- Stat strip -->
     <div class="login-stats">
-      <div class="ls-cell">
-        <div class="ls-val">13</div>
-        <div class="ls-label">추적 임상</div>
-      </div>
-      <div class="ls-cell">
-        <div class="ls-val success">5</div>
-        <div class="ls-label">성공 결과</div>
-      </div>
-      <div class="ls-cell">
-        <div class="ls-val warning">6</div>
-        <div class="ls-label">발표 예정</div>
-      </div>
+      <div class="ls-cell"><div class="ls-val">13</div><div class="ls-label">추적 임상</div></div>
+      <div class="ls-cell"><div class="ls-val success">5</div><div class="ls-label">성공 결과</div></div>
+      <div class="ls-cell"><div class="ls-val warning">6</div><div class="ls-label">발표 예정</div></div>
     </div>
 
     <div class="login-card">
       <div class="form-row" style="margin-bottom:6px;">
         <label class="form-label">이메일</label>
-        <div class="input-shell">
-          <!-- Lucide Mail icon -->
+        <div class="input-shell" id="shell-email">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-          <input type="email" placeholder="investor@biosignal.io" value="investor@biosignal.io" id="lf-email">
+          <input type="email" placeholder="investor@biosignal.io" id="lf-email">
         </div>
+        <div class="form-error" id="err-email">올바른 이메일 형식을 입력해주세요.</div>
       </div>
       <div class="form-row">
         <label class="form-label">비밀번호</label>
-        <div class="input-shell">
-          <!-- Lucide Lock icon -->
+        <div class="input-shell" id="shell-pw">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          <input type="password" placeholder="비밀번호를 입력하세요" value="••••••••" id="lf-pw">
+          <input type="password" placeholder="비밀번호를 입력하세요" id="lf-pw">
           <button class="pw-toggle" onclick="togglePw()" aria-label="비밀번호 표시">
             <svg id="eye-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>
           </button>
         </div>
+        <div class="form-error" id="err-pw">비밀번호를 입력해주세요.</div>
       </div>
 
       <div class="form-options">
         <label class="check-row">
-          <input type="checkbox" class="halo-check" checked>
+          <input type="checkbox" class="halo-check" id="chk-autologin" checked>
           <span class="check-label">자동 로그인</span>
         </label>
-        <span class="forgot-link">비밀번호 찾기</span>
+        <span class="forgot-link" onclick="showReset()">비밀번호 찾기</span>
       </div>
 
       <button class="btn-primary" onclick="doLogin()">임상 인텔리전스 시작하기</button>
@@ -1033,7 +1096,7 @@ svg{display:block;flex-shrink:0;}
         </button>
       </div>
 
-      <div class="login-footer">계정이 없으신가요? <a onclick="toast('회원가입 준비 중...')">Sign up</a></div>
+      <div class="login-footer">계정이 없으신가요? <a onclick="showSignup()">Sign up</a> · <a onclick="openTos()">이용약관</a></div>
     </div>
 
     <div class="chip-row">
@@ -1056,6 +1119,199 @@ svg{display:block;flex-shrink:0;}
   </div>
 </div>
 
+<!-- ═══════════════ SIGNUP ═══════════════ -->
+<div class="screen" id="s-signup">
+  <div class="signup-wrap">
+    <button class="back-btn" onclick="showScreen('s-login')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      로그인으로 돌아가기
+    </button>
+
+    <div class="login-brand" style="margin-bottom:var(--sp-lg)">
+      <div class="login-wordmark">Bio<em>Signal</em> X</div>
+      <div class="login-sub">회원가입</div>
+    </div>
+
+    <div class="login-card">
+      <div class="step-indicator" id="su-steps">
+        <div class="step-dot active" id="su-dot-1"></div>
+        <div class="step-dot" id="su-dot-2"></div>
+        <div class="step-dot" id="su-dot-3"></div>
+      </div>
+
+      <!-- Step 1: 계정 정보 -->
+      <div class="step-content active" id="su-step-1">
+        <div style="font-size:0.875rem;font-weight:600;color:var(--t1);margin-bottom:16px">1단계 · 계정 정보</div>
+        <div class="form-row">
+          <label class="form-label">이메일 <span style="color:var(--error)">*</span></label>
+          <div class="input-shell" id="su-shell-email">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            <input type="email" placeholder="your@email.com" id="su-email">
+          </div>
+          <div class="form-error" id="su-err-email">올바른 이메일 형식을 입력해주세요.</div>
+        </div>
+        <div class="form-row">
+          <label class="form-label">휴대폰 (선택)</label>
+          <div class="input-shell">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+            <input type="tel" placeholder="010-0000-0000" id="su-phone">
+          </div>
+        </div>
+        <div class="form-row">
+          <label class="form-label">비밀번호 <span style="color:var(--error)">*</span></label>
+          <div class="input-shell" id="su-shell-pw">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <input type="password" placeholder="비밀번호 (8자 이상)" id="su-pw" oninput="checkPwStrength(this.value,'su-strength','su-strength-label')">
+          </div>
+          <div class="pw-strength"><div class="pw-strength-fill" id="su-strength"></div></div>
+          <div class="pw-strength-label" id="su-strength-label">비밀번호를 입력하세요</div>
+          <div class="form-error" id="su-err-pw">비밀번호는 8자 이상이어야 합니다.</div>
+        </div>
+        <div class="form-row">
+          <label class="form-label">비밀번호 확인 <span style="color:var(--error)">*</span></label>
+          <div class="input-shell" id="su-shell-pw2">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <input type="password" placeholder="비밀번호 재입력" id="su-pw2">
+          </div>
+          <div class="form-error" id="su-err-pw2">비밀번호가 일치하지 않습니다.</div>
+        </div>
+        <button class="btn-primary" onclick="suNext(1)">다음</button>
+      </div>
+
+      <!-- Step 2: 본인 인증 -->
+      <div class="step-content" id="su-step-2">
+        <div style="font-size:0.875rem;font-weight:600;color:var(--t1);margin-bottom:16px">2단계 · 본인 인증</div>
+        <div style="font-size:0.8125rem;color:var(--t2);margin-bottom:16px;line-height:1.6">아래 인증코드를 이메일로 발송했습니다. (데모: 123456)</div>
+        <div class="otp-display" id="otp-display">
+          <div class="otp-digit">1</div>
+          <div class="otp-digit">2</div>
+          <div class="otp-digit">3</div>
+          <div class="otp-digit">4</div>
+          <div class="otp-digit">5</div>
+          <div class="otp-digit">6</div>
+        </div>
+        <div class="otp-timer" id="otp-timer-su">03:00</div>
+        <div class="form-row" style="margin-top:16px">
+          <label class="form-label">인증코드 입력</label>
+          <div class="input-shell" id="su-shell-otp">
+            <input type="text" class="otp-input" placeholder="000000" maxlength="6" id="su-otp" style="flex:1;background:transparent;border:none;font-family:var(--font-mono);font-size:1.5rem;letter-spacing:0.5em;text-align:center;color:var(--t1);">
+          </div>
+          <div class="form-error" id="su-err-otp">인증코드가 올바르지 않습니다. (데모: 123456)</div>
+        </div>
+        <button class="btn-primary" onclick="suNext(2)">확인</button>
+        <button class="modal-cancel" onclick="resendOtp('otp-timer-su')">인증코드 재발송</button>
+      </div>
+
+      <!-- Step 3: 약관 동의 -->
+      <div class="step-content" id="su-step-3">
+        <div style="font-size:0.875rem;font-weight:600;color:var(--t1);margin-bottom:16px">3단계 · 약관 동의</div>
+        <div class="form-row">
+          <label class="form-label">이름 <span style="color:var(--error)">*</span></label>
+          <div class="input-shell" id="su-shell-name">
+            <input type="text" placeholder="홍길동" id="su-name">
+          </div>
+          <div class="form-error" id="su-err-name">이름을 입력해주세요.</div>
+        </div>
+        <div class="form-row">
+          <label class="form-label">생년월일 <span style="color:var(--error)">*</span></label>
+          <div class="input-shell" id="su-shell-dob">
+            <input type="date" id="su-dob" style="flex:1;background:transparent;border:none;font-size:0.875rem;color:var(--t1);">
+          </div>
+          <div class="form-error" id="su-err-dob">생년월일을 입력해주세요.</div>
+        </div>
+        <div style="margin:16px 0;">
+          <label class="checkbox-row">
+            <input type="checkbox" class="halo-check" id="ck-tos">
+            <span class="checkbox-label">[필수] <a onclick="openTos()">이용약관</a> 동의</span>
+          </label>
+          <label class="checkbox-row">
+            <input type="checkbox" class="halo-check" id="ck-privacy">
+            <span class="checkbox-label">[필수] 개인정보 처리방침 동의</span>
+          </label>
+          <label class="checkbox-row">
+            <input type="checkbox" class="halo-check" id="ck-medical">
+            <span class="checkbox-label">[필수] 본 서비스는 의료 서비스가 아니며, 의학적 조언을 제공하지 않음에 동의합니다</span>
+          </label>
+          <div class="form-error" id="su-err-tos">필수 약관에 모두 동의해주세요.</div>
+        </div>
+        <button class="btn-primary" onclick="suNext(3)">가입 완료</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ RESET ═══════════════ -->
+<div class="screen" id="s-reset">
+  <div class="signup-wrap">
+    <button class="back-btn" onclick="showScreen('s-login')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      로그인으로 돌아가기
+    </button>
+
+    <div class="login-brand" style="margin-bottom:var(--sp-lg)">
+      <div class="login-wordmark">Bio<em>Signal</em> X</div>
+      <div class="login-sub">비밀번호 재설정</div>
+    </div>
+
+    <div class="login-card" id="reset-card">
+      <div class="step-indicator">
+        <div class="step-dot active" id="rs-dot-1"></div>
+        <div class="step-dot" id="rs-dot-2"></div>
+        <div class="step-dot" id="rs-dot-3"></div>
+      </div>
+
+      <!-- Reset Step 1 -->
+      <div class="step-content active" id="rs-step-1">
+        <div style="font-size:0.875rem;font-weight:600;color:var(--t1);margin-bottom:16px">이메일 또는 휴대폰 입력</div>
+        <div class="form-row">
+          <label class="form-label">이메일 / 휴대폰</label>
+          <div class="input-shell" id="rs-shell-id">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            <input type="text" placeholder="your@email.com" id="rs-id">
+          </div>
+          <div class="form-error" id="rs-err-id">입력값을 확인해주세요.</div>
+        </div>
+        <button class="btn-primary" onclick="rsNext(1)">인증코드 발송</button>
+      </div>
+
+      <!-- Reset Step 2 -->
+      <div class="step-content" id="rs-step-2">
+        <div style="font-size:0.875rem;font-weight:600;color:var(--t1);margin-bottom:16px">인증코드 입력 (데모: 123456)</div>
+        <div class="otp-timer" id="otp-timer-rs" style="margin-bottom:12px">30:00</div>
+        <div class="form-row">
+          <div class="input-shell" id="rs-shell-otp">
+            <input type="text" class="otp-input" placeholder="000000" maxlength="6" id="rs-otp" style="flex:1;background:transparent;border:none;font-family:var(--font-mono);font-size:1.5rem;letter-spacing:0.5em;text-align:center;color:var(--t1);">
+          </div>
+          <div class="form-error" id="rs-err-otp">인증코드가 올바르지 않습니다.</div>
+        </div>
+        <button class="btn-primary" onclick="rsNext(2)">확인</button>
+      </div>
+
+      <!-- Reset Step 3 -->
+      <div class="step-content" id="rs-step-3">
+        <div style="font-size:0.875rem;font-weight:600;color:var(--t1);margin-bottom:16px">새 비밀번호 설정</div>
+        <div class="form-row">
+          <label class="form-label">새 비밀번호</label>
+          <div class="input-shell" id="rs-shell-pw">
+            <input type="password" placeholder="8자 이상" id="rs-pw" oninput="checkPwStrength(this.value,'rs-strength','rs-strength-label')">
+          </div>
+          <div class="pw-strength"><div class="pw-strength-fill" id="rs-strength"></div></div>
+          <div class="pw-strength-label" id="rs-strength-label">비밀번호를 입력하세요</div>
+          <div class="form-error" id="rs-err-pw">비밀번호는 8자 이상이어야 합니다.</div>
+        </div>
+        <div class="form-row">
+          <label class="form-label">비밀번호 확인</label>
+          <div class="input-shell" id="rs-shell-pw2">
+            <input type="password" placeholder="재입력" id="rs-pw2">
+          </div>
+          <div class="form-error" id="rs-err-pw2">비밀번호가 일치하지 않습니다.</div>
+        </div>
+        <button class="btn-primary" onclick="rsNext(3)">비밀번호 재설정 완료</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ═══════════════ APP ═══════════════ -->
 <div class="screen" id="s-app">
   <div class="topbar">
@@ -1072,11 +1328,10 @@ svg{display:block;flex-shrink:0;}
   </div>
 
 
-
   <div class="content">
     <!-- HOME -->
     <div class="view active" id="v-home">
-
+      <div class="stat-grid" id="stat-grid"></div>
 
       <!-- Trending cards -->
       <div class="section" style="padding-bottom:14px;">
@@ -1119,6 +1374,36 @@ svg{display:block;flex-shrink:0;}
         </div>
       </div>
 
+      <!-- OCR Section -->
+      <div class="ocr-section">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div>
+            <div style="font-size:0.9375rem;font-weight:600;color:var(--t1)">내 검사 결과 입력</div>
+            <div style="font-size:0.6875rem;color:var(--t3);margin-top:2px">혈액검사 결과지를 업로드하거나 직접 입력하세요</div>
+          </div>
+          <label style="height:32px;padding:0 12px;background:var(--primary);color:#fff;border-radius:var(--r-md);font-size:0.75rem;font-weight:500;display:flex;align-items:center;gap:6px;cursor:pointer">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+            파일 업로드
+            <input type="file" accept="image/*,.pdf" style="display:none" onchange="handleOcrUpload(this)">
+          </label>
+        </div>
+        <div id="ocr-status" style="display:none;font-size:0.75rem;color:var(--warning);margin-bottom:8px">🔍 분석 중...</div>
+        <div id="ocr-result" style="display:none">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px" id="ocr-values"></div>
+          <svg class="ocr-chart-svg" id="ocr-chart" viewBox="0 0 300 120"></svg>
+        </div>
+        <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:12px">
+          <div style="font-size:0.75rem;color:var(--t3);margin-bottom:8px">직접 입력</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" id="manual-inputs">
+            <div><div style="font-size:0.625rem;color:var(--t3);margin-bottom:4px">WBC (백혈구)</div><div class="input-shell" style="height:36px"><input type="number" placeholder="4.0–10.0" style="flex:1;background:transparent;border:none;font-size:0.8125rem;color:var(--t1)" id="mi-wbc"></div></div>
+            <div><div style="font-size:0.625rem;color:var(--t3);margin-bottom:4px">HGB (헤모글로빈)</div><div class="input-shell" style="height:36px"><input type="number" placeholder="12–17" style="flex:1;background:transparent;border:none;font-size:0.8125rem;color:var(--t1)" id="mi-hgb"></div></div>
+            <div><div style="font-size:0.625rem;color:var(--t3);margin-bottom:4px">PLT (혈소판)</div><div class="input-shell" style="height:36px"><input type="number" placeholder="150–400" style="flex:1;background:transparent;border:none;font-size:0.8125rem;color:var(--t1)" id="mi-plt"></div></div>
+            <div><div style="font-size:0.625rem;color:var(--t3);margin-bottom:4px">CA-125 (종양표지자)</div><div class="input-shell" style="height:36px"><input type="number" placeholder="0–35" style="flex:1;background:transparent;border:none;font-size:0.8125rem;color:var(--t1)" id="mi-ca125"></div></div>
+          </div>
+          <button style="width:100%;height:36px;margin-top:10px;background:var(--elevated);border:1px solid var(--border);border-radius:var(--r-md);font-size:0.8125rem;color:var(--t2);cursor:pointer" onclick="saveManualData()">저장하기</button>
+        </div>
+      </div>
+
       <!-- Community preview -->
       <div class="section" style="margin-top:var(--sp-lg);">
         <div class="section-hdr">
@@ -1145,6 +1430,13 @@ svg{display:block;flex-shrink:0;}
 
     <!-- COMMUNITY -->
     <div class="view" id="v-community">
+      <div class="comm-disclaimer" style="margin:8px 16px 0">
+        <strong style="color:var(--warning)">⚠ 커뮤니티 안내</strong><br>
+        본 커뮤니티의 모든 게시물은 사용자의 개인적인 견해이며, BioSignal X의 공식 의견이 아닙니다. 의학적 진단, 처방 권고, 비공식 의약품 효능 광고는 금지됩니다.
+      </div>
+      <div class="prohibited-notice" style="margin-top:6px">
+        <strong style="color:var(--error)">금지 행위</strong>: 의학적 진단, 처방 권고, 비공식 의약품 효능 광고, 타인 정보 무단 수집 · 운영자는 규정 위반 게시물 삭제/계정 차단 권한을 보유합니다.
+      </div>
       <div class="tabs-wrap" id="comm-tabs">
         <button class="tab-btn on" onclick="filterComm('all',this)">전체</button>
         <button class="tab-btn" onclick="filterComm('bull',this)">📈 Bullish</button>
@@ -1156,12 +1448,12 @@ svg{display:block;flex-shrink:0;}
       <div class="feed" id="comm-feed"></div>
     </div>
 
-    <!-- EXPLORE (CLINICAL RECORDS) -->
+    <!-- EXPLORE -->
     <div class="view" id="v-explore">
       <div class="explore-header">
         <div class="section-title" style="margin-bottom:8px">임상기록</div>
         <div class="info-banner">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px;color:var(--primary-hover)"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
           <span><strong style="color:var(--primary-hover)">ClinicalTrials.gov API</strong> 실시간 검색 — NCT ID, 기업명, 약물명, 질환명으로 검색하세요</span>
         </div>
         <div class="filter-row" id="ef-phase">
@@ -1183,6 +1475,7 @@ svg{display:block;flex-shrink:0;}
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
           </button>
         </div>
+        <div class="data-timestamp" id="explore-timestamp"></div>
       </div>
       <div class="api-status-bar">
         <div class="api-status-left">
@@ -1196,7 +1489,7 @@ svg{display:block;flex-shrink:0;}
       </div>
     </div>
 
-    <!-- TRENDING (UPCOMING) -->
+    <!-- TRENDING -->
     <div class="view" id="v-trending">
       <div class="explore-header" style="border-bottom:none;padding-bottom:0">
         <div class="section-title">임상예정</div>
@@ -1213,6 +1506,12 @@ svg{display:block;flex-shrink:0;}
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
           알림 추가
         </button>
+      </div>
+      <div class="notif-tabs">
+        <button class="notif-tab on" onclick="filterNotifs('all',this)">전체</button>
+        <button class="notif-tab" onclick="filterNotifs('success',this)">임상결과 <span id="nb-clinical" style="font-family:var(--font-mono);font-size:0.5625rem;background:var(--primary-alpha);color:var(--primary-hover);padding:1px 5px;border-radius:var(--r-full);margin-left:4px"></span></button>
+        <button class="notif-tab" onclick="filterNotifs('comm',this)">커뮤니티</button>
+        <button class="notif-tab" onclick="filterNotifs('system',this)">시스템</button>
       </div>
       <div class="notif-list" id="notif-list"></div>
     </div>
@@ -1287,6 +1586,41 @@ svg{display:block;flex-shrink:0;}
   </div>
 </div>
 
+<!-- ToS Modal -->
+<div class="modal-bg" id="modal-tos">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">이용약관 및 개인정보 처리방침</div>
+    <div class="tos-modal-body">
+<h3>제1조 (목적)</h3>
+본 약관은 BioSignal X (이하 "서비스")의 이용조건 및 절차, 이용자와 서비스 제공자의 권리·의무 및 책임사항을 규정함을 목적으로 합니다.
+
+<h3>제2조 (서비스의 성격)</h3>
+본 서비스는 공개된 임상시험 정보(ClinicalTrials.gov, PubMed 등)를 수집·분석하여 제공하는 정보 제공 플랫폼입니다. 본 서비스는 의료 서비스가 아니며, 의학적 진단, 처방, 치료 권고를 제공하지 않습니다. 모든 임상시험 관련 결정은 반드시 담당 전문의와 상의하시기 바랍니다.
+
+<h3>제3조 (금지 행위)</h3>
+이용자는 다음 행위를 해서는 안 됩니다:
+- 의학적 진단 또는 처방 권고
+- 비공식 의약품 효능 광고
+- 타인의 개인정보 무단 수집 또는 유출
+- 허위 정보 유포 및 커뮤니티 질서 훼손
+- 관련 법령 위반 행위
+
+<h3>제4조 (운영자 권한)</h3>
+운영자는 규정 위반 게시물을 삭제하거나 계정을 정지·차단할 권한을 보유합니다.
+
+<h3>제5조 (면책 조항)</h3>
+서비스 제공자는 본 서비스의 정보를 근거로 한 투자 결정이나 의료적 판단에 대해 책임을 지지 않습니다. 제공되는 모든 정보는 공개 데이터 소스를 기반으로 하며, 정확성을 보장하지 않습니다.
+
+<h3>개인정보 처리방침</h3>
+서비스는 회원가입 시 이메일, 생년월일 등 최소한의 개인정보를 수집합니다. 수집된 정보는 서비스 제공 목적으로만 사용되며, 제3자에게 제공되지 않습니다. 이용자는 언제든지 개인정보 삭제를 요청할 수 있습니다.
+
+본 약관은 2026년 1월 1일부터 시행됩니다.
+    </div>
+    <button class="modal-submit" style="margin-top:16px" onclick="document.getElementById('modal-tos').classList.remove('open')">확인</button>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1294,19 +1628,19 @@ svg{display:block;flex-shrink:0;}
    DATA
    ══════════════════════════════════ */
 const TRIALS=[
-  {id:'NCT05558748',co:'유한양행',ticker:'YHB',drug:'레이저티닙+아미반타맙',ind:'비소세포폐암 1차',ph:3,st:'active',enroll:1040,upDate:'2026-Q2',upcoming:true,result:null,plain:'EGFR 변이 폐암 1차 치료. 표적+면역 조합으로 생존기간 연장 검증 중.'},
-  {id:'NCT05698394',co:'한미약품',ticker:'HMB',drug:'에페글레나타이드',ind:'비만/2형 당뇨',ph:3,st:'recruiting',enroll:1120,upDate:'2026-Q3',upcoming:true,result:null,plain:'GLP-1 수용체 작용제. 주 1회 주사로 체중 감소 효과 검증.'},
-  {id:'NCT04515303',co:'AstraZeneca',ticker:'AZN',drug:'오시머티닙',ind:'NSCLC 3기',ph:3,st:'completed',enroll:216,upDate:'2024-01',upcoming:false,result:{v:'success',hl:'PFS 39.1mo vs 5.6mo',key:'HR 0.23 (p<0.001). 위약 대비 진행 위험 77% 감소.',data:[{n:'PFS 중앙값',v:'39.1mo',c:'vs 5.6mo'},{n:'HR',v:'0.23',c:'p<0.001'},{n:'OS HR',v:'0.49',c:'미성숙'}]},plain:'3기 NSCLC 방사선 후 오시머티닙 유지요법 재발 지연 효과 입증.'},
-  {id:'NCT03669159',co:'Daiichi Sankyo/AZ',ticker:'DSK',drug:'T-DXd',ind:'HER2-low 유방암',ph:3,st:'completed',enroll:557,upDate:'2022-06',upcoming:false,result:{v:'success',hl:'PFS 9.9mo vs 5.1mo',key:'HER2-low 유방암에서 표적치료 효과를 최초로 입증.',data:[{n:'PFS',v:'9.9mo',c:'vs 5.1mo'},{n:'OS',v:'23.4mo',c:'vs 16.8mo'},{n:'ORR',v:'52.3%',c:'vs 16.3%'}]},plain:'ADC 항체-약물 접합체로 새로운 치료 패러다임 개척.'},
-  {id:'NCT04592250',co:'BMS',ticker:'BMY',drug:'니볼루맙+이필리무맙',ind:'간세포암 1차',ph:3,st:'completed',enroll:668,upDate:'2024-09',upcoming:false,result:{v:'success',hl:'OS HR 0.79 (p=0.0209)',key:'이중 면역항암제가 기존 표준치료 대비 생존기간 유의하게 연장.',data:[{n:'OS HR',v:'0.79',c:'p=0.0209'},{n:'ORR',v:'36%',c:'vs 13%'},{n:'완전관해',v:'7%',c:'vs 1%'}]},plain:'간암 1차 치료에서 이중 면역요법 우월성 입증.'},
-  {id:'NCT05908734',co:'Merck/MSD',ticker:'MRK',drug:'펨브롤리주맙+화학요법',ind:'삼중음성유방암',ph:3,st:'recruiting',enroll:1180,upDate:'2027-Q1',upcoming:true,result:null,plain:'면역항암제+화학요법으로 수술 전 완전관해율 개선 목표.'},
-  {id:'NCT05607511',co:'Moderna',ticker:'MRNA',drug:'mRNA-4157',ind:'흑색종 보조요법',ph:2,st:'active',enroll:157,upDate:'2025-Q4',upcoming:true,result:{v:'partial',hl:'RFS HR 0.44',key:'재발 56% 감소. 맞춤형 암백신+면역항암제 조합.',data:[{n:'RFS HR',v:'0.44',c:'p=0.031'},{n:'원격전이',v:'−65%',c:'HR 0.35'}]},plain:'수술 후 흑색종 재발 방지 맞춤형 mRNA 암백신.'},
-  {id:'NCT05096442',co:'Relay Therapeutics',ticker:'RLAY',drug:'RLY-4008',ind:'FGFR2 담도암',ph:2,st:'active',enroll:210,upDate:'2025-Q4',upcoming:true,result:null,plain:'FGFR2 융합 돌연변이 담도암 표적 치료제. 내성 극복 설계.'},
-  {id:'NCT05425081',co:'제넥신',ticker:'GNX',drug:'GX-I7',ind:'고형암',ph:2,st:'recruiting',enroll:60,upDate:'2025-Q4',upcoming:true,result:null,plain:'IL-7 기반 면역증강제.'},
-  {id:'NCT05220722',co:'대웅제약',ticker:'DWP',drug:'DWP-450',ind:'위식도역류',ph:2,st:'active',enroll:280,upDate:'2025-Q3',upcoming:true,result:null,plain:'P-CAB 계열 신약. 빠른 위산 억제.'},
-  {id:'NCT05610566',co:'BioNTech',ticker:'BNTX',drug:'BNT323',ind:'HER2 고형암',ph:1,st:'recruiting',enroll:115,upDate:'2025-Q3',upcoming:false,result:null,plain:'HER2 발현 고형암 ADC. 용량 탐색.'},
-  {id:'NCT05566275',co:'셀트리온',ticker:'CEL',drug:'CT-P59',ind:'인플루엔자',ph:1,st:'active',enroll:48,upDate:'2025-Q2',upcoming:false,result:null,plain:'독감 치료용 단클론항체.'},
-  {id:'NCT05602285',co:'ABL Bio',ticker:'ABL',drug:'ABL301',ind:'파킨슨병',ph:1,st:'recruiting',enroll:36,upDate:'2025-Q3',upcoming:false,result:null,plain:'이중항체로 파킨슨 원인 단백질 제거. 혈뇌장벽 투과.'},
+  {id:'NCT05558748',co:'유한양행',ticker:'YHB',drug:'레이저티닙+아미반타맙',ind:'비소세포폐암 1차',ph:3,st:'active',enroll:1040,upDate:'2026-Q2',upcoming:true,result:null,statChg:'+2.3%',plain:'EGFR 변이 폐암 1차 치료. 표적+면역 조합으로 생존기간 연장 검증 중.'},
+  {id:'NCT05698394',co:'한미약품',ticker:'HMB',drug:'에페글레나타이드',ind:'비만/2형 당뇨',ph:3,st:'recruiting',enroll:1120,upDate:'2026-Q3',upcoming:true,result:null,statChg:'+1.8%',plain:'GLP-1 수용체 작용제. 주 1회 주사로 체중 감소 효과 검증.'},
+  {id:'NCT04515303',co:'AstraZeneca',ticker:'AZN',drug:'오시머티닙',ind:'NSCLC 3기',ph:3,st:'completed',enroll:216,upDate:'2024-01',upcoming:false,result:{v:'success',hl:'PFS 39.1mo vs 5.6mo',key:'HR 0.23 (p<0.001). 위약 대비 진행 위험 77% 감소.',data:[{n:'PFS 중앙값',v:'39.1mo',c:'vs 5.6mo'},{n:'HR',v:'0.23',c:'p<0.001'},{n:'OS HR',v:'0.49',c:'미성숙'}]},statChg:'+5.2%',plain:'3기 NSCLC 방사선 후 오시머티닙 유지요법 재발 지연 효과 입증.'},
+  {id:'NCT03669159',co:'Daiichi Sankyo/AZ',ticker:'DSK',drug:'T-DXd',ind:'HER2-low 유방암',ph:3,st:'completed',enroll:557,upDate:'2022-06',upcoming:false,result:{v:'success',hl:'PFS 9.9mo vs 5.1mo',key:'HER2-low 유방암에서 표적치료 효과를 최초로 입증.',data:[{n:'PFS',v:'9.9mo',c:'vs 5.1mo'},{n:'OS',v:'23.4mo',c:'vs 16.8mo'},{n:'ORR',v:'52.3%',c:'vs 16.3%'}]},statChg:'+3.7%',plain:'ADC 항체-약물 접합체로 새로운 치료 패러다임 개척.'},
+  {id:'NCT04592250',co:'BMS',ticker:'BMY',drug:'니볼루맙+이필리무맙',ind:'간세포암 1차',ph:3,st:'completed',enroll:668,upDate:'2024-09',upcoming:false,result:{v:'success',hl:'OS HR 0.79 (p=0.0209)',key:'이중 면역항암제가 기존 표준치료 대비 생존기간 유의하게 연장.',data:[{n:'OS HR',v:'0.79',c:'p=0.0209'},{n:'ORR',v:'36%',c:'vs 13%'},{n:'완전관해',v:'7%',c:'vs 1%'}]},statChg:'+4.1%',plain:'간암 1차 치료에서 이중 면역요법 우월성 입증.'},
+  {id:'NCT05908734',co:'Merck/MSD',ticker:'MRK',drug:'펨브롤리주맙+화학요법',ind:'삼중음성유방암',ph:3,st:'recruiting',enroll:1180,upDate:'2027-Q1',upcoming:true,result:null,statChg:'+0.9%',plain:'면역항암제+화학요법으로 수술 전 완전관해율 개선 목표.'},
+  {id:'NCT05607511',co:'Moderna',ticker:'MRNA',drug:'mRNA-4157',ind:'흑색종 보조요법',ph:2,st:'active',enroll:157,upDate:'2025-Q4',upcoming:true,result:{v:'partial',hl:'RFS HR 0.44',key:'재발 56% 감소. 맞춤형 암백신+면역항암제 조합.',data:[{n:'RFS HR',v:'0.44',c:'p=0.031'},{n:'원격전이',v:'-65%',c:'HR 0.35'}]},statChg:'+6.8%',plain:'수술 후 흑색종 재발 방지 맞춤형 mRNA 암백신.'},
+  {id:'NCT05096442',co:'Relay Therapeutics',ticker:'RLAY',drug:'RLY-4008',ind:'FGFR2 담도암',ph:2,st:'active',enroll:210,upDate:'2025-Q4',upcoming:true,result:null,statChg:'-1.2%',plain:'FGFR2 융합 돌연변이 담도암 표적 치료제. 내성 극복 설계.'},
+  {id:'NCT05425081',co:'제넥신',ticker:'GNX',drug:'GX-I7',ind:'고형암',ph:2,st:'recruiting',enroll:60,upDate:'2025-Q4',upcoming:true,result:null,statChg:'+0.5%',plain:'IL-7 기반 면역증강제.'},
+  {id:'NCT05220722',co:'대웅제약',ticker:'DWP',drug:'DWP-450',ind:'위식도역류',ph:2,st:'active',enroll:280,upDate:'2025-Q3',upcoming:true,result:null,statChg:'+1.1%',plain:'P-CAB 계열 신약. 빠른 위산 억제.'},
+  {id:'NCT05610566',co:'BioNTech',ticker:'BNTX',drug:'BNT323',ind:'HER2 고형암',ph:1,st:'recruiting',enroll:115,upDate:'2025-Q3',upcoming:false,result:null,statChg:'+0.3%',plain:'HER2 발현 고형암 ADC. 용량 탐색.'},
+  {id:'NCT05566275',co:'셀트리온',ticker:'CEL',drug:'CT-P59',ind:'인플루엔자',ph:1,st:'active',enroll:48,upDate:'2025-Q2',upcoming:false,result:null,statChg:'-0.4%',plain:'독감 치료용 단클론항체.'},
+  {id:'NCT05602285',co:'ABL Bio',ticker:'ABL',drug:'ABL301',ind:'파킨슨병',ph:1,st:'recruiting',enroll:36,upDate:'2025-Q3',upcoming:false,result:null,statChg:'+1.9%',plain:'이중항체로 파킨슨 원인 단백질 제거. 혈뇌장벽 투과.'},
 ];
 
 const REPLIES={
@@ -1328,11 +1662,11 @@ const POSTS=[
 ];
 
 const NOTIFS=[
-  {id:'n1',type:'success',icon:'✅',cls:'ni-s',title:'임상 성공 — LAURA Trial',desc:'AstraZeneca 오시머티닙 Phase 3. PFS 39.1mo (HR 0.23, p<0.001).',time:'2시간 전',badge:'nb-s',badgeTx:'Phase 3 성공',unread:true},
-  {id:'n2',type:'upcoming',icon:'📅',cls:'ni-u',title:'발표 예정 — 유한양행',desc:'MARIPOSA Phase 3 결과 2026-Q2 발표 예정.',time:'6시간 전',badge:'nb-u',badgeTx:'D-30 예정',unread:true},
-  {id:'n3',type:'success',icon:'✅',cls:'ni-s',title:'임상 성공 — DESTINY-Breast04',desc:'T-DXd HER2-low 유방암 Phase 3. FDA 승인 완료.',time:'어제',badge:'nb-s',badgeTx:'FDA 승인',unread:true},
-  {id:'n4',type:'update',icon:'🔄',cls:'ni-up',title:'Moderna mRNA-4157 업데이트',desc:'흑색종 재발 위험 44% 감소. Phase 3 진행 결정.',time:'2일 전',badge:'nb-p',badgeTx:'Ph2→Ph3',unread:false},
-  {id:'n5',type:'comm',icon:'💬',cls:'ni-c',title:'커뮤니티 반응',desc:'한미약품 에페글레나타이드 게시글 댓글 42개.',time:'3일 전',badge:'',badgeTx:'',unread:false},
+  {id:'n1',type:'success',icon:'✅',cls:'ni-s',title:'임상 성공 — LAURA Trial',desc:'AstraZeneca 오시머티닙 Phase 3. PFS 39.1mo (HR 0.23, p<0.001).',time:'2시간 전',badge:'nb-s',badgeTx:'Phase 3 성공',unread:true,category:'success'},
+  {id:'n2',type:'upcoming',icon:'📅',cls:'ni-u',title:'발표 예정 — 유한양행',desc:'MARIPOSA Phase 3 결과 2026-Q2 발표 예정.',time:'6시간 전',badge:'nb-u',badgeTx:'D-30 예정',unread:true,category:'success'},
+  {id:'n3',type:'success',icon:'✅',cls:'ni-s',title:'임상 성공 — DESTINY-Breast04',desc:'T-DXd HER2-low 유방암 Phase 3. FDA 승인 완료.',time:'어제',badge:'nb-s',badgeTx:'FDA 승인',unread:true,category:'success'},
+  {id:'n4',type:'update',icon:'🔄',cls:'ni-up',title:'Moderna mRNA-4157 업데이트',desc:'흑색종 재발 위험 44% 감소. Phase 3 진행 결정.',time:'2일 전',badge:'nb-p',badgeTx:'Ph2→Ph3',unread:false,category:'success'},
+  {id:'n5',type:'comm',icon:'💬',cls:'ni-c',title:'커뮤니티 반응',desc:'한미약품 에페글레나타이드 게시글 댓글 42개.',time:'3일 전',badge:'',badgeTx:'',unread:false,category:'comm'},
 ];
 
 /* ══════════════════════════════════
@@ -1347,14 +1681,206 @@ function showScreen(id){
   requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('active')));
 }
 
-function doLogin(){
+/* ══════════════════════════════════
+   LOGIN / LOGOUT / SESSION
+   ══════════════════════════════════ */
+function doLogin(skipValidation=false){
+  if(!skipValidation){
+    const email=document.getElementById('lf-email').value.trim();
+    const pw=document.getElementById('lf-pw').value.trim();
+    let ok=true;
+    const emailShell=document.getElementById('shell-email');
+    const pwShell=document.getElementById('shell-pw');
+    const errEmail=document.getElementById('err-email');
+    const errPw=document.getElementById('err-pw');
+    // Reset
+    emailShell.classList.remove('error');pwShell.classList.remove('error');
+    errEmail.classList.remove('show');errPw.classList.remove('show');
+    if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+      emailShell.classList.add('error');errEmail.classList.add('show');ok=false;
+    }
+    if(!pw){
+      pwShell.classList.add('error');errPw.classList.add('show');ok=false;
+    }
+    if(!ok)return;
+    // Save session if autologin checked
+    const autologin=document.getElementById('chk-autologin');
+    if(autologin&&autologin.checked){
+      localStorage.setItem('bsx_session',JSON.stringify({email,loginTime:Date.now()}));
+    }
+  }
   showScreen('s-app');
-  buildTicker();renderStats();renderTrendCards();renderHomeComm();renderHomeUpcoming();
-  renderComm('all');renderTrending();loadExplore();renderNotifs();
+  renderStats();renderTrendCards();renderHomeComm();renderHomeUpcoming();
+  renderComm('all');renderTrending();loadExplore();renderNotifs();updateNotifCategoryBadges();
+  const ts=document.getElementById('explore-timestamp');
+  if(ts){const d=new Date();ts.textContent=`본 정보는 ${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()} 기준 데이터입니다 · 출처: ClinicalTrials.gov (U.S. National Library of Medicine)`;}
   toast('BioSignal X 접속 완료');
 }
-function doLogout(){showScreen('s-login');}
 
+function doLogout(){
+  localStorage.removeItem('bsx_session');
+  showScreen('s-login');
+}
+
+// Check session on load
+window.addEventListener('DOMContentLoaded',()=>{
+  try{
+    const sess=JSON.parse(localStorage.getItem('bsx_session')||'null');
+    if(sess&&sess.loginTime&&(Date.now()-sess.loginTime)<7*24*60*60*1000){
+      // Pre-fill email and auto-login
+      const emailEl=document.getElementById('lf-email');
+      const pwEl=document.getElementById('lf-pw');
+      if(emailEl)emailEl.value=sess.email||'';
+      if(pwEl)pwEl.value='••••••••';
+      doLogin(true);
+      return;
+    }
+  }catch(e){}
+});
+
+function showSignup(){
+  suStep=1;renderSuSteps();
+  showScreen('s-signup');
+}
+function showReset(){
+  rsStep=1;renderRsSteps();
+  showScreen('s-reset');
+  startTimer('otp-timer-rs',30*60);
+}
+function openTos(){document.getElementById('modal-tos').classList.add('open');}
+
+/* ══════════════════════════════════
+   SIGNUP
+   ══════════════════════════════════ */
+let suStep=1;
+function renderSuSteps(){
+  [1,2,3].forEach(i=>{
+    document.getElementById('su-step-'+i).classList.toggle('active',i===suStep);
+    const dot=document.getElementById('su-dot-'+i);
+    if(dot){dot.className='step-dot '+(i<suStep?'done':i===suStep?'active':'');}
+  });
+}
+
+let suOtpTimer=null;
+function suNext(step){
+  if(step===1){
+    const email=document.getElementById('su-email').value.trim();
+    const pw=document.getElementById('su-pw').value;
+    const pw2=document.getElementById('su-pw2').value;
+    let ok=true;
+    document.getElementById('su-shell-email').classList.remove('error');document.getElementById('su-err-email').classList.remove('show');
+    document.getElementById('su-shell-pw').classList.remove('error');document.getElementById('su-err-pw').classList.remove('show');
+    document.getElementById('su-shell-pw2').classList.remove('error');document.getElementById('su-err-pw2').classList.remove('show');
+    if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){document.getElementById('su-shell-email').classList.add('error');document.getElementById('su-err-email').classList.add('show');ok=false;}
+    if(!pw||pw.length<8){document.getElementById('su-shell-pw').classList.add('error');document.getElementById('su-err-pw').classList.add('show');ok=false;}
+    if(pw!==pw2){document.getElementById('su-shell-pw2').classList.add('error');document.getElementById('su-err-pw2').classList.add('show');ok=false;}
+    if(!ok)return;
+    suStep=2;renderSuSteps();
+    startTimer('otp-timer-su',3*60);
+  } else if(step===2){
+    const otp=document.getElementById('su-otp').value.trim();
+    document.getElementById('su-shell-otp').classList.remove('error');document.getElementById('su-err-otp').classList.remove('show');
+    if(otp!=='123456'){document.getElementById('su-shell-otp').classList.add('error');document.getElementById('su-err-otp').classList.add('show');return;}
+    suStep=3;renderSuSteps();
+  } else if(step===3){
+    const name=document.getElementById('su-name').value.trim();
+    const dob=document.getElementById('su-dob').value;
+    const tos=document.getElementById('ck-tos').checked;
+    const priv=document.getElementById('ck-privacy').checked;
+    const med=document.getElementById('ck-medical').checked;
+    let ok=true;
+    document.getElementById('su-shell-name').classList.remove('error');document.getElementById('su-err-name').classList.remove('show');
+    document.getElementById('su-shell-dob').classList.remove('error');document.getElementById('su-err-dob').classList.remove('show');
+    document.getElementById('su-err-tos').classList.remove('show');
+    if(!name){document.getElementById('su-shell-name').classList.add('error');document.getElementById('su-err-name').classList.add('show');ok=false;}
+    if(!dob){document.getElementById('su-shell-dob').classList.add('error');document.getElementById('su-err-dob').classList.add('show');ok=false;}
+    if(!tos||!priv||!med){document.getElementById('su-err-tos').classList.add('show');ok=false;}
+    if(!ok)return;
+    showScreen('s-login');
+    toast('가입이 완료되었습니다! 로그인해주세요.');
+  }
+}
+
+function resendOtp(timerId){
+  startTimer(timerId,3*60);
+  toast('인증코드가 재발송되었습니다. (데모: 123456)');
+}
+
+/* ══════════════════════════════════
+   RESET
+   ══════════════════════════════════ */
+let rsStep=1;
+function renderRsSteps(){
+  [1,2,3].forEach(i=>{
+    document.getElementById('rs-step-'+i).classList.toggle('active',i===rsStep);
+    const dot=document.getElementById('rs-dot-'+i);
+    if(dot){dot.className='step-dot '+(i<rsStep?'done':i===rsStep?'active':'');}
+  });
+}
+function rsNext(step){
+  if(step===1){
+    const id=document.getElementById('rs-id').value.trim();
+    document.getElementById('rs-shell-id').classList.remove('error');document.getElementById('rs-err-id').classList.remove('show');
+    if(!id){document.getElementById('rs-shell-id').classList.add('error');document.getElementById('rs-err-id').classList.add('show');return;}
+    rsStep=2;renderRsSteps();
+    startTimer('otp-timer-rs',30*60);
+    toast('인증코드가 발송되었습니다. (데모: 123456)');
+  } else if(step===2){
+    const otp=document.getElementById('rs-otp').value.trim();
+    document.getElementById('rs-shell-otp').classList.remove('error');document.getElementById('rs-err-otp').classList.remove('show');
+    if(otp!=='123456'){document.getElementById('rs-shell-otp').classList.add('error');document.getElementById('rs-err-otp').classList.add('show');return;}
+    rsStep=3;renderRsSteps();
+  } else if(step===3){
+    const pw=document.getElementById('rs-pw').value;
+    const pw2=document.getElementById('rs-pw2').value;
+    let ok=true;
+    document.getElementById('rs-shell-pw').classList.remove('error');document.getElementById('rs-err-pw').classList.remove('show');
+    document.getElementById('rs-shell-pw2').classList.remove('error');document.getElementById('rs-err-pw2').classList.remove('show');
+    if(!pw||pw.length<8){document.getElementById('rs-shell-pw').classList.add('error');document.getElementById('rs-err-pw').classList.add('show');ok=false;}
+    if(pw!==pw2){document.getElementById('rs-shell-pw2').classList.add('error');document.getElementById('rs-err-pw2').classList.add('show');ok=false;}
+    if(!ok)return;
+    showScreen('s-login');
+    toast('비밀번호가 재설정되었습니다. 새 비밀번호로 로그인해주세요.');
+  }
+}
+
+/* OTP Timer */
+const _timers={};
+function startTimer(elId,seconds){
+  if(_timers[elId])clearInterval(_timers[elId]);
+  let rem=seconds;
+  const el=document.getElementById(elId);
+  if(!el)return;
+  function fmt(s){const m=Math.floor(s/60);const sec=s%60;return `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;}
+  el.textContent=fmt(rem);
+  _timers[elId]=setInterval(()=>{
+    rem--;
+    if(el)el.textContent=fmt(rem);
+    if(rem<=0){clearInterval(_timers[elId]);if(el)el.textContent='00:00';}
+  },1000);
+}
+
+/* Password strength */
+function checkPwStrength(pw,barId,labelId){
+  const bar=document.getElementById(barId);const lbl=document.getElementById(labelId);
+  if(!bar||!lbl)return;
+  let score=0;
+  if(pw.length>=8)score++;
+  if(pw.length>=12)score++;
+  if(/[A-Z]/.test(pw)&&/[a-z]/.test(pw))score++;
+  if(/[0-9]/.test(pw))score++;
+  if(/[^A-Za-z0-9]/.test(pw))score++;
+  const lvl=score<=1?0:score<=2?1:score<=3?2:score<=4?3:4;
+  const widths=['0%','25%','50%','75%','100%'];
+  const colors=['var(--error)','var(--error)','var(--warning)','var(--success)','var(--success)'];
+  const labels=['','약함','보통','강함','매우강함'];
+  bar.style.width=widths[lvl];bar.style.background=colors[lvl];
+  lbl.textContent=pw?labels[lvl]||'약함':'비밀번호를 입력하세요';
+}
+
+/* ══════════════════════════════════
+   NAVIGATION
+   ══════════════════════════════════ */
 let navHistory = ['home'];
 function goNav(t, push=true){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
@@ -1366,11 +1892,7 @@ function goNav(t, push=true){
   if(t==='alerts')markAllRead();
 }
 function goBack(){
-  if(navHistory.length > 1){
-    navHistory.pop();
-    const prev = navHistory[navHistory.length-1];
-    goNav(prev, false);
-  }
+  if(navHistory.length > 1){navHistory.pop();const prev = navHistory[navHistory.length-1];goNav(prev, false);}
 }
 
 /* ══════════════════════════════════
@@ -1385,34 +1907,32 @@ function buildTicker(){
 }
 
 /* ══════════════════════════════════
-   HOME
+   HOME — STATS with status badges
    ══════════════════════════════════ */
 function renderStats(){
   const ph3=TRIALS.filter(t=>t.ph===3).length;
-  const succ=TRIALS.filter(t=>t.result?.v==='success').length;
+  const succ=TRIALS.filter(t=>t.result&&t.result.v==='success').length;
   const upcom=TRIALS.filter(t=>t.upcoming&&!t.result).length;
-  // Micro sparkline data (simulated)
-  const spData=[[40,55,48,60,52,70,65,80,75,90],[30,45,38,50,48,55,52,60,62,58],[50,48,52,45,55,50,58,54,60,56]];
-  const spCols=['spark-up','spark-up','spark-up'];
+  // Status classification
+  function ph3Status(n){return n>=5?'정상':n>=3?'주의':'위험';}
+  function ph3StatusCls(n){return n>=5?'sbs-normal':n>=3?'sbs-caution':'sbs-danger';}
+  function succStatus(n){return n>=3?'정상':n>=1?'주의':'위험';}
+  function succStatusCls(n){return n>=3?'sbs-normal':n>=1?'sbs-caution':'sbs-danger';}
   const tiles=[
-    {label:'Phase 3 임상',val:ph3,cls:'st-blue',chip:'',chipCls:'tc-neutral',spark:0,acnt:'st-blue'},
-    {label:'성공 결과',val:succ,valCls:'success',cls:'st-success',chip:'+1 신규',chipCls:'tc-up',spark:1,acnt:'st-success'},
-    {label:'발표 예정',val:upcom,valCls:'warning',cls:'st-warning',chip:'주목',chipCls:'tc-neutral',spark:2,acnt:'st-warning'},
+    {label:'Phase 3 임상',val:ph3,valCls:'',acnt:'st-blue',
+     statusBadge:ph3Status(ph3),statusCls:ph3StatusCls(ph3)},
+    {label:'성공 결과',val:succ,valCls:'success',acnt:'st-success',
+     statusBadge:succStatus(succ),statusCls:succStatusCls(succ)},
+    {label:'발표 예정',val:upcom,valCls:'warning',acnt:'st-warning',
+     statusBadge:'주의',statusCls:'sbs-caution'},
   ];
-  document.getElementById('stat-grid').innerHTML=tiles.map((tile,i)=>{
-    const pts=makeSpark(spData[i]);
+  document.getElementById('stat-grid').innerHTML=tiles.map((tile)=>{
     return `<div class="stat-tile ${tile.acnt}">
-      <div class="st-label">${tile.label}</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+        <div class="st-label">${tile.label}</div>
+        <span class="status-badge-sm ${tile.statusCls}">${tile.statusBadge}</span>
+      </div>
       <div class="st-val ${tile.valCls||''}">${tile.val}</div>
-      ${tile.chip?`<div class="trend-chip ${tile.chipCls}">
-        <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
-        </svg>
-        ${tile.chip}
-      </div>`:'<div class="trend-chip tc-neutral">—</div>'}
-      <svg class="sparkline" viewBox="0 0 80 28" preserveAspectRatio="none">
-        <polyline class="${spCols[i]}" points="${pts}"/>
-      </svg>
     </div>`;
   }).join('');
 }
@@ -1431,7 +1951,6 @@ function renderTrendCards(){
     .sort((a,b)=>{if(a.result&&!b.result)return -1;if(!a.result&&b.result)return 1;return b.ph-a.ph;})
     .slice(0,6);
   document.getElementById('trend-scroll').innerHTML=top.map((t,i)=>{
-    const up=parseFloat(t.statChg)>=0;
     const phCls={1:'card-ph1',2:'card-ph2',3:'card-ph3'}[t.ph]||'card-ph2';
     const pbCls={1:'pb-1',2:'pb-2',3:'pb-3'}[t.ph]||'pb-2';
     let foot='';
@@ -1452,7 +1971,6 @@ function renderTrendCards(){
       <div class="card-company">${esc(t.co)}</div>
       <div class="card-drug">${esc(t.drug)}</div>
       <span class="phase-badge ${pbCls}">PH ${t.ph}</span>
-      <div class="card-metric ${up?'up':'dn'}">${esc(t.statChg)}</div>
       ${foot}
     </div>`;
   }).join('');
@@ -1485,44 +2003,98 @@ function renderHomeUpcoming(){
 function watchAlert(id,btn){
   btn.className='alert-btn set';btn.textContent='✓ 설정됨';
   const t=TRIALS.find(x=>x.id===id);
-  addNotif({id:'nw'+id,type:'upcoming',icon:'🔔',cls:'ni-u',title:'알림 설정 완료',desc:`${t?.co||'선택 임상'}의 발표 결과를 알림으로 받습니다.`,time:'방금',badge:'nb-u',badgeTx:'알림 ON',unread:true});
+  addNotif({id:'nw'+id,type:'upcoming',icon:'🔔',cls:'ni-u',title:'알림 설정 완료',desc:`${t?.co||'선택 임상'}의 발표 결과를 알림으로 받습니다.`,time:'방금',badge:'nb-u',badgeTx:'알림 ON',unread:true,category:'success'});
   toast('알림이 설정되었습니다');
+}
+
+/* ══════════════════════════════════
+   OCR / MEDICAL DATA
+   ══════════════════════════════════ */
+function handleOcrUpload(input){
+  if(!input.files||!input.files[0])return;
+  const status=document.getElementById('ocr-status');
+  const result=document.getElementById('ocr-result');
+  status.style.display='block';result.style.display='none';
+  setTimeout(()=>{
+    status.style.display='none';
+    // Simulated extracted values
+    const data=[
+      {name:'WBC (백혈구)',val:7.2,unit:'×10³/μL',ref:'4.0-10.0',ok:true},
+      {name:'HGB (헤모글로빈)',val:13.5,unit:'g/dL',ref:'12-17',ok:true},
+      {name:'PLT (혈소판)',val:312,unit:'×10³/μL',ref:'150-400',ok:true},
+      {name:'CA-125 (종양표지자)',val:42,unit:'U/mL',ref:'0-35',ok:false},
+    ];
+    localStorage.setItem('bsx_medical_data',JSON.stringify({date:new Date().toISOString(),values:data}));
+    renderOcrResult(data);
+  },1500);
+}
+
+function renderOcrResult(data){
+  const result=document.getElementById('ocr-result');
+  const valEl=document.getElementById('ocr-values');
+  result.style.display='block';
+  valEl.innerHTML=data.map(d=>`
+    <div style="background:var(--bg);border:1px solid ${d.ok?'var(--border)':'rgba(255,58,92,0.25)'};border-radius:var(--r-md);padding:8px 10px">
+      <div style="font-size:0.625rem;color:var(--t3);margin-bottom:3px">${esc(d.name)}</div>
+      <div style="font-family:var(--font-mono);font-size:1rem;font-weight:600;color:${d.ok?'var(--success)':'var(--error)'}">${d.val}<span style="font-size:0.5625rem;color:var(--t3);margin-left:4px">${esc(d.unit)}</span></div>
+      <div style="font-size:0.5625rem;color:var(--t3)">정상: ${esc(d.ref)}</div>
+    </div>`).join('');
+  renderOcrChart(data);
+}
+
+function renderOcrChart(data){
+  const svg=document.getElementById('ocr-chart');
+  const w=300,h=120,pad=30,barW=40,gap=20;
+  const maxVal=Math.max(...data.map(d=>d.val))*1.2;
+  let paths='';
+  // Draw bars
+  data.forEach((d,i)=>{
+    const x=pad+i*(barW+gap);
+    const barH=((d.val/maxVal)*(h-pad-10));
+    const y=h-pad-barH;
+    const col=d.ok?'var(--success)':'var(--error)';
+    paths+=`<rect x="${x}" y="${y}" width="${barW}" height="${barH}" fill="${col}" opacity="0.7" rx="3"/>`;
+    paths+=`<text x="${x+barW/2}" y="${h-pad+12}" text-anchor="middle" font-size="7" fill="var(--t3)">${esc(d.name.split(' ')[0])}</text>`;
+    paths+=`<text x="${x+barW/2}" y="${y-4}" text-anchor="middle" font-size="7" fill="${col}" font-weight="600">${d.val}</text>`;
+  });
+  // Axes
+  paths+=`<line x1="${pad-5}" y1="${h-pad}" x2="${w-10}" y2="${h-pad}" stroke="var(--border)" stroke-width="1"/>`;
+  svg.innerHTML=paths;
+}
+
+function saveManualData(){
+  const wbc=document.getElementById('mi-wbc').value;
+  const hgb=document.getElementById('mi-hgb').value;
+  const plt=document.getElementById('mi-plt').value;
+  const ca125=document.getElementById('mi-ca125').value;
+  if(!wbc&&!hgb&&!plt&&!ca125){toast('값을 입력해주세요');return;}
+  const data=[
+    {name:'WBC (백혈구)',val:parseFloat(wbc)||0,unit:'×10³/μL',ref:'4.0-10.0',ok:parseFloat(wbc)>=4&&parseFloat(wbc)<=10},
+    {name:'HGB (헤모글로빈)',val:parseFloat(hgb)||0,unit:'g/dL',ref:'12-17',ok:parseFloat(hgb)>=12&&parseFloat(hgb)<=17},
+    {name:'PLT (혈소판)',val:parseFloat(plt)||0,unit:'×10³/μL',ref:'150-400',ok:parseFloat(plt)>=150&&parseFloat(plt)<=400},
+    {name:'CA-125',val:parseFloat(ca125)||0,unit:'U/mL',ref:'0-35',ok:parseFloat(ca125)<=35},
+  ].filter(d=>d.val>0);
+  if(!data.length){toast('유효한 값을 입력해주세요');return;}
+  localStorage.setItem('bsx_medical_data',JSON.stringify({date:new Date().toISOString(),values:data}));
+  renderOcrResult(data);
+  toast('검사 결과가 저장되었습니다');
 }
 
 /* ══════════════════════════════════
    METRIC CHART HELPERS
    ══════════════════════════════════ */
-/* Classify a metric value as good/bad/neutral based on metric name + value */
 function classifyMetric(name, val){
   const n=name.toLowerCase();
   const numVal=parseFloat(String(val).replace(/[^0-9.−-]/g,'').replace('−','-'));
-  // HR < 1 is good (hazard ratio), HR > 1 is bad
-  if(n.includes('hr')||n.includes('hazard')){
-    if(isNaN(numVal))return 'neutral';
-    return numVal<1?'good':'bad';
-  }
-  // p-value: < 0.05 is good
-  if(n.includes('p-val')||n.includes('p=')){
-    if(isNaN(numVal))return 'neutral';
-    return numVal<0.05?'good':'bad';
-  }
-  // ORR, PFS, OS, RFS, DCR — higher is better
-  if(n.includes('orr')||n.includes('pfs')||n.includes('os ')||n.includes('rfs')||n.includes('dcr')||n.includes('완전관해')||n.includes('생존')){
-    if(isNaN(numVal))return 'neutral';
-    return numVal>0?'good':'bad';
-  }
-  // 재발, 진행 위험 — decrease is good
-  if(n.includes('재발')||n.includes('위험')||n.includes('원격전이')){
-    if(isNaN(numVal))return 'neutral';
-    return numVal<0?'good':'bad';
-  }
+  if(n.includes('hr')||n.includes('hazard')){if(isNaN(numVal))return 'neutral';return numVal<1?'good':'bad';}
+  if(n.includes('p-val')||n.includes('p=')){if(isNaN(numVal))return 'neutral';return numVal<0.05?'good':'bad';}
+  if(n.includes('orr')||n.includes('pfs')||n.includes('os ')||n.includes('rfs')||n.includes('dcr')||n.includes('완전관해')||n.includes('생존')){if(isNaN(numVal))return 'neutral';return numVal>0?'good':'bad';}
+  if(n.includes('재발')||n.includes('위험')||n.includes('원격전이')){if(isNaN(numVal))return 'neutral';return numVal<0?'good':'bad';}
   return 'neutral';
 }
 
-/* Build metric bar chart HTML from data array */
-function buildMetricChart(data, isSuccess){
+function buildMetricChart(data){
   if(!data||!data.length)return '';
-  // Determine max numeric value for bar scaling
   const nums=data.map(d=>Math.abs(parseFloat(String(d.v).replace(/[^0-9.−-]/g,'').replace('−','-'))||0));
   const maxN=Math.max(...nums,1);
   const bars=data.map(d=>{
@@ -1535,10 +2107,7 @@ function buildMetricChart(data, isSuccess){
       <div class="metric-bar-val ${cls}">${esc(d.v)}<span style="font-size:.5625rem;color:var(--t3);margin-left:4px">${esc(d.c)}</span></div>
     </div>`;
   }).join('');
-  return `<div class="metric-chart">
-    <div class="metric-chart-title">Key Endpoints</div>
-    ${bars}
-  </div>`;
+  return `<div class="metric-chart"><div class="metric-chart-title">Key Endpoints</div>${bars}</div>`;
 }
 
 /* ══════════════════════════════════
@@ -1547,12 +2116,10 @@ function buildMetricChart(data, isSuccess){
 function showDetail(id, ctData=null){
   const t=ctData || TRIALS.find(x=>x.id===id);
   if(!t)return;
-  
   const isCT = !!ctData;
   const v=t.result && t.result.v==='success';
   const pubmedId='pm-'+id;
   const wikiId='wiki-'+id;
-  
   const html=`
     <div style="padding:16px">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
@@ -1561,39 +2128,29 @@ function showDetail(id, ctData=null){
           뒤로가기
         </button>
         <div style="display:flex;align-items:center;gap:6px">
-          ${isCT ? `<span class="ec-status ${t.stCls}" style="font-size:10px">${t.stLbl}</span>` : 
-          (t.result?`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="${v?'var(--success)':'var(--error)'}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${v?'<path d="M20 6 9 17l-5-5"/>':'<circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/>'}</svg>
+          ${t.result?`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="${v?'var(--success)':'var(--error)'}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${v?'<path d="M20 6 9 17l-5-5"/>':'<circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/>'}</svg>
           <span style="font-family:var(--font-mono);font-size:.625rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:${v?'var(--success)':'var(--error)'}">${v?'임상 성공':'임상 실패/부분 성공'}</span>`:
-          `<span style="font-family:var(--font-mono);font-size:.625rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--warning)">발표 예정</span>`)}
+          `<span style="font-family:var(--font-mono);font-size:.625rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--warning)">발표 예정</span>`}
         </div>
       </div>
-      
-      <div style="font-size:1.375rem;font-weight:600;letter-spacing:-.02em;color:var(--t1);margin-bottom:3px">${esc(t.co || t.sponsor)}</div>
+      <div style="font-size:1.375rem;font-weight:600;letter-spacing:-.02em;color:var(--t1);margin-bottom:3px">${esc(t.co||t.sponsor||'')}</div>
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
-        <div style="font-size:.8125rem;color:var(--t3);font-family:var(--font-mono)">${esc(t.drug)} · Ph.${t.ph} ${t.ind ? `· ${esc(t.ind)}` : ''}</div>
-        <button onclick="copyToClipboard('${t.drug}','약물명이 복사되었습니다')" style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-size:10px;color:var(--t2);cursor:pointer">복사</button>
+        <div style="font-size:.8125rem;color:var(--t3);font-family:var(--font-mono)">${esc(t.drug)} · Ph.${t.ph} ${t.ind?`· ${esc(t.ind)}`:''}</div>
+        <button onclick="copyToClipboard('${(t.drug||'').replace(/'/g,"\\'")}','약물명이 복사되었습니다')" style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-size:10px;color:var(--t2);cursor:pointer">복사</button>
       </div>
-
       <div id="${wikiId}" style="margin-bottom:16px"></div>
-
       ${t.result?`
       <div style="background:${v?'var(--success-alpha)':'var(--error-alpha)'};border:1px solid ${v?'rgba(43,224,140,0.18)':'rgba(255,58,92,0.18)'};border-radius:var(--r-lg);padding:12px;margin-bottom:12px">
         <div style="font-family:var(--font-mono);font-size:.875rem;font-weight:600;color:${v?'var(--success)':'var(--error)'};margin-bottom:5px">${esc(t.result.hl)}</div>
         <div style="font-size:.8125rem;color:var(--t1);line-height:1.65">${esc(t.result.key)}</div>
-      </div>`:
-      (isCT ? `<div style="background:var(--primary-alpha);border:1px solid var(--primary-focus);border-radius:var(--r-lg);padding:12px;margin-bottom:12px">
-        <div style="font-size:.875rem;font-weight:600;color:var(--primary-hover);margin-bottom:5px">임상 요약 (Summary)</div>
-        <div style="font-size:.8125rem;color:var(--t1);line-height:1.65">${esc(t.summary)}</div>
-      </div>` :
+      </div>
+      ${buildMetricChart(t.result.data)}`:
       `<div style="background:var(--warning-alpha);border:1px solid rgba(245,213,71,0.18);border-radius:var(--r-lg);padding:12px;margin-bottom:12px">
-        <div style="font-size:.875rem;font-weight:600;color:var(--warning);margin-bottom:5px">발표 예정: ${esc(t.upDate)}</div>
-        <div style="font-size:.8125rem;color:var(--t1);line-height:1.65">${esc(t.plain)}</div>
-      </div>`)}
-
-      ${t.cond ? `<div style="font-size:.75rem;color:var(--t2);line-height:1.7;padding:10px 12px;background:var(--bg);border-radius:var(--r-md);border:1px solid var(--border);margin-bottom:12px">🦠 질환명: ${esc(t.cond)}</div>` : ''}
-      
+        <div style="font-size:.875rem;font-weight:600;color:var(--warning);margin-bottom:5px">발표 예정: ${esc(t.upDate||'')}</div>
+        <div style="font-size:.8125rem;color:var(--t1);line-height:1.65">${esc(t.plain||'')}</div>
+      </div>`}
+      ${t.cond?`<div style="font-size:.75rem;color:var(--t2);line-height:1.7;padding:10px 12px;background:var(--bg);border-radius:var(--r-md);border:1px solid var(--border);margin-bottom:12px">🦠 질환명: ${esc(t.cond)}</div>`:''}
       <div id="${pubmedId}" style="margin-top:12px"><div class="pubmed-empty">🔍 PubMed 논문 로딩 중...</div></div>
-      
       <div style="margin-top:20px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);text-align:center">
         <div style="font-size:.75rem;color:var(--t3);margin-bottom:10px">더 자세한 정보는 ClinicalTrials.gov에서 확인하세요</div>
         <a href="https://clinicaltrials.gov/study/${t.id}" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:var(--primary);color:#fff;padding:8px 16px;border-radius:var(--r-md);font-size:.8125rem;font-weight:600;text-decoration:none">
@@ -1601,15 +2158,15 @@ function showDetail(id, ctData=null){
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
         </a>
       </div>
-
       <div style="margin-top:14px;display:flex;align-items:center;gap:8px;justify-content:center">
         <div style="font-family:var(--font-mono);font-size:.5625rem;color:var(--t3)">${t.id}</div>
         <button onclick="copyToClipboard('${t.id}','NCT ID가 복사되었습니다')" style="background:none;border:none;padding:0;font-size:9px;color:var(--primary-hover);cursor:pointer;text-decoration:underline">ID 복사</button>
       </div>
+      <div style="margin-top:16px;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-md);font-size:.5625rem;color:var(--t3);line-height:1.5">본 정보는 ClinicalTrials.gov 공개 데이터 기반이며 의료 서비스가 아닙니다. 임상시험 관련 결정은 담당 전문의와 상의하십시오.</div>
     </div>`;
   showSheet(html);
   loadPubMed(t.drug, pubmedId);
-  loadCompanyInfo(t.co || t.sponsor, wikiId);
+  loadCompanyInfo(t.co||t.sponsor||'', wikiId);
 }
 
 function showSheet(html){
@@ -1634,11 +2191,8 @@ function showSheet(html){
 const WIKI_CACHE = {};
 async function loadCompanyInfo(companyName, containerId) {
   const container = document.getElementById(containerId);
-  if (!container) return;
-  if (WIKI_CACHE[companyName]) {
-    container.innerHTML = renderCompanyInfo(WIKI_CACHE[companyName]);
-    return;
-  }
+  if (!container||!companyName) return;
+  if (WIKI_CACHE[companyName]) { container.innerHTML = renderCompanyInfo(WIKI_CACHE[companyName]); return; }
   try {
     const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(companyName)}`;
     const r = await fetch(url);
@@ -1651,18 +2205,17 @@ async function loadCompanyInfo(companyName, containerId) {
   }
 }
 function renderCompanyInfo(d) {
-  return `
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:12px;margin-bottom:12px">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-        ${d.thumbnail ? `<img src="${d.thumbnail.source}" style="width:32px;height:32px;border-radius:4px;object-fit:contain;background:#fff;padding:2px">` : ''}
-        <div>
-          <div style="font-size:.875rem;font-weight:600;color:var(--t1)">${esc(d.title)}</div>
-          <div style="font-size:.6875rem;color:var(--t3)">Global Pharmaceutical Company</div>
-        </div>
+  return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:12px;margin-bottom:12px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      ${d.thumbnail?`<img src="${d.thumbnail.source}" style="width:32px;height:32px;border-radius:4px;object-fit:contain;background:#fff;padding:2px">`:''}
+      <div>
+        <div style="font-size:.875rem;font-weight:600;color:var(--t1)">${esc(d.title)}</div>
+        <div style="font-size:.6875rem;color:var(--t3)">Global Pharmaceutical Company</div>
       </div>
-      <div style="font-size:.75rem;color:var(--t2);line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">${esc(d.extract)}</div>
-      <a href="${d.content_urls.desktop.page}" target="_blank" style="display:inline-block;margin-top:8px;font-size:.6875rem;color:var(--primary-hover);text-decoration:none">Wikipedia에서 더보기 →</a>
-    </div>`;
+    </div>
+    <div style="font-size:.75rem;color:var(--t2);line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">${esc(d.extract||'')}</div>
+    <a href="${d.content_urls?.desktop?.page||'#'}" target="_blank" style="display:inline-block;margin-top:8px;font-size:.6875rem;color:var(--primary-hover);text-decoration:none">Wikipedia에서 더보기 →</a>
+  </div>`;
 }
 
 /* ══════════════════════════════════
@@ -1673,46 +2226,28 @@ const PUBMED_CACHE={};
 
 async function loadPubMed(drugName, containerId){
   const container=document.getElementById(containerId);
-  if(!container)return;
-  // Use cached result
-  if(PUBMED_CACHE[drugName]){
-    container.innerHTML=renderPubMedPanel(drugName,PUBMED_CACHE[drugName]);
-    return;
-  }
+  if(!container||!drugName)return;
+  if(PUBMED_CACHE[drugName]){container.innerHTML=renderPubMedPanel(drugName,PUBMED_CACHE[drugName]);return;}
   try{
-    // Step 1: esearch
     const term=encodeURIComponent(drugName+' clinical trial');
-    const searchUrl=`${PUBMED_BASE}/esearch.fcgi?db=pubmed&term=${term}&retmax=5&retmode=json&sort=relevance`;
-    const sr=await fetch(searchUrl);
+    const sr=await fetch(`${PUBMED_BASE}/esearch.fcgi?db=pubmed&term=${term}&retmax=5&retmode=json&sort=relevance`);
     if(!sr.ok)throw new Error('esearch failed');
     const sd=await sr.json();
     const ids=(sd.esearchresult?.idlist||[]).slice(0,5);
-    if(!ids.length){
-      container.innerHTML='<div class="pubmed-empty">PubMed 관련 논문이 없습니다.</div>';
-      return;
-    }
-    // Step 2: efetch (for abstracts)
-    const fetchUrl=`${PUBMED_BASE}/efetch.fcgi?db=pubmed&id=${ids.join(',')}&retmode=xml`;
-    const fr=await fetch(fetchUrl);
+    if(!ids.length){container.innerHTML='<div class="pubmed-empty">PubMed 관련 논문이 없습니다.</div>';return;}
+    const fr=await fetch(`${PUBMED_BASE}/efetch.fcgi?db=pubmed&id=${ids.join(',')}&retmode=xml`);
     if(!fr.ok)throw new Error('efetch failed');
-    const xmlText=await fr.text();
-    const parser=new DOMParser();
-    const xmlDoc=parser.parseFromString(xmlText,'text/xml');
-    const articles=xmlDoc.querySelectorAll('PubmedArticle');
-    
-    const result=Array.from(articles).map(art=>{
-      const pmid=art.querySelector('PMID')?.textContent;
-      const title=art.querySelector('ArticleTitle')?.textContent;
-      const journal=art.querySelector('Title')?.textContent;
-      const year=art.querySelector('PubDate Year')?.textContent || art.querySelector('PubDate MedlineDate')?.textContent?.substring(0,4);
-      const abstract=Array.from(art.querySelectorAll('AbstractText')).map(ab=>ab.textContent).join('\n\n');
-      const authors=Array.from(art.querySelectorAll('Author')).slice(0,2).map(au=>{
-        return (au.querySelector('LastName')?.textContent||'') + ' ' + (au.querySelector('Initials')?.textContent||'');
-      }).join(', ');
-      
-      return { pmid, title, journal, year, authors, abstract };
+    const xmlDoc=(new DOMParser()).parseFromString(await fr.text(),'text/xml');
+    const result=Array.from(xmlDoc.querySelectorAll('PubmedArticle')).map(art=>{
+      return {
+        pmid:art.querySelector('PMID')?.textContent,
+        title:art.querySelector('ArticleTitle')?.textContent,
+        journal:art.querySelector('Title')?.textContent,
+        year:art.querySelector('PubDate Year')?.textContent||art.querySelector('PubDate MedlineDate')?.textContent?.substring(0,4),
+        authors:Array.from(art.querySelectorAll('Author')).slice(0,2).map(au=>(au.querySelector('LastName')?.textContent||'')+' '+(au.querySelector('Initials')?.textContent||'')).join(', '),
+        abstract:Array.from(art.querySelectorAll('AbstractText')).map(ab=>ab.textContent).join('\n\n')
+      };
     });
-
     PUBMED_CACHE[drugName]=result;
     container.innerHTML=renderPubMedPanel(drugName,result);
   }catch(e){
@@ -1732,30 +2267,25 @@ function renderPubMedPanel(drug, articles){
       </div>
       <div id="abs-${idx}" class="pubmed-abstract">
         <div style="font-weight:600;margin-bottom:8px;color:var(--t1);font-size:.75rem;text-transform:uppercase;letter-spacing:.05em">Abstract</div>
-        <div style="white-space:pre-wrap">${esc(a.abstract || '초록 정보가 없습니다.')}</div>
+        <div style="white-space:pre-wrap">${esc(a.abstract||'초록 정보가 없습니다.')}</div>
         <button class="pubmed-item-btn" onclick="window.open('https://pubmed.ncbi.nlm.nih.gov/${a.pmid}','_blank')">PubMed에서 전체 보기 ↗</button>
       </div>
     </div>`).join('');
   return `<div class="pubmed-panel">
     <div class="pubmed-panel-hdr">
-      <div class="pubmed-hdr-left">
-        <span class="pubmed-logo">PubMed</span>
-        <span class="pubmed-query">${esc(drug)} 관련 논문</span>
-      </div>
+      <div class="pubmed-hdr-left"><span class="pubmed-logo">PubMed</span><span class="pubmed-query">${esc(drug)} 관련 논문</span></div>
       <span class="pubmed-count">${articles.length}건</span>
     </div>
     <div class="pubmed-list">${items}</div>
   </div>`;
 }
-function toggleAbstract(idx){
-  const el=document.getElementById('abs-'+idx);
-  if(el)el.classList.toggle('open');
-}
+function toggleAbstract(idx){const el=document.getElementById('abs-'+idx);if(el)el.classList.toggle('open');}
 
 /* ══════════════════════════════════
    COMMUNITY
    ══════════════════════════════════ */
 let commFilter='all',userPosts=[],selCatVal='bull';
+let commDisclaimerShown=false;
 function filterComm(f,btn){
   commFilter=f;document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');renderComm(f);
 }
@@ -1793,10 +2323,9 @@ function postHTML(p,withReply){
       <button class="reply-send" onclick="sendReply(${p.id})">전송</button>
     </div>
   </div>`:'';
-  // Repost quote block
   const rqBlock=p.repost?`<div class="repost-quote">
     <div class="rq-author">🔁 ${esc(p.repost.n)} 원문 인용</div>
-    <div class="rq-body">${esc(p.repost.title)} — ${esc(p.repost.body.substring(0,80))}${p.repost.body.length>80?'...':''}</div>
+    <div class="rq-body">${esc(p.repost.title)} — ${esc((p.repost.body||'').substring(0,80))}${(p.repost.body||'').length>80?'...':''}</div>
   </div>`:'';
   return `<div class="post-card cat-${p.cat}">
     <div class="post-header">
@@ -1821,11 +2350,8 @@ function postHTML(p,withReply){
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
         리포스트
       </button>
-      <button class="action-btn">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z"/></svg>
-        ${Math.floor((p.likes||0)/8)}
-      </button>
     </div>
+    <div class="post-disclaimer">본 게시물은 의료 서비스가 아니며, 정보 공유를 목적으로 합니다. 임상시험 관련 결정은 담당 전문의와 상의하십시오.</div>
     ${rzone}
   </div>`;
 }
@@ -1873,7 +2399,6 @@ function renderTrending(){
         ${list.map((t,i)=>{
           const stL={recruiting:'모집중',active:'진행중',completed:'완료',terminated:'종료'}[t.st]||t.st;
           const stC={recruiting:'sp-r',active:'sp-a',completed:'sp-c',terminated:'sp-t'}[t.st]||'sp-a';
-          const up=parseFloat(t.statChg)>=0;
           let rb='';
           if(t.result)rb=`<span class="result-pill ${t.result.v==='success'?'rp-s':'rp-f'}">${t.result.v==='success'?'성공':'실패'}</span>`;
           else if(t.upcoming)rb=`<span class="result-pill rp-u">${esc(t.upDate)}</span>`;
@@ -1929,10 +2454,9 @@ async function loadExplore(){
   list.innerHTML='<div class="explore-empty">🔄 ClinicalTrials.gov 검색 중...</div>';
   dot.className='api-dot loading';lbl.textContent='연결 중...';retry.classList.remove('show');
   try{
-    const p=new URLSearchParams({format:'json',pageSize:'18',
-      fields:'NCTId,BriefTitle,OverallStatus,Phase,Condition,InterventionName,LeadSponsorName,EnrollmentCount,BriefSummary'});
-    if(eTerm&&/^NCT\d{8}$/i.test(eTerm))p.set('query.id',eTerm.toUpperCase());
-    else if(eTerm)p.set('query.term',eTerm);
+    const p=new URLSearchParams({format:'json',pageSize:'18'});
+    if(eTerm&&/^NCT\d{8}$/i.test(eTerm.trim()))p.set('query.id',eTerm.trim().toUpperCase());
+    else if(eTerm)p.set('query.term',eTerm.trim());
     else p.set('query.cond','cancer');
     if(ePhase)p.set('filter.phase',ePhase);
     if(eStatus)p.set('filter.overallStatus',eStatus);
@@ -1943,6 +2467,7 @@ async function loadExplore(){
     lbl.textContent=`연결됨 · ${(d.totalCount||studies.length).toLocaleString()}건`;
     document.querySelectorAll('.filter-pill.loading').forEach(b=>b.classList.remove('loading'));
     if(!studies.length){list.innerHTML='<div class="explore-empty">검색 결과가 없습니다.</div>';return;}
+    const today=new Date();const dateStr=`${today.getFullYear()}.${today.getMonth()+1}.${today.getDate()}`;
     list.innerHTML=studies.map(s=>{
       const ps=s.protocolSection||{};
       const id=(ps.identificationModule||{});const st=(ps.statusModule||{});
@@ -1966,7 +2491,10 @@ async function loadExplore(){
           ${enroll?`<span class="ec-tag">👥 ${Number(enroll).toLocaleString()}</span>`:''}
         </div>
         ${cond?`<div class="ec-abstract">🦠 ${esc(cond)}</div>`:''}
-        <div class="ec-nct">${nct}</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
+          <span class="ec-nct">${nct}</span>
+          <span style="font-size:0.5625rem;color:var(--t3)">출처: ClinicalTrials.gov · ${dateStr}</span>
+        </div>
       </div>`;
     }).join('');
   }catch(e){
@@ -1976,18 +2504,29 @@ async function loadExplore(){
     ${TRIALS.map(t=>`<div class="explore-card" onclick="showDetail('${t.id}')">
       <div class="ec-row1"><div class="ec-title">${esc(t.co)} — ${esc(t.drug)}</div><span class="phase-badge pb-${t.ph}" style="flex-shrink:0">PH ${t.ph}</span></div>
       <div class="ec-meta"><span class="ec-tag">${esc(t.ind)}</span></div>
-      <div class="ec-nct">${t.id}</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
+        <span class="ec-nct">${t.id}</span>
+        <span style="font-size:0.5625rem;color:var(--t3)">출처: ClinicalTrials.gov</span>
+      </div>
     </div>`).join('')}`;
   }
 }
 
 /* ══════════════════════════════════
-   ALERTS
+   ALERTS / NOTIFS
    ══════════════════════════════════ */
 let notifs=[...NOTIFS];
-function addNotif(n){notifs.unshift(n);updateBadge();}
+let notifFilter='all';
+function addNotif(n){notifs.unshift(n);updateBadge();updateNotifCategoryBadges();}
+function filterNotifs(cat,btn){
+  notifFilter=cat;
+  document.querySelectorAll('.notif-tab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderNotifs();
+}
 function renderNotifs(){
-  document.getElementById('notif-list').innerHTML=notifs.map(n=>`
+  const filtered=notifFilter==='all'?notifs:notifs.filter(n=>n.category===notifFilter);
+  document.getElementById('notif-list').innerHTML=filtered.map(n=>`
     <div class="notif-card ${n.unread?'unread':''}" onclick="readNotif('${n.id}')">
       <div class="notif-icon ${n.cls}">${n.icon}</div>
       <div class="notif-body">
@@ -2008,6 +2547,11 @@ function updateBadge(){
   const b=document.getElementById('notif-badge');
   if(cnt>0){b.textContent=cnt>9?'9+':String(cnt);b.classList.add('show');}else b.classList.remove('show');
 }
+function updateNotifCategoryBadges(){
+  const clinicalCnt=notifs.filter(n=>n.category==='success'&&n.unread).length;
+  const el=document.getElementById('nb-clinical');
+  if(el)el.textContent=clinicalCnt>0?String(clinicalCnt):'';
+}
 
 /* Alert Modal */
 let selAlertT='success';
@@ -2019,7 +2563,7 @@ function submitAlert(){
   if(!co){toast('기업명 또는 약물명을 입력해주세요');return;}
   const note=document.getElementById('alert-note').value.trim();
   const tm={success:{icon:'✅',cls:'ni-s',label:'임상 성공',badge:'nb-s'},fail:{icon:'❌',cls:'ni-f',label:'임상 실패',badge:'nb-f'},upcoming:{icon:'📅',cls:'ni-u',label:'발표 예정',badge:'nb-u'},update:{icon:'🔄',cls:'ni-up',label:'업데이트',badge:'nb-p'}}[selAlertT]||{icon:'📅',cls:'ni-u',label:'예정',badge:'nb-u'};
-  addNotif({id:'na'+Date.now(),type:selAlertT,icon:tm.icon,cls:tm.cls,title:`${co} — ${tm.label}`,desc:note||`${co}의 ${tm.label} 알림이 설정되었습니다.`,time:'방금',badge:tm.badge,badgeTx:tm.label,unread:true});
+  addNotif({id:'na'+Date.now(),type:selAlertT,icon:tm.icon,cls:tm.cls,title:`${co} — ${tm.label}`,desc:note||`${co}의 ${tm.label} 알림이 설정되었습니다.`,time:'방금',badge:tm.badge,badgeTx:tm.label,unread:true,category:selAlertT==='comm'?'comm':'success'});
   closeAlertModal();document.getElementById('alert-company').value='';document.getElementById('alert-note').value='';
   goNav('alerts');renderNotifs();toast(`${co} 알림이 추가되었습니다`);
 }
@@ -2029,10 +2573,8 @@ let pendingRepost=null;
 function fabAction(){pendingRepost=null;openModal();}
 function openModal(){
   document.getElementById('modal-write').classList.add('open');
-  // Update title
   const titleEl=document.querySelector('#modal-write .modal-title');
   if(titleEl)titleEl.textContent=pendingRepost?'리포스트':'새 글 작성';
-  // Show/hide repost preview
   const rp=document.getElementById('w-repost-preview');
   if(rp)rp.style.display=pendingRepost?'block':'none';
   if(pendingRepost&&rp){
@@ -2096,8 +2638,8 @@ function copyToClipboard(text, msg='복사되었습니다'){
 document.addEventListener('click',e=>{
   if(e.target===document.getElementById('modal-write'))closeModal();
   if(e.target===document.getElementById('modal-alert'))closeAlertModal();
+  if(e.target===document.getElementById('modal-tos'))document.getElementById('modal-tos').classList.remove('open');
   if(!e.target.closest('#w-ref')&&!e.target.closest('#w-ac')){const ac=document.getElementById('w-ac');if(ac)ac.classList.remove('open');}
 });
 </script>
 </body>
-</html>

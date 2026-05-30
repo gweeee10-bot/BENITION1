@@ -748,6 +748,7 @@ svg{display:block;flex-shrink:0;}
 .sp-a{background:var(--primary-alpha);color:var(--primary-hover);}
 .sp-c{background:rgba(255,255,255,0.05);color:var(--t2);}
 .sp-t{background:var(--error-alpha);color:var(--error);}
+.sp-p{background:var(--warning-alpha);color:var(--warning);}
 .result-pill{font-size:0.625rem;font-weight:500;padding:2px 7px;border-radius:var(--r-full);}
 .rp-s{background:var(--success-alpha);color:var(--success);}
 .rp-f{background:var(--error-alpha);color:var(--error);}
@@ -2036,7 +2037,8 @@ function renderTrendCards(){
 }
 
 function renderHomeComm(){
-  document.getElementById('home-comm-preview').innerHTML=POSTS.slice(0,2).map(p=>postHTML(p,false)).join('');
+  const popular=[...POSTS].sort((a,b)=>(b.likes||0)-(a.likes||0)).slice(0,3);
+  document.getElementById('home-comm-preview').innerHTML=popular.map(p=>postHTML(p,false)).join('');
 }
 
 function renderHomeUpcoming(){
@@ -2156,28 +2158,113 @@ function buildMetricChart(data){
   if(!data||!data.length)return '';
   const nums=data.map(d=>Math.abs(parseFloat(String(d.v).replace(/[^0-9.−-]/g,'').replace('−','-'))||0));
   const maxN=Math.max(...nums,1);
-  const bars=data.map(d=>{
-    const cls=classifyMetric(d.n, d.v);
-    const num=Math.abs(parseFloat(String(d.v).replace(/[^0-9.−-]/g,'').replace('−','-'))||0);
-    const pct=Math.min(100,Math.round((num/maxN)*100));
-    return `<div class="metric-bar-row">
-      <div class="metric-bar-label">${esc(d.n)}</div>
-      <div class="metric-bar-track"><div class="metric-bar-fill ${cls}" style="width:${pct}%"></div></div>
-      <div class="metric-bar-val ${cls}">${esc(d.v)}<span style="font-size:.5625rem;color:var(--t3);margin-left:4px">${esc(d.c)}</span></div>
+  const rows=data.map((d,i)=>{
+    const cls=classifyMetric(d.n,d.v);
+    const pct=Math.min(100,Math.round((nums[i]/maxN)*100));
+    const barColor=cls==='good'?'var(--success)':cls==='bad'?'var(--error)':'var(--primary-hover)';
+    const valColor=cls==='good'?'var(--success)':cls==='bad'?'var(--error)':'var(--t1)';
+    return `<div style="margin-bottom:12px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
+        <span style="font-size:.8125rem;color:var(--t2);font-weight:500">${esc(d.n)}</span>
+        <span style="display:flex;align-items:baseline;gap:5px">
+          <span style="font-family:var(--font-mono);font-size:.9375rem;font-weight:700;color:${valColor}">${esc(d.v)}</span>
+          ${d.c?`<span style="font-size:.6875rem;color:var(--t3)">${esc(d.c)}</span>`:''}
+        </span>
+      </div>
+      <div style="height:5px;background:var(--border);border-radius:3px;overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:${barColor};border-radius:3px"></div>
+      </div>
     </div>`;
   }).join('');
-  return `<div class="metric-chart"><div class="metric-chart-title">Key Endpoints</div>${bars}</div>`;
+  return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px;margin-bottom:12px">
+    <div style="font-size:.625rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:12px">Key Endpoints</div>
+    ${rows}
+  </div>`;
 }
 
-/* ══════════════════════════════════
-   DETAIL SHEET
-   ══════════════════════════════════ */
+function showDetail(id, ctData=null){
+  const t=ctData || TRIALS.find(x=>x.id===id);
+  if(!t)return;
+  const v=t.result && t.result.v==='success';
+  const pubmedId='pm-'+id;
+  const wikiId='wiki-'+id;
+  window._trText=window._trText||{};
+  if(t.result?.key)window._trText['tr-key-'+t.id]=t.result.key;
+  if(t.plain)window._trText['tr-plain-'+t.id]=t.plain;
+
+  const resultBadge=t.result
+    ? `<div style="display:flex;align-items:center;gap:5px;background:${v?'var(--success-alpha)':'var(--error-alpha)'};border:1px solid ${v?'rgba(43,224,140,0.25)':'rgba(255,58,92,0.25)'};border-radius:var(--r-full);padding:4px 10px">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="${v?'var(--success)':'var(--error)'}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${v?'<path d="M20 6 9 17l-5-5"/>':'<circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/>'}</svg>
+        <span style="font-size:.6875rem;font-weight:600;color:${v?'var(--success)':'var(--error)'}">${v?'임상 성공':'임상 실패'}</span>
+      </div>`
+    : `<div style="background:var(--warning-alpha);border:1px solid rgba(245,213,71,0.25);border-radius:var(--r-full);padding:4px 10px"><span style="font-size:.6875rem;font-weight:600;color:var(--warning)">발표 예정</span></div>`;
+
+  const html=`<div style="padding:16px 16px 8px">
+    <!-- 헤더 -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+      <button onclick="document.getElementById('detail-ov').remove()" style="background:var(--elevated);border:1px solid var(--border);border-radius:var(--r-md);padding:6px 14px;font-size:.8125rem;color:var(--t2);display:flex;align-items:center;gap:5px;cursor:pointer;font-weight:500">
+        완료
+      </button>
+      ${resultBadge}
+    </div>
+
+    <!-- 기업명 + 약물·Phase·적응증 -->
+    <div style="font-size:1.5rem;font-weight:700;letter-spacing:-.025em;color:var(--t1);line-height:1.2;margin-bottom:6px">${esc(t.co||t.sponsor||'')}</div>
+    <div style="font-size:.8125rem;color:var(--t3);margin-bottom:16px;display:flex;align-items:center;gap:4px;flex-wrap:wrap">
+      ${t.drug?`<span>${esc(t.drug)}</span><span style="color:var(--border-strong)">·</span>`:''}
+      <span>Phase ${t.ph}</span>
+      ${t.ind?`<span style="color:var(--border-strong)">·</span><span>${esc(t.ind)}</span>`:''}
+    </div>
+
+    <!-- NCT ID 바 -->
+    <div style="display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-md);padding:9px 12px;margin-bottom:16px">
+      <span style="font-family:var(--font-mono);font-size:.8125rem;color:var(--t3);flex:1">${esc(t.id)}</span>
+      <button onclick="copyToClipboard('${t.id}','NCT ID 복사됨')" style="font-size:.6875rem;color:var(--primary-hover);background:none;border:none;cursor:pointer;font-weight:600;padding:0">NCT ID 복사</button>
+      <span style="color:var(--border)">|</span>
+      <a href="https://clinicaltrials.gov/study/${t.id}" target="_blank" style="font-size:.6875rem;color:var(--primary-hover);text-decoration:none;font-weight:600;display:flex;align-items:center;gap:2px">원문 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>
+    </div>
+
+    <!-- 위키 기업 정보 -->
+    <div id="${wikiId}" style="margin-bottom:4px"></div>
+
+    ${t.result?`
+    <!-- 결과 하이라이트 박스 -->
+    <div style="background:${v?'var(--success-alpha)':'var(--error-alpha)'};border:1px solid ${v?'rgba(43,224,140,0.2)':'rgba(255,58,92,0.2)'};border-radius:var(--r-lg);padding:14px;margin-bottom:12px">
+      <div style="font-family:var(--font-mono);font-size:.9375rem;font-weight:700;color:${v?'var(--success)':'var(--error)'};margin-bottom:6px;line-height:1.3">${esc(t.result.hl)}</div>
+      <div style="font-size:.8125rem;color:var(--t1);line-height:1.65">${esc(t.result.key)}</div>
+      <div style="margin-top:10px"><button class="translate-btn" data-src="tr-key-${t.id}" onclick="doTranslate(this)">🌐 번역</button><div id="tr-key-${t.id}" class="tr-box" style="display:none;margin-top:8px;margin-bottom:0"></div></div>
+    </div>
+    <!-- 메트릭 차트 (CSS 바) -->
+    ${buildMetricChart(t.result.data)}`
+    :`<div style="background:var(--warning-alpha);border:1px solid rgba(245,213,71,0.2);border-radius:var(--r-lg);padding:14px;margin-bottom:12px">
+      <div style="font-size:.875rem;font-weight:600;color:var(--warning);margin-bottom:5px">📅 발표 예정: ${esc(t.upDate||'')}</div>
+      <div style="font-size:.8125rem;color:var(--t1);line-height:1.65">${esc(t.plain||'')}</div>
+      <div style="margin-top:10px"><button class="translate-btn" data-src="tr-plain-${t.id}" onclick="doTranslate(this)">🌐 번역</button><div id="tr-plain-${t.id}" class="tr-box" style="display:none;margin-top:8px;margin-bottom:0"></div></div>
+    </div>`}
+
+    ${t.cond?`
+    <!-- MESH 질병 분류 -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:12px;margin-bottom:12px">
+      <div style="font-size:.625rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:8px">MESH 질병 분류</div>
+      <div style="font-size:.8125rem;color:var(--t2);display:flex;align-items:flex-start;gap:6px"><span>🦠</span><span>${esc(t.cond)}</span></div>
+    </div>`:''}
+
+    <!-- PubMed 논문 -->
+    <div id="${pubmedId}" style="margin-bottom:12px"><div class="pubmed-empty">🔍 PubMed 논문 로딩 중...</div></div>
+
+    <!-- 면책 -->
+    <div style="padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);font-size:.5625rem;color:var(--t3);line-height:1.5;margin-bottom:4px">⚠ Research Only — BioSignal X는 정보 제공 목적이며 투자 권유가 아닙니다. 임상시험 관련 결정은 담당 전문의와 상의하십시오.</div>
+  </div>`;
+  showSheet(html);
+  loadPubMed(t.drug, pubmedId);
+  loadCompanyInfo(t.co||t.sponsor||'', wikiId);
+}
+
 function showDetailCT(nctId){
   const s = window._ctStore.get(nctId);
   if(!s){toast('데이터를 불러올 수 없습니다');return;}
   const d = _ctParse(s);
 
-  // 번역 텍스트 등록 (onclick 대신 전역 저장)
   const skSummary = 'tr-ds-'+nctId;
   const skOutcome = 'tr-do-'+nctId;
   if(d.briefSummary) window._trText[skSummary] = d.briefSummary.slice(0,500);
@@ -2236,67 +2323,6 @@ function showDetailCT(nctId){
     <div style="padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);font-size:.5625rem;color:var(--t3);line-height:1.5">본 정보는 ClinicalTrials.gov 공개 데이터 기반이며 의료 서비스가 아닙니다.</div>
   </div>`;
   showSheet(html);
-}
-
-function showDetail(id, ctData=null){
-  const t=ctData || TRIALS.find(x=>x.id===id);
-  if(!t)return;
-  const isCT = !!ctData;
-  const v=t.result && t.result.v==='success';
-  const pubmedId='pm-'+id;
-  const wikiId='wiki-'+id;
-  window._trText=window._trText||{};
-  if(t.result?.key)window._trText['tr-key-'+t.id]=t.result.key;
-  if(t.plain)window._trText['tr-plain-'+t.id]=t.plain;
-  const html=`
-    <div style="padding:16px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-        <button onclick="document.getElementById('detail-ov').remove()" style="background:var(--elevated);border:1px solid var(--border);border-radius:var(--r-md);padding:6px 12px;font-size:.75rem;color:var(--t2);display:flex;align-items:center;gap:6px">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-          뒤로가기
-        </button>
-        <div style="display:flex;align-items:center;gap:6px">
-          ${t.result?`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="${v?'var(--success)':'var(--error)'}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${v?'<path d="M20 6 9 17l-5-5"/>':'<circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/>'}</svg>
-          <span style="font-family:var(--font-mono);font-size:.625rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:${v?'var(--success)':'var(--error)'}">${v?'임상 성공':'임상 실패/부분 성공'}</span>`:
-          `<span style="font-family:var(--font-mono);font-size:.625rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--warning)">발표 예정</span>`}
-        </div>
-      </div>
-      <div style="font-size:1.375rem;font-weight:600;letter-spacing:-.02em;color:var(--t1);margin-bottom:3px">${esc(t.co||t.sponsor||'')}</div>
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
-        <div style="font-size:.8125rem;color:var(--t3);font-family:var(--font-mono)">${esc(t.drug)} · Ph.${t.ph} ${t.ind?`· ${esc(t.ind)}`:''}</div>
-        <button onclick="copyToClipboard('${(t.drug||'').replace(/'/g,"\\'")}','약물명이 복사되었습니다')" style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-size:10px;color:var(--t2);cursor:pointer">복사</button>
-      </div>
-      <div id="${wikiId}" style="margin-bottom:16px"></div>
-      ${t.result?`
-      <div style="background:${v?'var(--success-alpha)':'var(--error-alpha)'};border:1px solid ${v?'rgba(43,224,140,0.18)':'rgba(255,58,92,0.18)'};border-radius:var(--r-lg);padding:12px;margin-bottom:12px">
-        <div style="font-family:var(--font-mono);font-size:.875rem;font-weight:600;color:${v?'var(--success)':'var(--error)'};margin-bottom:5px">${esc(t.result.hl)}</div>
-        <div style="font-size:.8125rem;color:var(--t1);line-height:1.65">${esc(t.result.key)}</div>
-        <div style="margin-top:8px"><button class="translate-btn" data-src="tr-key-${t.id}" onclick="doTranslate(this)">🌐 번역</button><div id="tr-key-${t.id}" class="tr-box" style="display:none;margin-top:8px;margin-bottom:0"></div></div>
-      </div>
-      ${buildMetricChart(t.result.data)}`:
-      `<div style="background:var(--warning-alpha);border:1px solid rgba(245,213,71,0.18);border-radius:var(--r-lg);padding:12px;margin-bottom:12px">
-        <div style="font-size:.875rem;font-weight:600;color:var(--warning);margin-bottom:5px">발표 예정: ${esc(t.upDate||'')}</div>
-        <div style="font-size:.8125rem;color:var(--t1);line-height:1.65">${esc(t.plain||'')}</div>
-        <div style="margin-top:8px"><button class="translate-btn" data-src="tr-plain-${t.id}" onclick="doTranslate(this)">🌐 번역</button><div id="tr-plain-${t.id}" class="tr-box" style="display:none;margin-top:8px;margin-bottom:0"></div></div>
-      </div>`}
-      ${t.cond?`<div style="font-size:.75rem;color:var(--t2);line-height:1.7;padding:10px 12px;background:var(--bg);border-radius:var(--r-md);border:1px solid var(--border);margin-bottom:12px">🦠 질환명: ${esc(t.cond)}</div>`:''}
-      <div id="${pubmedId}" style="margin-top:12px"><div class="pubmed-empty">🔍 PubMed 논문 로딩 중...</div></div>
-      <div style="margin-top:20px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);text-align:center">
-        <div style="font-size:.75rem;color:var(--t3);margin-bottom:10px">더 자세한 정보는 ClinicalTrials.gov에서 확인하세요</div>
-        <a href="https://clinicaltrials.gov/study/${t.id}" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:var(--primary);color:#fff;padding:8px 16px;border-radius:var(--r-md);font-size:.8125rem;font-weight:600;text-decoration:none">
-          원문 사이트 방문
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
-        </a>
-      </div>
-      <div style="margin-top:14px;display:flex;align-items:center;gap:8px;justify-content:center">
-        <div style="font-family:var(--font-mono);font-size:.5625rem;color:var(--t3)">${t.id}</div>
-        <button onclick="copyToClipboard('${t.id}','NCT ID가 복사되었습니다')" style="background:none;border:none;padding:0;font-size:9px;color:var(--primary-hover);cursor:pointer;text-decoration:underline">ID 복사</button>
-      </div>
-      <div style="margin-top:16px;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-md);font-size:.5625rem;color:var(--t3);line-height:1.5">본 정보는 ClinicalTrials.gov 공개 데이터 기반이며 의료 서비스가 아닙니다. 임상시험 관련 결정은 담당 전문의와 상의하십시오.</div>
-    </div>`;
-  showSheet(html);
-  loadPubMed(t.drug, pubmedId);
-  loadCompanyInfo(t.co||t.sponsor||'', wikiId);
 }
 
 function showSheet(html){
@@ -2424,7 +2450,7 @@ function filterComm(f,btn){
   commFilter=f;document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');renderComm(f);
 }
 function renderComm(filter){
-  const all=[...userPosts,...POSTS];
+  const all=[...userPosts,...POSTS].sort((a,b)=>Number(b.id)-Number(a.id));
   const filtered=filter==='all'?all:all.filter(p=>p.cat===filter);
   const feed=document.getElementById('comm-feed');
   if(!filtered.length){feed.innerHTML='<div style="padding:40px;text-align:center;font-size:.8125rem;color:var(--t3)">게시글이 없습니다.</div>';return;}
@@ -2581,11 +2607,16 @@ async function loadTrending(){
   body.innerHTML='<div class="explore-empty" style="padding:40px 24px">🔄 ClinicalTrials.gov 연결 중...</div>';
   dot.className='trending-api-dot loading';lbl.textContent='연결 중...';retry.classList.remove('show');
 
-  const statuses='RECRUITING,ACTIVE_NOT_RECRUITING,NOT_YET_RECRUITING';
+  // COMPLETED도 포함해서 가져온 뒤, resultsSection 없으면 발표대기로 분류
+  const statuses='RECRUITING,ACTIVE_NOT_RECRUITING,NOT_YET_RECRUITING,COMPLETED';
 
-  function buildCard(s){
+  function buildCard(s, forcePending){
     return _storeAndCard(s, s=>{
       const d=_ctParse(s);
+      // COMPLETED + resultsSection 없으면 발표대기
+      const isPending = forcePending || (d.status==='COMPLETED' && !s.resultsSection);
+      const statusLabel = isPending ? '발표대기' : d.stInfo.label;
+      const statusCls   = isPending ? 'sp-p'       : d.stInfo.cls;
       return `<div class="t-trial-card" onclick="ripple(event);showDetailCT('${d.nct}')">
         <div class="ttc-top">
           <div class="ttc-title-wrap">
@@ -2595,7 +2626,7 @@ async function loadTrending(){
           </div>
           <div class="ttc-badges">
             ${d.phN&&d.pbCls?`<span class="phase-badge ${d.pbCls}">PH ${d.phN}</span>`:''}
-            <span class="status-pill ${d.stInfo.cls}">${d.stInfo.label}</span>
+            <span class="status-pill ${statusCls}">${statusLabel}</span>
           </div>
         </div>
         <div class="ttc-footer">
@@ -2603,6 +2634,7 @@ async function loadTrending(){
           <span style="display:flex;align-items:center;gap:6px">
             ${d.enroll?`<span style="font-size:.625rem;color:var(--t3)">👥 ${Number(d.enroll).toLocaleString()}</span>`:''}
             ${d.endDate?`<span style="font-size:.625rem;color:var(--warning)">📅 ${d.endDate}</span>`:''}
+            <button class="action-btn" onclick="event.stopPropagation();openRepostByCT('${d.nct}','${(d.sponsor||'').replace(/'/g,'\\x27')}','${(d.drug||'').replace(/'/g,'\\x27')}')" title="리포스트" style="font-size:.7rem;padding:3px 7px">🔁</button>
             <span class="ttc-more-btn">자세히 보기 →</span>
           </span>
         </div>
@@ -2610,7 +2642,7 @@ async function loadTrending(){
     });
   }
 
-  function phGroup(label,pbCls,phLabel,items){
+  function phGroup(label,pbCls,phLabel,items,forcePending){
     if(!items.length)return '';
     return `<div class="trending-ph-block">
       <div class="trending-ph-hdr">
@@ -2618,31 +2650,78 @@ async function loadTrending(){
         <span class="trending-ph-label">${phLabel}</span>
         <span class="trending-ph-count">${items.length}건</span>
       </div>
-      ${items.map(buildCard).join('')}
+      ${items.map(s=>buildCard(s,!!forcePending)).join('')}
     </div>`;
   }
 
   try{
-    const params=new URLSearchParams({format:'json',pageSize:'50','filter.overallStatus':statuses,'query.cond':'cancer OR oncology OR tumor'});
+    const params=new URLSearchParams({format:'json',pageSize:'100','filter.overallStatus':statuses,'query.cond':'cancer OR oncology OR tumor'});
     const r=await fetch(`${CT}?${params}`);
     if(!r.ok)throw new Error('HTTP '+r.status);
     const d=await r.json();
     const studies=d.studies||[];
+
+    // 분류: COMPLETED+결과없음=발표대기 / COMPLETED+결과있음=제외 / 나머지=진행중
+    const active  = studies.filter(s=>['RECRUITING','ACTIVE_NOT_RECRUITING','NOT_YET_RECRUITING'].includes(s.protocolSection?.statusModule?.overallStatus||''));
+    const pending = studies.filter(s=>(s.protocolSection?.statusModule?.overallStatus||'')==='COMPLETED' && !s.resultsSection);
+    // COMPLETED+resultsSection 있는 것은 이미 공표됐으므로 목록에서 제외
+
     dot.className='trending-api-dot live';
-    lbl.textContent=`연결됨 · ${(d.totalCount||studies.length).toLocaleString()}건`;
-    if(!studies.length){body.innerHTML='<div class="explore-empty">검색 결과가 없습니다.</div>';return;}
-    const ph3=studies.filter(s=>(s.protocolSection?.designModule?.phases||[]).includes('PHASE3'));
-    const ph2=studies.filter(s=>{const ph=s.protocolSection?.designModule?.phases||[];return ph.includes('PHASE2')&&!ph.includes('PHASE3');});
-    const ph1=studies.filter(s=>{const ph=s.protocolSection?.designModule?.phases||[];return ph.includes('PHASE1')&&!ph.includes('PHASE2')&&!ph.includes('PHASE3');});
-    const other=studies.filter(s=>{const ph=s.protocolSection?.designModule?.phases||[];return !ph.some(p=>['PHASE1','PHASE2','PHASE3'].includes(p));});
-    body.innerHTML='<div class="trending-wrap">'+
-      phGroup('PHASE 3','pb-3','대규모 효능 검증',ph3)+
-      phGroup('PHASE 2','pb-2','탐색적 임상',ph2)+
-      phGroup('PHASE 1','pb-1','안전성 확인',ph1)+
-      (other.length?phGroup('기타','','기타',other):'')+
-      '</div>';
+    lbl.textContent=`연결됨 · 진행중 ${active.length}건 · 발표대기 ${pending.length}건`;
+
+    const phFn=[
+      s=>(s.protocolSection?.designModule?.phases||[]).includes('PHASE3'),
+      s=>{const p=s.protocolSection?.designModule?.phases||[];return p.includes('PHASE2')&&!p.includes('PHASE3');},
+      s=>{const p=s.protocolSection?.designModule?.phases||[];return p.includes('PHASE1')&&!p.includes('PHASE2')&&!p.includes('PHASE3');}
+    ];
+
+    const activeByPh  = phFn.map(fn=>active.filter(fn));
+    const pendingByPh = phFn.map(fn=>pending.filter(fn));
+
+    if(!active.length&&!pending.length){body.innerHTML='<div class="explore-empty">검색 결과가 없습니다.</div>';return;}
+
+    let html='<div class="trending-wrap">';
+    // 발표대기 섹션 (상단 — 투자자 관심 높음)
+    if(pending.length){
+      html+=`<div class="trending-ph-block">
+        <div class="trending-ph-hdr" style="background:rgba(245,213,71,0.06);border-radius:var(--r-sm);padding:8px 10px;margin-bottom:6px">
+          <span class="status-pill sp-p" style="font-size:.75rem;padding:4px 10px">📅 발표대기</span>
+          <span class="trending-ph-label">임상 완료 · 결과 미공표</span>
+          <span class="trending-ph-count">${pending.length}건</span>
+        </div>
+        ${phGroup('PHASE 3','pb-3','',pendingByPh[0],true)}
+        ${phGroup('PHASE 2','pb-2','',pendingByPh[1],true)}
+        ${phGroup('PHASE 1','pb-1','',pendingByPh[2],true)}
+      </div>`;
+    }
+    // 진행중 섹션
+    html+=phGroup('PHASE 3','pb-3','대규모 효능 검증',activeByPh[0]);
+    html+=phGroup('PHASE 2','pb-2','탐색적 임상',activeByPh[1]);
+    html+=phGroup('PHASE 1','pb-1','안전성 확인',activeByPh[2]);
+    html+='</div>';
+    body.innerHTML=html;
   }catch(e){
     dot.className='trending-api-dot error';lbl.textContent='연결 실패';retry.classList.add('show');
+    // 로컬 fallback — 발표대기(completed+결과없음) 포함, 결과공표된 것은 제외
+    const localPending=[3,2,1].map(ph=>{
+      const items=TRIALS.filter(t=>t.ph===ph&&t.st==='completed'&&!t.result);
+      if(!items.length)return '';
+      const pbCls={1:'pb-1',2:'pb-2',3:'pb-3'}[ph];
+      return items.map(t=>`<div class="t-trial-card" onclick="ripple(event);showDetail('${t.id}')">
+        <div class="ttc-top">
+          <div class="ttc-title-wrap">
+            <div class="ttc-company">${esc(t.co)}</div>
+            <div class="ttc-drug">💊 ${esc(t.drug)}</div>
+            <div class="ttc-indication">🦠 ${esc(t.ind)}</div>
+          </div>
+          <div class="ttc-badges">
+            <span class="phase-badge ${pbCls}">PH ${ph}</span>
+            <span class="status-pill sp-p">발표대기</span>
+          </div>
+        </div>
+        <div class="ttc-footer"><span class="ttc-nct">${t.id}</span><span style="display:flex;align-items:center;gap:6px"><button class="action-btn" onclick="event.stopPropagation();openRepostByCT('${t.id}','${t.co.replace(/'/g,"\\x27")}','${t.drug.replace(/'/g,"\\x27")}')" title="리포스트" style="font-size:.7rem;padding:3px 7px">🔁</button><span class="ttc-more-btn">자세히 보기 →</span></span></div>
+      </div>`).join('');
+    }).join('');
     const localHtml=[3,2,1].map(ph=>{
       const items=TRIALS.filter(t=>t.ph===ph&&(t.st==='recruiting'||t.st==='active'));
       if(!items.length)return '';
@@ -2666,13 +2745,15 @@ async function loadTrending(){
             <span class="ttc-nct">${t.id}</span>
             <span style="display:flex;align-items:center;gap:6px">
               ${t.enroll?`<span style="font-size:.625rem;color:var(--t3)">👥 ${Number(t.enroll).toLocaleString()}</span>`:''}
+              <button class="action-btn" onclick="event.stopPropagation();openRepostByCT('${t.id}','${t.co.replace(/'/g,"\\x27")}','${t.drug.replace(/'/g,"\\x27")}')" title="리포스트" style="font-size:.7rem;padding:3px 7px">🔁</button>
               <span class="ttc-more-btn">자세히 보기 →</span>
             </span>
           </div>
         </div>`).join('')}
       </div>`;
     }).join('');
-    body.innerHTML='<div class="explore-empty" style="color:var(--warning);margin:10px 24px 6px">⚠ API 연결 실패 — 로컬 데이터</div><div class="trending-wrap">'+localHtml+'</div>';
+    const pendingBlock=localPending?`<div class="trending-ph-block"><div class="trending-ph-hdr" style="background:rgba(245,213,71,0.06);border-radius:var(--r-sm);padding:8px 10px;margin-bottom:6px"><span class="status-pill sp-p" style="font-size:.75rem;padding:4px 10px">📅 발표대기</span><span class="trending-ph-label">임상 완료 · 결과 미공표</span></div>${localPending}</div>`:'';
+    body.innerHTML='<div class="explore-empty" style="color:var(--warning);margin:10px 24px 6px">⚠ API 연결 실패 — 로컬 데이터</div><div class="trending-wrap">'+pendingBlock+localHtml+'</div>';
   }
 }
 
@@ -2725,7 +2806,10 @@ async function loadExplore(){
       ${d.conditions?`<div class="ec-abstract">🦠 ${esc(d.conditions)}</div>`:''}
       <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
         <span class="ec-nct">${d.nct}</span>
-        <span style="font-size:0.5625rem;color:var(--t3)">ClinicalTrials.gov · ${dateStr}</span>
+        <span style="display:flex;align-items:center;gap:6px">
+          <button class="action-btn" onclick="event.stopPropagation();openRepostByCT('${d.nct}','${(d.sponsor||'').replace(/'/g,'\\x27')}','${(d.drug||'').replace(/'/g,'\\x27')}')" title="리포스트" style="font-size:.7rem;padding:3px 7px">🔁</button>
+          <span style="font-size:0.5625rem;color:var(--t3)">ClinicalTrials.gov · ${dateStr}</span>
+        </span>
       </div>
     </div>`;
   }
@@ -2863,6 +2947,10 @@ function closeModal(){
 }
 function selCat(c,btn){selCatVal=c;document.querySelectorAll('.cat-pill').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');}
 
+function openRepostByCT(nct,company,drug){
+  pendingRepost={id:nct,n:company||nct,title:(drug?drug+' · ':'')+nct,body:company||''};
+  openModal();
+}
 function openRepostById(pid){
   const allPosts=[...userPosts,...POSTS];
   const p=allPosts.find(x=>String(x.id)===String(pid));
@@ -2954,4 +3042,3 @@ document.addEventListener('click',e=>{
 });
 </script>
 </body>
-</html>

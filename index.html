@@ -1030,6 +1030,15 @@ svg{display:block;flex-shrink:0;}
 .success-title { font-size:1.25rem; font-weight:600; color:var(--success); margin-bottom:8px; }
 .success-sub { font-size:0.875rem; color:var(--t2); }
 
+/* ── Ripple click effect ── */
+@keyframes rippleAnim{from{transform:scale(0);opacity:.3;}to{transform:scale(4.5);opacity:0;}}
+.ripple-wave{position:absolute;border-radius:50%;background:rgba(255,255,255,0.2);pointer-events:none;animation:rippleAnim 0.5s ease-out forwards;z-index:99;}
+.trial-card,.explore-card,.post-card,.upcoming-card,.notif-card,.trial-row{transition:background var(--dur-base),border-color var(--dur-base),transform var(--dur-fast);}
+.trial-card:active,.explore-card:active,.post-card:active,.upcoming-card:active,.notif-card:active,.trial-row:active{transform:scale(0.984);}
+
+/* ── translate box ── */
+.tr-box{white-space:pre-wrap;font-size:.8125rem;color:var(--success);background:var(--success-alpha);border-radius:var(--r-md);padding:10px;margin-bottom:8px;line-height:1.7;}
+
 </style>
 </head>
 <body>
@@ -1371,36 +1380,6 @@ svg{display:block;flex-shrink:0;}
             <svg class="sb-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
             발표 예정일 D-7, D-1 사전 알림
           </div>
-        </div>
-      </div>
-
-      <!-- OCR Section -->
-      <div class="ocr-section">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-          <div>
-            <div style="font-size:0.9375rem;font-weight:600;color:var(--t1)">내 검사 결과 입력</div>
-            <div style="font-size:0.6875rem;color:var(--t3);margin-top:2px">혈액검사 결과지를 업로드하거나 직접 입력하세요</div>
-          </div>
-          <label style="height:32px;padding:0 12px;background:var(--primary);color:#fff;border-radius:var(--r-md);font-size:0.75rem;font-weight:500;display:flex;align-items:center;gap:6px;cursor:pointer">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
-            파일 업로드
-            <input type="file" accept="image/*,.pdf" style="display:none" onchange="handleOcrUpload(this)">
-          </label>
-        </div>
-        <div id="ocr-status" style="display:none;font-size:0.75rem;color:var(--warning);margin-bottom:8px">🔍 분석 중...</div>
-        <div id="ocr-result" style="display:none">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px" id="ocr-values"></div>
-          <svg class="ocr-chart-svg" id="ocr-chart" viewBox="0 0 300 120"></svg>
-        </div>
-        <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:12px">
-          <div style="font-size:0.75rem;color:var(--t3);margin-bottom:8px">직접 입력</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" id="manual-inputs">
-            <div><div style="font-size:0.625rem;color:var(--t3);margin-bottom:4px">WBC (백혈구)</div><div class="input-shell" style="height:36px"><input type="number" placeholder="4.0–10.0" style="flex:1;background:transparent;border:none;font-size:0.8125rem;color:var(--t1)" id="mi-wbc"></div></div>
-            <div><div style="font-size:0.625rem;color:var(--t3);margin-bottom:4px">HGB (헤모글로빈)</div><div class="input-shell" style="height:36px"><input type="number" placeholder="12–17" style="flex:1;background:transparent;border:none;font-size:0.8125rem;color:var(--t1)" id="mi-hgb"></div></div>
-            <div><div style="font-size:0.625rem;color:var(--t3);margin-bottom:4px">PLT (혈소판)</div><div class="input-shell" style="height:36px"><input type="number" placeholder="150–400" style="flex:1;background:transparent;border:none;font-size:0.8125rem;color:var(--t1)" id="mi-plt"></div></div>
-            <div><div style="font-size:0.625rem;color:var(--t3);margin-bottom:4px">CA-125 (종양표지자)</div><div class="input-shell" style="height:36px"><input type="number" placeholder="0–35" style="flex:1;background:transparent;border:none;font-size:0.8125rem;color:var(--t1)" id="mi-ca125"></div></div>
-          </div>
-          <button style="width:100%;height:36px;margin-top:10px;background:var(--elevated);border:1px solid var(--border);border-radius:var(--r-md);font-size:0.8125rem;color:var(--t2);cursor:pointer" onclick="saveManualData()">저장하기</button>
         </div>
       </div>
 
@@ -1966,7 +1945,7 @@ function renderTrendCards(){
         ${esc(t.upDate)}
       </div>`;
     }
-    return `<div class="trial-card ${phCls}" onclick="showDetail('${t.id}')">
+    return `<div class="trial-card ${phCls}" onclick="ripple(event);showDetail('${t.id}')">
       <div class="card-ticker">${esc(t.ticker)} · #${i+1}</div>
       <div class="card-company">${esc(t.co)}</div>
       <div class="card-drug">${esc(t.drug)}</div>
@@ -1984,7 +1963,7 @@ function renderHomeUpcoming(){
   const up=TRIALS.filter(t=>t.upcoming&&!t.result).sort((a,b)=>b.ph-a.ph).slice(0,4);
   const pbCls={1:'pb-1',2:'pb-2',3:'pb-3'};
   document.getElementById('home-upcoming').innerHTML=up.map(t=>`
-    <div class="upcoming-card" onclick="showDetail('${t.id}')">
+    <div class="upcoming-card" onclick="ripple(event);showDetail('${t.id}')">
       <div class="uc-date">${esc(t.upDate)}</div>
       <div class="uc-body">
         <div class="uc-company">${esc(t.co)}</div>
@@ -2266,8 +2245,12 @@ function renderPubMedPanel(drug, articles){
         <span class="pubmed-pmid">PMID ${a.pmid}</span>
       </div>
       <div id="abs-${idx}" class="pubmed-abstract">
-        <div style="font-weight:600;margin-bottom:8px;color:var(--t1);font-size:.75rem;text-transform:uppercase;letter-spacing:.05em">Abstract</div>
-        <div style="white-space:pre-wrap">${esc(a.abstract||'초록 정보가 없습니다.')}</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <div style="font-weight:600;color:var(--t1);font-size:.75rem;text-transform:uppercase;letter-spacing:.05em">Abstract</div>
+          <button onclick="translateAbstract(this.dataset.txt,this,'tr-${idx}')" data-txt="${esc(a.abstract||'')}" style="height:22px;padding:0 9px;background:var(--primary-alpha);border:1px solid rgba(91,107,255,0.2);border-radius:var(--r-full);font-size:0.6rem;color:var(--primary-hover);cursor:pointer;white-space:nowrap">🌐 한국어 번역</button>
+        </div>
+        <div style="white-space:pre-wrap;margin-bottom:8px">${esc(a.abstract||'초록 정보가 없습니다.')}</div>
+        <div id="tr-${idx}" class="tr-box" style="display:none"></div>
         <button class="pubmed-item-btn" onclick="window.open('https://pubmed.ncbi.nlm.nih.gov/${a.pmid}','_blank')">PubMed에서 전체 보기 ↗</button>
       </div>
     </div>`).join('');
@@ -2327,7 +2310,7 @@ function postHTML(p,withReply){
     <div class="rq-author">🔁 ${esc(p.repost.n)} 원문 인용</div>
     <div class="rq-body">${esc(p.repost.title)} — ${esc((p.repost.body||'').substring(0,80))}${(p.repost.body||'').length>80?'...':''}</div>
   </div>`:'';
-  return `<div class="post-card cat-${p.cat}">
+  return `<div class="post-card cat-${p.cat}" onclick="ripple(event)">
     <div class="post-header">
       <div class="avatar" style="color:${avc.c};background:${avc.bg};border-color:${avc.c}33">${(p.u||'U').substring(0,2)}</div>
       <div class="post-meta"><div class="post-author">${esc(p.n)}</div><div class="post-time">${esc(p.t)}</div></div>
@@ -2402,7 +2385,7 @@ function renderTrending(){
           let rb='';
           if(t.result)rb=`<span class="result-pill ${t.result.v==='success'?'rp-s':'rp-f'}">${t.result.v==='success'?'성공':'실패'}</span>`;
           else if(t.upcoming)rb=`<span class="result-pill rp-u">${esc(t.upDate)}</span>`;
-          return `<div class="trial-row tr-ph${ph}" onclick="showDetail('${t.id}')">
+          return `<div class="trial-row tr-ph${ph}" onclick="ripple(event);showDetail('${t.id}')">
             <span class="tr-rank">${i+1}</span>
             <div class="tr-body">
               <div class="tr-company">${esc(t.co)}</div>
@@ -2453,8 +2436,45 @@ async function loadExplore(){
   const dot=document.getElementById('api-dot'),lbl=document.getElementById('api-label'),retry=document.getElementById('api-retry');
   list.innerHTML='<div class="explore-empty">🔄 ClinicalTrials.gov 검색 중...</div>';
   dot.className='api-dot loading';lbl.textContent='연결 중...';retry.classList.remove('show');
+  const today=new Date();const dateStr=`${today.getFullYear()}.${today.getMonth()+1}.${today.getDate()}`;
+  function cardHTML(s){
+    const ps=s.protocolSection||{};
+    const idM=ps.identificationModule||{};const st=ps.statusModule||{};
+    const sp=ps.sponsorCollaboratorsModule||{};const de=ps.designModule||{};const iv=ps.interventionsModule||{};
+    const nct=idM.nctId||'';const title=idM.briefTitle||'제목 없음';const status=st.overallStatus||'';
+    const phases=de.phases||[];const phN=phases.length?parseInt(phases[phases.length-1].replace('PHASE','')||'0')||0:0;
+    const pbCls={1:'pb-1',2:'pb-2',3:'pb-3',4:'pb-3'}[phN]||'';
+    const sLbl={RECRUITING:'모집중',COMPLETED:'완료',ACTIVE_NOT_RECRUITING:'진행중',TERMINATED:'종료'}[status]||status;
+    const sCls={RECRUITING:'sp-r',COMPLETED:'sp-c',ACTIVE_NOT_RECRUITING:'sp-a',TERMINATED:'sp-t'}[status]||'';
+    const sponsor=(sp.leadSponsor||{}).name||'';const drug=((iv.interventions||[])[0]||{}).name||'';const enroll=(de.enrollmentInfo||{}).count||0;
+    const cond=(ps.conditionsModule?.conditions||[]).slice(0,2).join(', ');
+    return `<div class="explore-card" onclick="ripple(event);window.open('https://clinicaltrials.gov/study/${nct}','_blank')">
+      <div class="ec-row1"><div class="ec-title">${esc(title)}</div>${phN&&pbCls?`<span class="phase-badge ${pbCls}" style="flex-shrink:0">PH ${phN}</span>`:''}</div>
+      <div class="ec-meta">
+        ${sponsor?`<span class="ec-tag">🏢 ${esc(sponsor)}</span>`:''}
+        ${drug?`<span class="ec-tag">💊 ${esc(drug)}</span>`:''}
+        <span class="ec-status ${sCls}">${sLbl}</span>
+        ${enroll?`<span class="ec-tag">👥 ${Number(enroll).toLocaleString()}</span>`:''}
+      </div>
+      ${cond?`<div class="ec-abstract">🦠 ${esc(cond)}</div>`:''}
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
+        <span class="ec-nct">${nct}</span>
+        <span style="font-size:0.5625rem;color:var(--t3)">출처: ClinicalTrials.gov · ${dateStr}</span>
+      </div>
+    </div>`;
+  }
+  function phGroupHTML(label,pbCls,items){
+    if(!items.length)return '';
+    return `<div style="margin-bottom:8px">
+      <div style="display:flex;align-items:center;gap:8px;padding:10px 0 6px">
+        <span class="phase-badge ${pbCls}">${label}</span>
+        <span style="font-family:var(--font-mono);font-size:0.6875rem;color:var(--t3)">${items.length}건</span>
+      </div>
+      ${items.map(cardHTML).join('')}
+    </div>`;
+  }
   try{
-    const p=new URLSearchParams({format:'json',pageSize:'18'});
+    const p=new URLSearchParams({format:'json',pageSize:'30'});
     if(eTerm&&/^NCT\d{8}$/i.test(eTerm.trim()))p.set('query.id',eTerm.trim().toUpperCase());
     else if(eTerm)p.set('query.term',eTerm.trim());
     else p.set('query.cond','cancer');
@@ -2467,48 +2487,36 @@ async function loadExplore(){
     lbl.textContent=`연결됨 · ${(d.totalCount||studies.length).toLocaleString()}건`;
     document.querySelectorAll('.filter-pill.loading').forEach(b=>b.classList.remove('loading'));
     if(!studies.length){list.innerHTML='<div class="explore-empty">검색 결과가 없습니다.</div>';return;}
-    const today=new Date();const dateStr=`${today.getFullYear()}.${today.getMonth()+1}.${today.getDate()}`;
-    list.innerHTML=studies.map(s=>{
-      const ps=s.protocolSection||{};
-      const id=(ps.identificationModule||{});const st=(ps.statusModule||{});
-      const sp=(ps.sponsorCollaboratorsModule||{});const de=(ps.designModule||{});const iv=(ps.interventionsModule||{});
-      const nct=id.nctId||'';const title=id.briefTitle||'제목 없음';const status=st.overallStatus||'';
-      const phases=de.phases||[];const phN=phases.length?parseInt(phases[phases.length-1].replace('PHASE','')||'0')||0:0;
-      const pbCls={1:'pb-1',2:'pb-2',3:'pb-3',4:'pb-3'}[phN]||'';
-      const sLbl={RECRUITING:'모집중',COMPLETED:'완료',ACTIVE_NOT_RECRUITING:'진행중',TERMINATED:'종료'}[status]||status;
-      const sCls={RECRUITING:'sp-r',COMPLETED:'sp-c',ACTIVE_NOT_RECRUITING:'sp-a',TERMINATED:'sp-t'}[status]||'';
-      const sponsor=(sp.leadSponsor||{}).name||'';const drug=((iv.interventions||[])[0]||{}).name||'';const enroll=(de.enrollmentInfo||{}).count||0;
-      const cond=(ps.conditionsModule?.conditions||[]).slice(0,2).join(', ');
-      return `<div class="explore-card" onclick="window.open('https://clinicaltrials.gov/study/${nct}','_blank')">
-        <div class="ec-row1">
-          <div class="ec-title">${esc(title)}</div>
-          ${phN&&pbCls?`<span class="phase-badge ${pbCls}" style="flex-shrink:0">PH ${phN}</span>`:''}
-        </div>
-        <div class="ec-meta">
-          ${sponsor?`<span class="ec-tag">🏢 ${esc(sponsor)}</span>`:''}
-          ${drug?`<span class="ec-tag">💊 ${esc(drug)}</span>`:''}
-          <span class="ec-status ${sCls}">${sLbl}</span>
-          ${enroll?`<span class="ec-tag">👥 ${Number(enroll).toLocaleString()}</span>`:''}
-        </div>
-        ${cond?`<div class="ec-abstract">🦠 ${esc(cond)}</div>`:''}
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
-          <span class="ec-nct">${nct}</span>
-          <span style="font-size:0.5625rem;color:var(--t3)">출처: ClinicalTrials.gov · ${dateStr}</span>
-        </div>
-      </div>`;
-    }).join('');
+    if(ePhase){
+      list.innerHTML=studies.map(cardHTML).join('');
+    } else {
+      const ph3=studies.filter(s=>(s.protocolSection?.designModule?.phases||[]).includes('PHASE3'));
+      const ph2=studies.filter(s=>{const ph=s.protocolSection?.designModule?.phases||[];return ph.includes('PHASE2')&&!ph.includes('PHASE3');});
+      const ph1=studies.filter(s=>{const ph=s.protocolSection?.designModule?.phases||[];return ph.includes('PHASE1')&&!ph.includes('PHASE2')&&!ph.includes('PHASE3');});
+      const other=studies.filter(s=>{const ph=s.protocolSection?.designModule?.phases||[];return !ph.some(p=>['PHASE1','PHASE2','PHASE3'].includes(p));});
+      list.innerHTML=phGroupHTML('PHASE 3','pb-3',ph3)+phGroupHTML('PHASE 2','pb-2',ph2)+phGroupHTML('PHASE 1','pb-1',ph1)+(other.length?phGroupHTML('기타','',other):'');
+    }
   }catch(e){
     dot.className='api-dot error';lbl.textContent='연결 실패';retry.classList.add('show');
     document.querySelectorAll('.filter-pill.loading').forEach(b=>b.classList.remove('loading'));
-    list.innerHTML=`<div class="explore-empty" style="color:var(--t2)">⚠ API 오류 — 로컬 데이터로 전환합니다</div>
-    ${TRIALS.map(t=>`<div class="explore-card" onclick="showDetail('${t.id}')">
-      <div class="ec-row1"><div class="ec-title">${esc(t.co)} — ${esc(t.drug)}</div><span class="phase-badge pb-${t.ph}" style="flex-shrink:0">PH ${t.ph}</span></div>
-      <div class="ec-meta"><span class="ec-tag">${esc(t.ind)}</span></div>
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
-        <span class="ec-nct">${t.id}</span>
-        <span style="font-size:0.5625rem;color:var(--t3)">출처: ClinicalTrials.gov</span>
-      </div>
-    </div>`).join('')}`;
+    const localByPhase=[3,2,1].map(ph=>{
+      const items=TRIALS.filter(t=>t.ph===ph);
+      const pbCls={1:'pb-1',2:'pb-2',3:'pb-3'}[ph];
+      return items.length?`<div style="margin-bottom:8px">
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 0 6px">
+          <span class="phase-badge ${pbCls}">PHASE ${ph}</span>
+          <span style="font-family:var(--font-mono);font-size:0.6875rem;color:var(--t3)">${items.length}건</span>
+        </div>
+        ${items.map(t=>`<div class="explore-card" onclick="ripple(event);showDetail('${t.id}')">
+          <div class="ec-row1"><div class="ec-title">${esc(t.co)} — ${esc(t.drug)}</div><span class="phase-badge pb-${t.ph}" style="flex-shrink:0">PH ${t.ph}</span></div>
+          <div class="ec-meta"><span class="ec-tag">${esc(t.ind)}</span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
+            <span class="ec-nct">${t.id}</span><span style="font-size:0.5625rem;color:var(--t3)">출처: ClinicalTrials.gov</span>
+          </div>
+        </div>`).join('')}
+      </div>`:'';
+    }).join('');
+    list.innerHTML=`<div class="explore-empty" style="color:var(--t2);margin-bottom:8px">⚠ API 오류 — 로컬 데이터</div>${localByPhase}`;
   }
 }
 
@@ -2527,7 +2535,7 @@ function filterNotifs(cat,btn){
 function renderNotifs(){
   const filtered=notifFilter==='all'?notifs:notifs.filter(n=>n.category===notifFilter);
   document.getElementById('notif-list').innerHTML=filtered.map(n=>`
-    <div class="notif-card ${n.unread?'unread':''}" onclick="readNotif('${n.id}')">
+    <div class="notif-card ${n.unread?'unread':''}" onclick="ripple(event);readNotif('${n.id}')">
       <div class="notif-icon ${n.cls}">${n.icon}</div>
       <div class="notif-body">
         <div class="notif-title">${esc(n.title)}</div>
@@ -2625,6 +2633,36 @@ function submitPost(){
    ══════════════════════════════════ */
 function togglePw(){const inp=document.getElementById('lf-pw');inp.type=inp.type==='password'?'text':'password';}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+/* Ripple */
+function ripple(e){
+  const el=e.currentTarget;const rect=el.getBoundingClientRect();
+  const size=Math.max(rect.width,rect.height);
+  const r=document.createElement('span');r.className='ripple-wave';
+  r.style.cssText=`width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px;`;
+  el.style.position='relative';el.style.overflow='hidden';
+  el.appendChild(r);setTimeout(()=>r.remove(),520);
+}
+
+/* 논문 한국어 번역 */
+const TRANSLATE_CACHE={};
+async function translateAbstract(text,btnEl,targetId){
+  if(TRANSLATE_CACHE[text]){
+    const el=document.getElementById(targetId);if(el){el.textContent=TRANSLATE_CACHE[text];el.style.display='block';}
+    if(btnEl)btnEl.textContent='번역 완료 ✓';return;
+  }
+  if(btnEl){btnEl.textContent='번역 중...';btnEl.disabled=true;}
+  try{
+    const url=`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text.substring(0,500))}&langpair=en|ko`;
+    const r=await fetch(url);const d=await r.json();
+    const translated=d.responseData?.translatedText||'번역 결과를 가져올 수 없습니다.';
+    TRANSLATE_CACHE[text]=translated;
+    const el=document.getElementById(targetId);if(el){el.textContent=translated;el.style.display='block';}
+    if(btnEl){btnEl.textContent='번역 완료 ✓';btnEl.disabled=false;}
+  }catch(err){
+    if(btnEl){btnEl.textContent='번역 실패 — 재시도';btnEl.disabled=false;}
+  }
+}
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2200);}
 function copyToClipboard(text, msg='복사되었습니다'){
   if(!navigator.clipboard){

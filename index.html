@@ -1106,6 +1106,49 @@ svg{display:block;flex-shrink:0;}
 .trial-card,.explore-card,.post-card,.upcoming-card,.notif-card,.trial-row{transition:background var(--dur-base),border-color var(--dur-base),transform var(--dur-fast);}
 .trial-card:active,.explore-card:active,.post-card:active,.upcoming-card:active,.notif-card:active,.trial-row:active{transform:scale(0.984);}
 
+/* ══════════════════════════════════
+   PROFILE VIEW
+   ══════════════════════════════════ */
+.profile-header { padding: 20px 16px 0; }
+.profile-avatar { width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;margin-bottom:12px; }
+.profile-name { font-size:1.125rem;font-weight:600; }
+.profile-handle { font-size:.8125rem;color:var(--t2);margin-top:2px; }
+.profile-bio { font-size:.875rem;color:var(--t2);margin-top:8px;line-height:1.5; }
+.profile-stats { display:flex;gap:24px;margin-top:16px;padding:16px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border); }
+.profile-stat { display:flex;flex-direction:column;align-items:center;gap:2px; }
+.profile-stat-n { font-size:1.125rem;font-weight:700;color:var(--t1); }
+.profile-stat-l { font-size:.6875rem;color:var(--t2); }
+.profile-tabs { display:flex;border-bottom:1px solid var(--border);margin-top:0; }
+.profile-tab { flex:1;padding:12px 0;font-size:.8125rem;font-weight:500;color:var(--t2);background:none;border:none;border-bottom:2px solid transparent;transition:all var(--dur-base);cursor:pointer;min-height:44px; }
+.profile-tab.on { color:var(--primary);border-bottom-color:var(--primary); }
+.profile-tab-body { padding:0; }
+/* Follow pill */
+.follow-pill { font-size:.625rem;font-weight:600;padding:3px 8px;border-radius:var(--r-full);border:1px solid var(--border);color:var(--t2);background:none;cursor:pointer;transition:all var(--dur-fast);white-space:nowrap; }
+.follow-pill.following { background:var(--primary-alpha);border-color:var(--primary);color:var(--primary); }
+/* Save button */
+.save-btn { font-size:.75rem;padding:4px 8px;border-radius:var(--r-full);border:1px solid var(--border);background:none;color:var(--t2);cursor:pointer;transition:all var(--dur-fast); }
+.save-btn.saved { color:var(--warning);border-color:var(--warning);background:var(--warning-alpha); }
+/* Edit profile sheet */
+.color-swatch { width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all var(--dur-fast); }
+.color-swatch.sel { border-color:white; }
+.emoji-grid { display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:8px; }
+.emoji-opt { font-size:1.5rem;padding:6px;border-radius:var(--r-sm);cursor:pointer;text-align:center;transition:background var(--dur-fast); }
+.emoji-opt:hover,.emoji-opt.sel { background:var(--elevated); }
+
+/* ══════════════════════════════════
+   MOBILE UX IMPROVEMENTS
+   ══════════════════════════════════ */
+.bottom-nav { height:calc(60px + env(safe-area-inset-bottom,0px)); }
+.nav-icon { width:24px;height:24px; }
+.nav-label { font-size:10px; }
+.filter-pill { min-height:36px; }
+.modal-sheet { max-height:92dvh;border-radius:20px 20px 0 0; }
+.modal-input { min-height:48px; }
+.reply-input { min-height:44px; }
+.post-card { border-radius:var(--r-lg);padding:14px; }
+.explore-card { border-radius:var(--r-lg);padding:12px var(--sp-md); }
+.view { transition:opacity var(--dur-base) var(--ease); }
+
 /* ── translate btn ── */
 .translate-btn{height:22px;padding:0 9px;background:var(--primary-alpha);border:1px solid rgba(91,107,255,0.2);border-radius:var(--r-full);font-size:.5625rem;font-weight:500;color:var(--primary-hover);cursor:pointer;white-space:nowrap;}
 .translate-btn:hover{background:var(--primary);color:#fff;}
@@ -1483,12 +1526,18 @@ svg{display:block;flex-shrink:0;}
 
     <!-- COMMUNITY -->
     <div class="view" id="v-community">
-      <div class="comm-disclaimer" style="margin:8px 16px 0">
-        <strong style="color:var(--warning)">⚠ 커뮤니티 안내</strong><br>
-        본 커뮤니티의 모든 게시물은 사용자의 개인적인 견해이며, BioSignal X의 공식 의견이 아닙니다. 의학적 진단, 처방 권고, 비공식 의약품 효능 광고는 금지됩니다.
-      </div>
-      <div class="prohibited-notice" style="margin-top:6px">
-        <strong style="color:var(--error)">금지 행위</strong>: 의학적 진단, 처방 권고, 비공식 의약품 효능 광고, 타인 정보 무단 수집 · 운영자는 규정 위반 게시물 삭제/계정 차단 권한을 보유합니다.
+      <div style="margin:10px 14px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden">
+        <div style="padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px">
+          <span style="font-size:.75rem">⚠️</span>
+          <span style="font-size:.75rem;font-weight:600;color:var(--warning)">커뮤니티 안내</span>
+        </div>
+        <div style="padding:10px 14px;font-size:.6875rem;color:var(--t2);line-height:1.65">
+          모든 게시물은 개인 견해이며 BioSignal X의 공식 의견이 아닙니다.
+        </div>
+        <div style="padding:8px 14px 10px;background:var(--error-alpha);border-top:1px solid rgba(255,58,92,0.12);font-size:.6875rem;color:var(--t3);line-height:1.65">
+          <span style="color:var(--error);font-weight:600">금지</span> · 의학적 진단 · 처방 권고 · 효능 광고 · 타인 정보 무단 수집<br>
+          <span style="color:var(--t3)">규정 위반 시 게시물 삭제 및 계정 차단될 수 있습니다.</span>
+        </div>
       </div>
       <div class="tabs-wrap" id="comm-tabs">
         <button class="tab-btn on" onclick="filterComm('all',this)">전체</button>
@@ -1558,22 +1607,31 @@ svg{display:block;flex-shrink:0;}
       <div id="trending-body" style="overflow-y:auto;flex:1;padding-bottom:80px;"></div>
     </div>
 
-    <!-- ALERTS -->
-    <div class="view" id="v-alerts">
-      <div class="alerts-topbar">
-        <div class="alerts-title">알림</div>
-        <button class="add-alert-btn" onclick="openAlertModal()">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-          알림 추가
-        </button>
+    <!-- PROFILE -->
+    <div class="view" id="v-profile">
+      <div class="view-scroll" style="overflow-y:auto;flex:1;padding-bottom:80px">
+        <div class="profile-header">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <div class="profile-avatar" id="profile-avatar-display" style="background:#5B6BFF">🧬</div>
+            <button class="btn-secondary" style="font-size:.8125rem;padding:8px 16px;height:auto;min-height:44px" onclick="openProfileEdit()">프로필 편집</button>
+          </div>
+          <div class="profile-name" id="profile-name-display">임상 투자자</div>
+          <div class="profile-handle" id="profile-handle-display">@biosignal_user</div>
+          <div class="profile-bio" id="profile-bio-display"></div>
+          <div class="profile-stats">
+            <div class="profile-stat"><span class="profile-stat-n" id="ps-posts">6</span><span class="profile-stat-l">게시글</span></div>
+            <div class="profile-stat" style="cursor:pointer" onclick="showFollowList('followers')"><span class="profile-stat-n" id="ps-followers">0</span><span class="profile-stat-l">팔로워</span></div>
+            <div class="profile-stat" style="cursor:pointer" onclick="showFollowList('following')"><span class="profile-stat-n" id="ps-following">0</span><span class="profile-stat-l">팔로잉</span></div>
+            <div class="profile-stat"><span class="profile-stat-n" id="ps-saved">0</span><span class="profile-stat-l">저장</span></div>
+          </div>
+        </div>
+        <div class="profile-tabs">
+          <button class="profile-tab on" id="ptab-saved" onclick="switchProfileTab('saved',this)">저장한 임상</button>
+          <button class="profile-tab" id="ptab-posts" onclick="switchProfileTab('posts',this)">내 게시글</button>
+          <button class="profile-tab" id="ptab-notifs" onclick="switchProfileTab('notifs',this)">알림<span id="profile-notif-dot" style="display:inline-block;width:6px;height:6px;background:var(--error);border-radius:50%;margin-left:4px;vertical-align:middle"></span></button>
+        </div>
+        <div class="profile-tab-body" id="profile-tab-body"></div>
       </div>
-      <div class="notif-tabs">
-        <button class="notif-tab on" onclick="filterNotifs('all',this)">전체</button>
-        <button class="notif-tab" onclick="filterNotifs('success',this)">임상결과 <span id="nb-clinical" style="font-family:var(--font-mono);font-size:0.5625rem;background:var(--primary-alpha);color:var(--primary-hover);padding:1px 5px;border-radius:var(--r-full);margin-left:4px"></span></button>
-        <button class="notif-tab" onclick="filterNotifs('comm',this)">커뮤니티</button>
-        <button class="notif-tab" onclick="filterNotifs('system',this)">시스템</button>
-      </div>
-      <div class="notif-list" id="notif-list"></div>
     </div>
   </div>
 
@@ -1598,13 +1656,59 @@ svg{display:block;flex-shrink:0;}
       <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
       <span class="nav-label">임상예정</span>
     </div>
-    <div class="nav-item" id="nav-alerts" onclick="goNav('alerts')">
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
-      <span class="nav-label">알림</span>
-      <span class="nav-badge show" id="notif-badge">3</span>
+    <div class="nav-item" id="nav-profile" onclick="goNav('profile')">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      <span class="nav-label">프로필</span>
+      <span class="nav-badge" id="notif-badge"></span>
     </div>
   </div>
   <div class="disclaimer"><strong>⚠ Research Only</strong> — BioSignal X는 정보 제공 목적이며 투자 권유가 아닙니다.</div>
+</div>
+
+<!-- Profile Edit Modal -->
+<div class="modal-bg" id="modal-profile-edit">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">프로필 편집</div>
+    <div style="display:flex;justify-content:center;margin-bottom:16px">
+      <div id="pe-avatar-preview" style="width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;background:#5B6BFF">🧬</div>
+    </div>
+    <div style="font-size:.75rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);margin-bottom:8px">아바타 이모지</div>
+    <div class="emoji-grid" id="pe-emoji-grid">
+      🧬 🔬 💊 🧪 🩺 🧫 🧲 🏥 📊 📈 💉 🦠 🧠 🫀 🫁 🦷 🩻 🩹 💊 🔭 🌡️ ⚗️ 🧑‍⚕️ 👨‍🔬 👩‍🔬
+    </div>
+    <div style="font-size:.75rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);margin-top:16px;margin-bottom:8px">아바타 색상</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap" id="pe-color-swatches">
+      <div class="color-swatch sel" style="background:#5B6BFF" onclick="selectAvatarColor('#5B6BFF',this)"></div>
+      <div class="color-swatch" style="background:#2BE08C" onclick="selectAvatarColor('#2BE08C',this)"></div>
+      <div class="color-swatch" style="background:#F5D547" onclick="selectAvatarColor('#F5D547',this)"></div>
+      <div class="color-swatch" style="background:#FF3A5C" onclick="selectAvatarColor('#FF3A5C',this)"></div>
+      <div class="color-swatch" style="background:#3DD7E5" onclick="selectAvatarColor('#3DD7E5',this)"></div>
+      <div class="color-swatch" style="background:#FF8C42" onclick="selectAvatarColor('#FF8C42',this)"></div>
+      <div class="color-swatch" style="background:#C77DFF" onclick="selectAvatarColor('#C77DFF',this)"></div>
+      <div class="color-swatch" style="background:#4CC9F0" onclick="selectAvatarColor('#4CC9F0',this)"></div>
+    </div>
+    <div style="margin-top:16px">
+      <label class="form-label">이름</label>
+      <input class="modal-input" id="pe-name" placeholder="표시 이름" style="margin-bottom:10px">
+      <label class="form-label">핸들</label>
+      <input class="modal-input" id="pe-handle" placeholder="@handle" style="margin-bottom:10px">
+      <label class="form-label">소개 (최대 100자)</label>
+      <textarea class="modal-input modal-ta" id="pe-bio" placeholder="자기 소개를 입력하세요" maxlength="100" style="height:72px"></textarea>
+    </div>
+    <button class="modal-submit" onclick="saveProfile()">저장하기</button>
+    <button class="modal-cancel" onclick="document.getElementById('modal-profile-edit').classList.remove('open')">취소</button>
+  </div>
+</div>
+
+<!-- Follow List Modal -->
+<div class="modal-bg" id="modal-follow-list">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="follow-list-title">팔로잉</div>
+    <div id="follow-list-body" style="padding:8px 0"></div>
+    <button class="modal-cancel" onclick="document.getElementById('modal-follow-list').classList.remove('open')">닫기</button>
+  </div>
 </div>
 
 <!-- Write Modal -->
@@ -1732,8 +1836,21 @@ const NOTIFS=[
 /* ══════════════════════════════════
    NAVIGATION
    ══════════════════════════════════ */
-const VIEWS={home:'v-home',community:'v-community',explore:'v-explore',trending:'v-trending',alerts:'v-alerts'};
-const NAVELS={home:'nav-home',community:'nav-community',explore:'nav-explore',trending:'nav-trending',alerts:'nav-alerts'};
+const VIEWS={home:'v-home',community:'v-community',explore:'v-explore',trending:'v-trending',profile:'v-profile'};
+const NAVELS={home:'nav-home',community:'nav-community',explore:'nav-explore',trending:'nav-trending',profile:'nav-profile'};
+
+/* ══════════════════════════════════
+   STATE — Profile, Follow, Saved
+   ══════════════════════════════════ */
+let currentUser = {
+  name: '임상 투자자',
+  handle: '@biosignal_user',
+  bio: '',
+  avatar: '🧬',
+  avatarColor: '#5B6BFF',
+};
+let FOLLOWS = {};
+let SAVED_TRIALS = new Set();
 
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('active');s.style.display='none';});
@@ -1769,13 +1886,18 @@ function doLogin(skipValidation=false){
       localStorage.setItem('bsx_session',JSON.stringify({email,loginTime:Date.now()}));
     }
   }
+  // Load localStorage state
+  try{const f=JSON.parse(localStorage.getItem('bsx_follows')||'{}');if(f&&typeof f==='object')FOLLOWS=f;}catch(e){}
+  try{const s=JSON.parse(localStorage.getItem('bsx_saved')||'[]');if(Array.isArray(s))SAVED_TRIALS=new Set(s);}catch(e){}
+  try{const p=JSON.parse(localStorage.getItem('bsx_profile')||'null');if(p){Object.assign(currentUser,p);}}catch(e){}
+
   showScreen('s-app');
-try{renderTrendCards();}catch(e){}
+  try{renderTrendCards();}catch(e){}
   try{renderHomeComm();}catch(e){}
   try{renderHomeUpcoming();}catch(e){}
   try{renderComm('all');}catch(e){}
   try{loadExplore();}catch(e){}
-  try{renderNotifs();}catch(e){}
+  try{updateBadge();}catch(e){}
   try{updateNotifCategoryBadges();}catch(e){}
   const ts=document.getElementById('explore-timestamp');
   if(ts){const d=new Date();ts.textContent=`본 정보는 ${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()} 기준 데이터입니다 · 출처: ClinicalTrials.gov (U.S. National Library of Medicine)`;}
@@ -1949,14 +2071,15 @@ function checkPwStrength(pw,barId,labelId){
    ══════════════════════════════════ */
 let navHistory = ['home'];
 function goNav(t, push=true){
+  if(!VIEWS[t])return;
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(v=>v.classList.remove('on'));
   document.getElementById(VIEWS[t]).classList.add('active');
   document.getElementById(NAVELS[t]).classList.add('on');
   if(push && navHistory[navHistory.length-1] !== t) navHistory.push(t);
   document.getElementById('global-back').style.display = navHistory.length > 1 ? 'block' : 'none';
-  if(t==='alerts')markAllRead();
   if(t==='trending')loadTrending();
+  if(t==='profile'){renderProfileHeader();switchProfileTab(_curProfileTab||'saved',document.getElementById('ptab-'+(_curProfileTab||'saved')));}
 }
 function goBack(){
   if(navHistory.length > 1){navHistory.pop();const prev = navHistory[navHistory.length-1];goNav(prev, false);}
@@ -2031,7 +2154,7 @@ function renderTrendCards(){
       </div>`;
     }
     return `<div class="trial-card ${phCls}" onclick="ripple(event);showDetail('${t.id}')">
-      <div class="card-ticker">${esc(t.ticker)} · #${i+1}</div>
+      <div class="card-ticker" style="display:flex;align-items:center;justify-content:space-between">${esc(t.ticker)} · #${i+1}<button class="save-btn ${SAVED_TRIALS.has(t.id)?'saved':''}" onclick="event.stopPropagation();toggleSaveTrial('${t.id}',this)" title="저장">🔖</button></div>
       <div class="card-company">${esc(t.co)}</div>
       <div class="card-drug">${esc(t.drug)}</div>
       <span class="phase-badge ${pbCls}">PH ${t.ph}</span>
@@ -2209,7 +2332,10 @@ function showDetail(id, ctData=null){
       <button onclick="document.getElementById('detail-ov').remove()" style="background:var(--elevated);border:1px solid var(--border);border-radius:var(--r-md);padding:6px 14px;font-size:.8125rem;color:var(--t2);display:flex;align-items:center;gap:5px;cursor:pointer;font-weight:500">
         완료
       </button>
-      ${resultBadge}
+      <div style="display:flex;align-items:center;gap:8px">
+        <button class="save-btn ${SAVED_TRIALS.has(t.id)?'saved':''}" onclick="toggleSaveTrial('${t.id}',this)">🔖 ${SAVED_TRIALS.has(t.id)?'저장됨':'저장'}</button>
+        ${resultBadge}
+      </div>
     </div>
 
     <!-- 기업명 + 약물·Phase·적응증 -->
@@ -2280,6 +2406,7 @@ function showDetailCT(nctId){
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>뒤로가기
       </button>
       <div style="display:flex;align-items:center;gap:6px">
+        <button class="save-btn ${SAVED_TRIALS.has(d.nct)?'saved':''}" id="detail-save-btn-${d.nct}" onclick="toggleSaveTrial('${d.nct}',this)" title="저장">🔖 ${SAVED_TRIALS.has(d.nct)?'저장됨':'저장'}</button>
         ${d.phN&&d.pbCls?`<span class="phase-badge ${d.pbCls}">PHASE ${d.phN}</span>`:''}
         <span class="status-pill ${d.stInfo.cls}">${d.stInfo.label}</span>
       </div>
@@ -2533,7 +2660,7 @@ function postHTML(p,withReply){
   return `<div class="post-card cat-${p.cat}" data-pid="${p.id}" onclick="ripple(event)">
     <div class="post-header">
       <div class="avatar" style="color:${avc.c};background:${avc.bg};border-color:${avc.c}33">${(p.u||'U').substring(0,2)}</div>
-      <div class="post-meta"><div class="post-author">${esc(p.n)}</div><div class="post-time">${esc(p.t)}</div></div>
+      <div class="post-meta"><div class="post-author" style="display:flex;align-items:center;gap:6px">${esc(p.n)}<button class="follow-pill ${FOLLOWS[p.n]?'following':''}" onclick="event.stopPropagation();toggleFollow('${p.n}',this)">${FOLLOWS[p.n]?'팔로잉 ✓':'팔로우'}</button></div><div class="post-time">${esc(p.t)}</div></div>
       <span class="cat-chip ${catChipCls}">${catIcon} ${catLabel}</span>
     </div>
     <div class="post-title">${esc(p.title)}</div>
@@ -2680,8 +2807,7 @@ async function loadTrending(){
   body.innerHTML='<div class="explore-empty" style="padding:40px 24px">🔄 ClinicalTrials.gov 연결 중...</div>';
   dot.className='trending-api-dot loading';lbl.textContent='연결 중...';retry.classList.remove('show');
 
-  // COMPLETED도 포함해서 가져온 뒤, resultsSection 없으면 발표대기로 분류
-  const statuses='RECRUITING,ACTIVE_NOT_RECRUITING,NOT_YET_RECRUITING,COMPLETED';
+  const statuses='RECRUITING,ACTIVE_NOT_RECRUITING,NOT_YET_RECRUITING';
 
   function buildCard(s, forcePending){
     return _storeAndCard(s, s=>{
@@ -2708,6 +2834,7 @@ async function loadTrending(){
             ${d.enroll?`<span style="font-size:.625rem;color:var(--t3)">👥 ${Number(d.enroll).toLocaleString()}</span>`:''}
             ${d.endDate?`<span style="font-size:.625rem;color:var(--warning)">📅 ${d.endDate}</span>`:''}
             <button class="action-btn" onclick="event.stopPropagation();openRepostByCT('${d.nct}','${(d.sponsor||'').replace(/'/g,'\\x27')}','${(d.drug||'').replace(/'/g,'\\x27')}')" title="리포스트" style="font-size:.7rem;padding:3px 7px">🔁</button>
+            <button class="save-btn ${SAVED_TRIALS.has(d.nct)?'saved':''}" onclick="event.stopPropagation();toggleSaveTrial('${d.nct}',this)" title="저장">🔖</button>
             <span class="ttc-more-btn">자세히 보기 →</span>
           </span>
         </div>
@@ -2732,15 +2859,11 @@ async function loadTrending(){
     const d=await fetchCT(params.toString());
     const studies=d.studies||[];
 
-    // 분류: COMPLETED+결과없음=발표대기 / COMPLETED+결과있음=제외 / 나머지=진행중
-    let active  = studies.filter(s=>['RECRUITING','ACTIVE_NOT_RECRUITING','NOT_YET_RECRUITING'].includes(s.protocolSection?.statusModule?.overallStatus||''));
-    const pending = studies.filter(s=>(s.protocolSection?.statusModule?.overallStatus||'')==='COMPLETED' && !s.resultsSection);
-    // 상태 필터 적용
+    let active = studies.filter(s=>['RECRUITING','ACTIVE_NOT_RECRUITING','NOT_YET_RECRUITING'].includes(s.protocolSection?.statusModule?.overallStatus||''));
     if(trStatus) active = active.filter(s=>(s.protocolSection?.statusModule?.overallStatus||'')===trStatus);
-    // COMPLETED+resultsSection 있는 것은 이미 공표됐으므로 목록에서 제외
 
     dot.className='trending-api-dot live';
-    lbl.textContent=`연결됨 · 진행중 ${active.length}건 · 발표대기 ${pending.length}건`;
+    lbl.textContent=`연결됨 · ${active.length}건`;
 
     const phFn=[
       s=>(s.protocolSection?.designModule?.phases||[]).includes('PHASE3'),
@@ -2748,26 +2871,11 @@ async function loadTrending(){
       s=>{const p=s.protocolSection?.designModule?.phases||[];return p.includes('PHASE1')&&!p.includes('PHASE2')&&!p.includes('PHASE3');}
     ];
 
-    const activeByPh  = phFn.map(fn=>active.filter(fn));
-    const pendingByPh = phFn.map(fn=>pending.filter(fn));
+    const activeByPh = phFn.map(fn=>active.filter(fn));
 
-    if(!active.length&&!pending.length){body.innerHTML='<div class="explore-empty">검색 결과가 없습니다.</div>';return;}
+    if(!active.length){body.innerHTML='<div class="explore-empty">검색 결과가 없습니다.</div>';return;}
 
     let html='<div class="trending-wrap">';
-    // 발표대기 섹션 (상단 — 투자자 관심 높음)
-    if(pending.length){
-      html+=`<div class="trending-ph-block">
-        <div class="trending-ph-hdr" style="background:rgba(245,213,71,0.06);border-radius:var(--r-sm);padding:8px 10px;margin-bottom:6px">
-          <span class="status-pill sp-p" style="font-size:.75rem;padding:4px 10px">📅 발표대기</span>
-          <span class="trending-ph-label">임상 완료 · 결과 미공표</span>
-          <span class="trending-ph-count">${pending.length}건</span>
-        </div>
-        ${phGroup('PHASE 3','pb-3','',pendingByPh[0],true)}
-        ${phGroup('PHASE 2','pb-2','',pendingByPh[1],true)}
-        ${phGroup('PHASE 1','pb-1','',pendingByPh[2],true)}
-      </div>`;
-    }
-    // 진행중 섹션
     html+=phGroup('PHASE 3','pb-3','대규모 효능 검증',activeByPh[0]);
     html+=phGroup('PHASE 2','pb-2','탐색적 임상',activeByPh[1]);
     html+=phGroup('PHASE 1','pb-1','안전성 확인',activeByPh[2]);
@@ -2775,28 +2883,9 @@ async function loadTrending(){
     body.innerHTML=html;
   }catch(e){
     dot.className='trending-api-dot error';lbl.textContent='연결 실패';retry.classList.add('show');
-    // 로컬 fallback — 발표대기(completed+결과없음) 포함, 결과공표된 것은 제외
-    const localPending=[3,2,1].map(ph=>{
-      const items=TRIALS.filter(t=>t.ph===ph&&t.st==='completed'&&!t.result);
-      if(!items.length)return '';
-      const pbCls={1:'pb-1',2:'pb-2',3:'pb-3'}[ph];
-      return items.map(t=>`<div class="t-trial-card" onclick="ripple(event);showDetail('${t.id}')">
-        <div class="ttc-top">
-          <div class="ttc-title-wrap">
-            <div class="ttc-company">${esc(t.co)}</div>
-            <div class="ttc-drug">💊 ${esc(t.drug)}</div>
-            <div class="ttc-indication">🦠 ${esc(t.ind)}</div>
-          </div>
-          <div class="ttc-badges">
-            <span class="phase-badge ${pbCls}">PH ${ph}</span>
-            <span class="status-pill sp-p">발표대기</span>
-          </div>
-        </div>
-        <div class="ttc-footer"><span class="ttc-nct">${t.id}</span><span style="display:flex;align-items:center;gap:6px"><button class="action-btn" onclick="event.stopPropagation();openRepostByCT('${t.id}','${t.co.replace(/'/g,"\\x27")}','${t.drug.replace(/'/g,"\\x27")}')" title="리포스트" style="font-size:.7rem;padding:3px 7px">🔁</button><span class="ttc-more-btn">자세히 보기 →</span></span></div>
-      </div>`).join('');
-    }).join('');
+    // 로컬 fallback — 모집중/진행중만 표시
     const localHtml=[3,2,1].map(ph=>{
-      const items=TRIALS.filter(t=>t.ph===ph&&(t.st==='recruiting'||t.st==='active'));
+      const items=TRIALS.filter(t=>t.ph===ph&&(t.st==='recruiting'||t.st==='active'||t.st==='not_yet'));
       if(!items.length)return '';
       const pbCls={1:'pb-1',2:'pb-2',3:'pb-3'}[ph];
       const phLabel={3:'대규모 효능 검증',2:'탐색적 임상',1:'안전성 확인'}[ph];
@@ -2811,7 +2900,7 @@ async function loadTrending(){
             </div>
             <div class="ttc-badges">
               <span class="phase-badge ${pbCls}">PH ${ph}</span>
-              <span class="status-pill ${{recruiting:'sp-r',active:'sp-a'}[t.st]||'sp-a'}">${{recruiting:'모집중',active:'진행중'}[t.st]||t.st}</span>
+              <span class="status-pill ${{recruiting:'sp-r',active:'sp-a',not_yet:'sp-a'}[t.st]||'sp-a'}">${{recruiting:'모집중',active:'진행중',not_yet:'모집예정'}[t.st]||t.st}</span>
             </div>
           </div>
           <div class="ttc-footer">
@@ -2825,8 +2914,7 @@ async function loadTrending(){
         </div>`).join('')}
       </div>`;
     }).join('');
-    const pendingBlock=localPending?`<div class="trending-ph-block"><div class="trending-ph-hdr" style="background:rgba(245,213,71,0.06);border-radius:var(--r-sm);padding:8px 10px;margin-bottom:6px"><span class="status-pill sp-p" style="font-size:.75rem;padding:4px 10px">📅 발표대기</span><span class="trending-ph-label">임상 완료 · 결과 미공표</span></div>${localPending}</div>`:'';
-    body.innerHTML='<div class="explore-empty" style="color:var(--warning);margin:10px 24px 6px">⚠ API 연결 실패 — 로컬 데이터</div><div class="trending-wrap">'+pendingBlock+localHtml+'</div>';
+    body.innerHTML='<div class="explore-empty" style="color:var(--warning);margin:10px 24px 6px">⚠ API 연결 실패 — 로컬 데이터</div><div class="trending-wrap">'+localHtml+'</div>';
   }
 }
 
@@ -2895,6 +2983,7 @@ function renderExplore(){
         <span class="ec-nct">${d.nct}</span>
         <span style="display:flex;align-items:center;gap:6px">
           <button class="action-btn" onclick="event.stopPropagation();openRepostByCT('${d.nct}','${(d.sponsor||'').replace(/'/g,'\\x27')}','${(d.drug||'').replace(/'/g,'\\x27')}')" title="리포스트" style="font-size:.7rem;padding:3px 7px">🔁</button>
+          <button class="save-btn ${SAVED_TRIALS.has(d.nct)?'saved':''}" onclick="event.stopPropagation();toggleSaveTrial('${d.nct}',this)" title="저장">🔖</button>
           <span style="font-size:0.5625rem;color:var(--t3)">ClinicalTrials.gov · ${dateStr}</span>
         </span>
       </div>
@@ -2993,12 +3082,11 @@ function addNotif(n){notifs.unshift(n);updateBadge();updateNotifCategoryBadges()
 function filterNotifs(cat,btn){
   notifFilter=cat;
   document.querySelectorAll('.notif-tab').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
+  if(btn)btn.classList.add('on');
   renderNotifs();
 }
-function renderNotifs(){
-  const filtered=notifFilter==='all'?notifs:notifs.filter(n=>n.category===notifFilter);
-  document.getElementById('notif-list').innerHTML=filtered.map(n=>`
+function notifListHTML(list){
+  return list.map(n=>`
     <div class="notif-card ${n.unread?'unread':''}" onclick="ripple(event);readNotif('${n.id}')">
       <div class="notif-icon ${n.cls}">${n.icon}</div>
       <div class="notif-body">
@@ -3012,12 +3100,28 @@ function renderNotifs(){
       ${n.unread?'<div class="unread-dot"></div>':''}
     </div>`).join('');
 }
-function readNotif(id){const n=notifs.find(x=>x.id===id);if(n)n.unread=false;renderNotifs();updateBadge();}
-function markAllRead(){notifs.forEach(n=>n.unread=false);renderNotifs();updateBadge();}
+function renderNotifs(containerId){
+  const filtered=notifFilter==='all'?notifs:notifs.filter(n=>n.category===notifFilter);
+  // Render into profile tab body if profile is active
+  const target=containerId||'profile-notifs-container';
+  const el=document.getElementById(target);
+  if(el)el.innerHTML=notifListHTML(filtered);
+}
+function readNotif(id){const n=notifs.find(x=>x.id===id);if(n)n.unread=false;
+  // re-render current profile tab if showing notifs
+  if(_curProfileTab==='notifs')switchProfileTab('notifs',document.getElementById('ptab-notifs'));
+  updateBadge();}
+function markAllRead(){notifs.forEach(n=>n.unread=false);
+  if(_curProfileTab==='notifs')switchProfileTab('notifs',document.getElementById('ptab-notifs'));
+  updateBadge();}
 function updateBadge(){
   const cnt=notifs.filter(n=>n.unread).length;
   const b=document.getElementById('notif-badge');
-  if(cnt>0){b.textContent=cnt>9?'9+':String(cnt);b.classList.add('show');}else b.classList.remove('show');
+  if(!b)return;
+  if(cnt>0){b.textContent=cnt>9?'9+':String(cnt);b.classList.add('show');}else{b.textContent='';b.classList.remove('show');}
+  // Show dot on profile notifs tab
+  const dot=document.getElementById('profile-notif-dot');
+  if(dot)dot.style.display=cnt>0?'inline-block':'none';
 }
 function updateNotifCategoryBadges(){
   const clinicalCnt=notifs.filter(n=>n.category==='success'&&n.unread).length;
@@ -3037,7 +3141,228 @@ function submitAlert(){
   const tm={success:{icon:'✅',cls:'ni-s',label:'임상 성공',badge:'nb-s'},fail:{icon:'❌',cls:'ni-f',label:'임상 실패',badge:'nb-f'},upcoming:{icon:'📅',cls:'ni-u',label:'발표 예정',badge:'nb-u'},update:{icon:'🔄',cls:'ni-up',label:'업데이트',badge:'nb-p'}}[selAlertT]||{icon:'📅',cls:'ni-u',label:'예정',badge:'nb-u'};
   addNotif({id:'na'+Date.now(),type:selAlertT,icon:tm.icon,cls:tm.cls,title:`${co} — ${tm.label}`,desc:note||`${co}의 ${tm.label} 알림이 설정되었습니다.`,time:'방금',badge:tm.badge,badgeTx:tm.label,unread:true,category:selAlertT==='comm'?'comm':'success'});
   closeAlertModal();document.getElementById('alert-company').value='';document.getElementById('alert-note').value='';
-  goNav('alerts');renderNotifs();toast(`${co} 알림이 추가되었습니다`);
+  toast(`${co} 알림이 추가되었습니다`);
+}
+
+/* ══════════════════════════════════
+   PROFILE
+   ══════════════════════════════════ */
+let _curProfileTab='saved';
+let _peColor='#5B6BFF';
+let _peEmoji='🧬';
+
+function renderProfileHeader(){
+  const ad=document.getElementById('profile-avatar-display');
+  const nd=document.getElementById('profile-name-display');
+  const hd=document.getElementById('profile-handle-display');
+  const bd=document.getElementById('profile-bio-display');
+  if(ad){ad.textContent=currentUser.avatar;ad.style.background=currentUser.avatarColor;}
+  if(nd)nd.textContent=currentUser.name;
+  if(hd)hd.textContent=currentUser.handle;
+  if(bd)bd.textContent=currentUser.bio||'';
+  updateProfileStats();
+}
+
+function updateProfileStats(){
+  const ps=document.getElementById('ps-posts');
+  const pf=document.getElementById('ps-followers');
+  const pfg=document.getElementById('ps-following');
+  const psa=document.getElementById('ps-saved');
+  const allPosts=[...userPosts,...POSTS];
+  if(ps)ps.textContent=String(allPosts.length);
+  if(pf)pf.textContent='0';
+  if(pfg)pfg.textContent=String(Object.values(FOLLOWS).filter(Boolean).length);
+  if(psa)psa.textContent=String(SAVED_TRIALS.size);
+}
+
+function switchProfileTab(tab, btn){
+  _curProfileTab=tab;
+  document.querySelectorAll('.profile-tab').forEach(b=>b.classList.remove('on'));
+  if(btn)btn.classList.add('on');
+  const body=document.getElementById('profile-tab-body');
+  if(!body)return;
+  if(tab==='saved'){
+    if(!SAVED_TRIALS.size){body.innerHTML='<div style="padding:40px;text-align:center;font-size:.8125rem;color:var(--t3)">저장된 임상이 없습니다.<br>임상 카드의 🔖 버튼으로 저장하세요.</div>';return;}
+    const cards=[];
+    SAVED_TRIALS.forEach(nct=>{
+      const t=TRIALS.find(x=>x.id===nct);
+      const ctRaw=window._ctStore&&window._ctStore.get(nct);
+      if(t){
+        const pbCls={1:'pb-1',2:'pb-2',3:'pb-3'}[t.ph]||'pb-2';
+        const stCls={recruiting:'sp-r',active:'sp-a',completed:'sp-c'}[t.st]||'sp-a';
+        const stLbl={recruiting:'모집중',active:'진행중',completed:'완료'}[t.st]||t.st;
+        cards.push(`<div class="saved-ct-card" onclick="showDetail('${nct}')">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
+            <div>
+              <div style="font-size:.875rem;font-weight:600;color:var(--t1)">${esc(t.co)}</div>
+              <div style="font-size:.75rem;color:var(--primary-hover);margin-top:2px">${esc(t.drug)}</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
+              <span class="phase-badge ${pbCls}">PH ${t.ph}</span>
+              <span class="status-pill ${stCls}">${stLbl}</span>
+            </div>
+          </div>
+          <div style="margin-top:6px;display:flex;align-items:center;justify-content:space-between">
+            <span style="font-family:var(--font-mono);font-size:.625rem;color:var(--t3)">${nct}</span>
+            <button class="save-btn saved" onclick="event.stopPropagation();toggleSaveTrial('${nct}',this)">🔖</button>
+          </div>
+        </div>`);
+      } else if(ctRaw){
+        const d=_ctParse(ctRaw);
+        cards.push(`<div class="saved-ct-card" onclick="showDetailCT('${nct}')">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
+            <div>
+              <div style="font-size:.875rem;font-weight:600;color:var(--t1)">${esc(d.sponsor||d.title)}</div>
+              ${d.drug?`<div style="font-size:.75rem;color:var(--primary-hover);margin-top:2px">${esc(d.drug)}</div>`:''}
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
+              ${d.phN&&d.pbCls?`<span class="phase-badge ${d.pbCls}">PH ${d.phN}</span>`:''}
+              <span class="status-pill ${d.stInfo.cls}">${d.stInfo.label}</span>
+            </div>
+          </div>
+          <div style="margin-top:6px;display:flex;align-items:center;justify-content:space-between">
+            <span style="font-family:var(--font-mono);font-size:.625rem;color:var(--t3)">${nct}</span>
+            <button class="save-btn saved" onclick="event.stopPropagation();toggleSaveTrial('${nct}',this)">🔖</button>
+          </div>
+        </div>`);
+      } else {
+        cards.push(`<div class="saved-ct-card">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span style="font-family:var(--font-mono);font-size:.75rem;color:var(--primary-hover)">${nct}</span>
+            <button onclick="showDetailCT('${nct}')" style="font-size:.75rem;color:var(--primary-hover);background:none;border:1px solid var(--border);border-radius:var(--r-full);padding:4px 10px;cursor:pointer">보기</button>
+          </div>
+          <button class="save-btn saved" style="margin-top:6px" onclick="toggleSaveTrial('${nct}',this)">🔖 저장됨</button>
+        </div>`);
+      }
+    });
+    body.innerHTML=cards.join('');
+  } else if(tab==='posts'){
+    const allPosts=[...userPosts,...POSTS];
+    if(!allPosts.length){body.innerHTML='<div style="padding:40px;text-align:center;font-size:.8125rem;color:var(--t3)">게시글이 없습니다.</div>';return;}
+    body.innerHTML='<div style="padding:8px 0">'+allPosts.map(p=>postHTML(p,false)).join('')+'</div>';
+  } else if(tab==='notifs'){
+    const filtered=notifFilter==='all'?notifs:notifs.filter(n=>n.category===notifFilter);
+    body.innerHTML=`
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px 6px">
+        <div style="display:flex;gap:0;overflow-x:auto" class="notif-tabs" id="profile-notif-tabs">
+          <button class="notif-tab ${notifFilter==='all'?'on':''}" onclick="filterNotifs('all',this);switchProfileTab('notifs',document.getElementById('ptab-notifs'))">전체</button>
+          <button class="notif-tab ${notifFilter==='success'?'on':''}" onclick="filterNotifs('success',this);switchProfileTab('notifs',document.getElementById('ptab-notifs'))">임상결과</button>
+          <button class="notif-tab ${notifFilter==='comm'?'on':''}" onclick="filterNotifs('comm',this);switchProfileTab('notifs',document.getElementById('ptab-notifs'))">커뮤니티</button>
+          <button class="notif-tab ${notifFilter==='follow'?'on':''}" onclick="filterNotifs('follow',this);switchProfileTab('notifs',document.getElementById('ptab-notifs'))">팔로우</button>
+          <button class="notif-tab ${notifFilter==='system'?'on':''}" onclick="filterNotifs('system',this);switchProfileTab('notifs',document.getElementById('ptab-notifs'))">시스템</button>
+        </div>
+        <button onclick="openAlertModal()" style="flex-shrink:0;display:flex;align-items:center;gap:5px;height:32px;padding:0 10px;background:var(--primary);color:#fff;border-radius:var(--r-md);font-size:.75rem;font-weight:500;border:none;cursor:pointer">+ 알림</button>
+      </div>
+      <div id="profile-notifs-container" class="notif-list" style="padding:6px 16px"></div>
+    `;
+    const cont=document.getElementById('profile-notifs-container');
+    if(cont)cont.innerHTML=notifListHTML(filtered);
+    markAllRead();
+  }
+}
+
+function openProfileEdit(){
+  _peColor=currentUser.avatarColor;
+  _peEmoji=currentUser.avatar;
+  const pe=document.getElementById('pe-avatar-preview');
+  if(pe){pe.textContent=_peEmoji;pe.style.background=_peColor;}
+  document.getElementById('pe-name').value=currentUser.name;
+  document.getElementById('pe-handle').value=currentUser.handle;
+  document.getElementById('pe-bio').value=currentUser.bio||'';
+  // Build emoji grid
+  const emojis=['🧬','🔬','💊','🧪','🩺','🧫','🧲','🏥','📊','📈','💉','🦠','🧠','🫀','🫁','🦷','🩻','🩹','🔭','🌡️','⚗️','🧑‍⚕️','👨‍🔬','👩‍🔬','🧑‍💼'];
+  const grid=document.getElementById('pe-emoji-grid');
+  if(grid)grid.innerHTML=emojis.map(e=>`<div class="emoji-opt ${e===_peEmoji?'sel':''}" onclick="selectAvatarEmoji('${e}',this)">${e}</div>`).join('');
+  // Highlight current color swatch
+  document.querySelectorAll('.color-swatch').forEach(sw=>{
+    sw.classList.toggle('sel',sw.style.background===_peColor||sw.style.backgroundColor===_peColor);
+  });
+  document.getElementById('modal-profile-edit').classList.add('open');
+}
+
+function selectAvatarEmoji(em,el){
+  _peEmoji=em;
+  document.querySelectorAll('.emoji-opt').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
+  const pe=document.getElementById('pe-avatar-preview');
+  if(pe)pe.textContent=em;
+}
+
+function selectAvatarColor(color,el){
+  _peColor=color;
+  document.querySelectorAll('.color-swatch').forEach(sw=>sw.classList.remove('sel'));
+  el.classList.add('sel');
+  const pe=document.getElementById('pe-avatar-preview');
+  if(pe)pe.style.background=color;
+}
+
+function saveProfile(){
+  currentUser.name=document.getElementById('pe-name').value.trim()||currentUser.name;
+  currentUser.handle=document.getElementById('pe-handle').value.trim()||currentUser.handle;
+  currentUser.bio=(document.getElementById('pe-bio').value||'').slice(0,100);
+  currentUser.avatar=_peEmoji;
+  currentUser.avatarColor=_peColor;
+  localStorage.setItem('bsx_profile',JSON.stringify(currentUser));
+  document.getElementById('modal-profile-edit').classList.remove('open');
+  renderProfileHeader();
+  toast('프로필이 저장되었습니다');
+}
+
+function showFollowList(type){
+  const modal=document.getElementById('modal-follow-list');
+  const title=document.getElementById('follow-list-title');
+  const body=document.getElementById('follow-list-body');
+  if(!modal)return;
+  if(type==='following'){
+    title.textContent='팔로잉';
+    const following=Object.entries(FOLLOWS).filter(([,v])=>v).map(([k])=>k);
+    if(!following.length){body.innerHTML='<div style="padding:24px;text-align:center;font-size:.8125rem;color:var(--t3)">팔로잉 중인 사용자가 없습니다.</div>';}
+    else{body.innerHTML=following.map(n=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)">
+      <div style="font-size:.875rem;font-weight:500;color:var(--t1)">${esc(n)}</div>
+      <button class="follow-pill following" onclick="toggleFollow('${n}',this)">팔로잉 ✓</button>
+    </div>`).join('');}
+  } else {
+    title.textContent='팔로워';
+    body.innerHTML='<div style="padding:24px;text-align:center;font-size:.8125rem;color:var(--t3)">팔로워 데이터가 없습니다. (데모 버전)</div>';
+  }
+  modal.classList.add('open');
+}
+
+/* ══════════════════════════════════
+   FOLLOW SYSTEM
+   ══════════════════════════════════ */
+function toggleFollow(name, btn){
+  FOLLOWS[name]=!FOLLOWS[name];
+  localStorage.setItem('bsx_follows',JSON.stringify(FOLLOWS));
+  if(btn){btn.textContent=FOLLOWS[name]?'팔로잉 ✓':'팔로우';btn.classList.toggle('following',FOLLOWS[name]);}
+  if(FOLLOWS[name]){
+    addNotif({id:'nf'+Date.now(),type:'follow',icon:'💙',cls:'ni-c',title:`${name}님을 팔로우했습니다`,desc:'',time:'방금',badge:'',badgeTx:'',unread:true,category:'follow'});
+    toast(`${name}님을 팔로우했습니다`);
+  } else {
+    toast('팔로우 취소');
+  }
+  updateProfileStats();
+}
+
+/* ══════════════════════════════════
+   SAVE / BOOKMARK TRIALS
+   ══════════════════════════════════ */
+function toggleSaveTrial(nct,btn){
+  if(SAVED_TRIALS.has(nct)){
+    SAVED_TRIALS.delete(nct);
+    if(btn){btn.classList.remove('saved');btn.textContent='🔖';}
+    toast('저장 취소');
+  } else {
+    SAVED_TRIALS.add(nct);
+    if(btn){btn.classList.add('saved');btn.textContent='🔖';}
+    toast('임상 저장됨 🔖');
+  }
+  localStorage.setItem('bsx_saved',JSON.stringify([...SAVED_TRIALS]));
+  updateProfileStats();
+  // If profile saved tab is showing, refresh
+  if(_curProfileTab==='saved'&&document.getElementById('v-profile')?.classList.contains('active')){
+    switchProfileTab('saved',document.getElementById('ptab-saved'));
+  }
 }
 
 /* Write Modal */
@@ -3108,8 +3433,13 @@ function submitPost(){
   const newPost={id:nid,u:'ME',n:'나 (게스트)',t:'방금',cat:selCatVal,title:ref||'새 게시글',body,ref:match?{ph:match.ph,co:match.co,drug:match.drug}:null,likes:0,cmts:0};
   if(pendingRepost)newPost.repost=pendingRepost;
   userPosts.unshift(newPost);
+  // Add reply notification mock
+  setTimeout(()=>{
+    addNotif({id:'nr'+Date.now(),type:'comm',icon:'💬',cls:'ni-c',title:'새 댓글 알림',desc:`게시글 "${(ref||'새 게시글').substring(0,20)}"에 댓글이 달렸습니다.`,time:'방금',badge:'',badgeTx:'',unread:true,category:'comm'});
+  }, 3000);
   closeModal();document.getElementById('w-ref').value='';document.getElementById('w-body').value='';
   goNav('community');renderComm(commFilter);toast(pendingRepost?'리포스트 완료':'게시 완료');
+  updateProfileStats();
   pendingRepost=null;
 }
 
@@ -3169,6 +3499,8 @@ document.addEventListener('click',e=>{
   if(e.target===document.getElementById('modal-write'))closeModal();
   if(e.target===document.getElementById('modal-alert'))closeAlertModal();
   if(e.target===document.getElementById('modal-tos'))document.getElementById('modal-tos').classList.remove('open');
+  if(e.target===document.getElementById('modal-profile-edit'))document.getElementById('modal-profile-edit').classList.remove('open');
+  if(e.target===document.getElementById('modal-follow-list'))document.getElementById('modal-follow-list').classList.remove('open');
   if(!e.target.closest('#w-ref')&&!e.target.closest('#w-ac')){const ac=document.getElementById('w-ac');if(ac)ac.classList.remove('open');}
 });
 </script>

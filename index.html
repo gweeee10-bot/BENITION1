@@ -1512,15 +1512,9 @@ svg{display:block;flex-shrink:0;}
         </div>
         <div class="filter-row" id="ef-phase">
           <button class="filter-pill on" onclick="setEPhase('',this)">전체</button>
-          <button class="filter-pill" onclick="setEPhase('PHASE1',this)">Phase 1</button>
-          <button class="filter-pill" onclick="setEPhase('PHASE2',this)">Phase 2</button>
-          <button class="filter-pill" onclick="setEPhase('PHASE3',this)">Phase 3</button>
-        </div>
-        <div class="filter-row" id="ef-status">
-          <button class="filter-pill on" onclick="setEStatus('',this)">전체 상태</button>
-          <button class="filter-pill" onclick="setEStatus('RECRUITING',this)">모집중</button>
-          <button class="filter-pill" onclick="setEStatus('COMPLETED',this)">완료</button>
-          <button class="filter-pill" onclick="setEStatus('ACTIVE_NOT_RECRUITING',this)">진행중</button>
+          <button class="filter-pill" onclick="setEPhase('PHASE1',this)">1상</button>
+          <button class="filter-pill" onclick="setEPhase('PHASE2',this)">2상</button>
+          <button class="filter-pill" onclick="setEPhase('PHASE3',this)">3상</button>
         </div>
         <div class="search-shell">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="color:var(--t3)"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
@@ -1548,6 +1542,14 @@ svg{display:block;flex-shrink:0;}
       <div class="explore-header" style="padding-bottom:0">
         <div class="section-title">임상예정</div>
         <div class="section-sub">ClinicalTrials.gov 실시간 · 모집/진행 중 임상</div>
+      </div>
+      <div style="padding:8px var(--sp-lg) 6px;background:var(--bg);border-bottom:1px solid var(--border)">
+        <div class="filter-row" id="tr-status-row">
+          <button class="filter-pill on" onclick="setTrStatus('',this)">전체 상태</button>
+          <button class="filter-pill" onclick="setTrStatus('RECRUITING',this)">모집중</button>
+          <button class="filter-pill" onclick="setTrStatus('ACTIVE_NOT_RECRUITING',this)">진행중</button>
+          <button class="filter-pill" onclick="setTrStatus('NOT_YET_RECRUITING',this)">예정</button>
+        </div>
       </div>
       <div style="display:flex;align-items:center;gap:8px;padding:8px var(--sp-lg) 10px;border-bottom:1px solid var(--border);background:var(--bg);">
         <span class="trending-api-dot loading" id="tr-dot"></span>
@@ -1769,8 +1771,14 @@ function doLogin(skipValidation=false){
     }
   }
   showScreen('s-app');
-  renderStats();renderTrendCards();renderHomeComm();renderHomeUpcoming();
-  renderComm('all');loadExplore();renderNotifs();updateNotifCategoryBadges();
+  try{renderStats();}catch(e){}
+  try{renderTrendCards();}catch(e){}
+  try{renderHomeComm();}catch(e){}
+  try{renderHomeUpcoming();}catch(e){}
+  try{renderComm('all');}catch(e){}
+  try{loadExplore();}catch(e){}
+  try{renderNotifs();}catch(e){}
+  try{updateNotifCategoryBadges();}catch(e){}
   const ts=document.getElementById('explore-timestamp');
   if(ts){const d=new Date();ts.textContent=`본 정보는 ${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()} 기준 데이터입니다 · 출처: ClinicalTrials.gov (U.S. National Library of Medicine)`;}
   toast('BioSignal X 접속 완료');
@@ -1786,15 +1794,16 @@ window.addEventListener('DOMContentLoaded',()=>{
   try{
     const sess=JSON.parse(localStorage.getItem('bsx_session')||'null');
     if(sess&&sess.loginTime&&(Date.now()-sess.loginTime)<7*24*60*60*1000){
-      // Pre-fill email and auto-login
       const emailEl=document.getElementById('lf-email');
       const pwEl=document.getElementById('lf-pw');
       if(emailEl)emailEl.value=sess.email||'';
-      if(pwEl)pwEl.value='••••••••';
+      if(pwEl)pwEl.value='password';
       doLogin(true);
       return;
     }
-  }catch(e){}
+  }catch(e){console.error('Session restore failed:',e);}
+  // 게스트로 바로 입장 (로그인 화면 건너뛰기)
+  // doLogin(true); // 필요시 주석 해제
 });
 
 function showSignup(){
@@ -2660,8 +2669,10 @@ async function loadTrending(){
     const studies=d.studies||[];
 
     // 분류: COMPLETED+결과없음=발표대기 / COMPLETED+결과있음=제외 / 나머지=진행중
-    const active  = studies.filter(s=>['RECRUITING','ACTIVE_NOT_RECRUITING','NOT_YET_RECRUITING'].includes(s.protocolSection?.statusModule?.overallStatus||''));
+    let active  = studies.filter(s=>['RECRUITING','ACTIVE_NOT_RECRUITING','NOT_YET_RECRUITING'].includes(s.protocolSection?.statusModule?.overallStatus||''));
     const pending = studies.filter(s=>(s.protocolSection?.statusModule?.overallStatus||'')==='COMPLETED' && !s.resultsSection);
+    // 상태 필터 적용
+    if(trStatus) active = active.filter(s=>(s.protocolSection?.statusModule?.overallStatus||'')===trStatus);
     // COMPLETED+resultsSection 있는 것은 이미 공표됐으므로 목록에서 제외
 
     dot.className='trending-api-dot live';
@@ -2767,37 +2778,46 @@ async function fetchCT(params){
   return await r.json();
 }
 let ePhase='',eStatus='',eTimer=null,eTerm='';
+let trStatus='';
+function setTrStatus(v,btn){
+  trStatus=v;
+  document.querySelectorAll('#tr-status-row .filter-pill').forEach(b=>{b.classList.remove('on');});
+  btn.classList.add('on');
+  loadTrending();
+}
+
+// ── 임상기록 캐시 (API 1회 호출 → 클라이언트 필터링) ──
+let _exploreCache = [];      // 전체 데이터 저장소
+let _exploreTerm  = null;    // 캐시된 검색어
 
 function setEPhase(v,btn){
-  ePhase=v;document.querySelectorAll('#ef-phase .filter-pill').forEach(b=>{b.classList.remove('on');b.classList.add('loading');});
-  btn.classList.add('on');btn.classList.remove('loading');triggerExplore();
-}
-function setEStatus(v,btn){
-  eStatus=v;document.querySelectorAll('#ef-status .filter-pill').forEach(b=>{b.classList.remove('on');b.classList.add('loading');});
-  btn.classList.add('on');btn.classList.remove('loading');triggerExplore();
+  ePhase=v;
+  document.querySelectorAll('#ef-phase .filter-pill').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderExplore(); // API 재호출 없이 캐시에서 필터링
 }
 function onSearch(v){
   eTerm=v.trim();
   document.getElementById('srch-clear').classList.toggle('show',eTerm.length>0);
-  clearTimeout(eTimer);eTimer=setTimeout(triggerExplore,420);
+  clearTimeout(eTimer);eTimer=setTimeout(()=>{ _exploreTerm=null; loadExplore(); },420);
 }
 function clearSearch(){
   const inp=document.getElementById('srch-inp');if(inp)inp.value='';eTerm='';
-  document.getElementById('srch-clear').classList.remove('show');triggerExplore();
+  document.getElementById('srch-clear').classList.remove('show');
+  _exploreTerm=null; loadExplore();
 }
-function triggerExplore(){loadExplore();}
-function retryAPI(){loadExplore();}
+function triggerExplore(){ _exploreTerm=null; loadExplore(); }
+function retryAPI(){ _exploreTerm=null; loadExplore(); }
 
-async function loadExplore(){
+// 캐시 데이터를 필터링해서 화면에 그리기
+function renderExplore(){
   const list=document.getElementById('explore-list');
-  const dot=document.getElementById('api-dot'),lbl=document.getElementById('api-label'),retry=document.getElementById('api-retry');
-  list.innerHTML='<div class="explore-empty">🔄 ClinicalTrials.gov 검색 중...</div>';
-  dot.className='api-dot loading';lbl.textContent='연결 중...';retry.classList.remove('show');
   const today=new Date();const dateStr=`${today.getFullYear()}.${today.getMonth()+1}.${today.getDate()}`;
+
   function cardHTML(s){
-    const nct = s.protocolSection?.identificationModule?.nctId||'';
-    if(nct) window._ctStore.set(nct, s);
-    const d = _ctParse(s);
+    const nct=s.protocolSection?.identificationModule?.nctId||'';
+    if(nct)window._ctStore.set(nct,s);
+    const d=_ctParse(s);
     return `<div class="explore-card" onclick="ripple(event);showDetailCT('${d.nct}')">
       <div class="ec-row1"><div class="ec-title">${esc(d.title)}</div>${d.phN&&d.pbCls?`<span class="phase-badge ${d.pbCls}" style="flex-shrink:0">PH ${d.phN}</span>`:''}</div>
       <div class="ec-meta">
@@ -2826,57 +2846,77 @@ async function loadExplore(){
       ${items.map(cardHTML).join('')}
     </div>`;
   }
+
+  // 캐시에서 필터링
+  let filtered = _exploreCache;
+  if(ePhase) filtered = filtered.filter(s=>(s.protocolSection?.designModule?.phases||[]).includes(ePhase));
+  if(!filtered.length){list.innerHTML='<div class="explore-empty">검색 결과가 없습니다.</div>';return;}
+
+  if(ePhase){
+    const phNum=ePhase.replace('PHASE','');
+    const pbCls={'1':'pb-1','2':'pb-2','3':'pb-3'}[phNum]||'pb-2';
+    list.innerHTML=`<div style="margin-bottom:8px"><div style="display:flex;align-items:center;gap:8px;padding:10px 0 6px"><span class="phase-badge ${pbCls}">${phNum}상</span><span style="font-family:var(--font-mono);font-size:0.6875rem;color:var(--t3)">${filtered.length}건</span></div>${filtered.map(cardHTML).join('')}</div>`;
+  } else {
+    const ph3=filtered.filter(s=>(s.protocolSection?.designModule?.phases||[]).includes('PHASE3'));
+    const ph2=filtered.filter(s=>{const ph=s.protocolSection?.designModule?.phases||[];return ph.includes('PHASE2')&&!ph.includes('PHASE3');});
+    const ph1=filtered.filter(s=>{const ph=s.protocolSection?.designModule?.phases||[];return ph.includes('PHASE1')&&!ph.includes('PHASE2')&&!ph.includes('PHASE3');});
+    const other=filtered.filter(s=>{const ph=s.protocolSection?.designModule?.phases||[];return !ph.some(p=>['PHASE1','PHASE2','PHASE3'].includes(p));});
+    list.innerHTML=phGroupHTML('3상','pb-3',ph3)+phGroupHTML('2상','pb-2',ph2)+phGroupHTML('1상','pb-1',ph1)+(other.length?phGroupHTML('기타','',other):'');
+  }
+}
+
+async function loadExplore(){
+  const list=document.getElementById('explore-list');
+  const dot=document.getElementById('api-dot'),lbl=document.getElementById('api-label'),retry=document.getElementById('api-retry');
+
+  // 같은 검색어면 캐시 재사용 (API 재호출 없음)
+  if(_exploreCache.length && _exploreTerm===eTerm){
+    renderExplore(); return;
+  }
+
+  list.innerHTML='<div class="explore-empty">🔄 ClinicalTrials.gov 검색 중...</div>';
+  dot.className='api-dot loading';lbl.textContent='연결 중...';retry.classList.remove('show');
+
   try{
-    const p=new URLSearchParams({format:'json',pageSize:'30'});
+    const p=new URLSearchParams({format:'json',pageSize:'100'});
     if(eTerm&&/^NCT\d{8}$/i.test(eTerm.trim()))p.set('query.id',eTerm.trim().toUpperCase());
     else if(eTerm)p.set('query.term',eTerm.trim());
     else p.set('query.cond','cancer');
-    if(ePhase)p.set('filter.phase',ePhase);
-    if(eStatus)p.set('filter.overallStatus',eStatus);
-    const d=await fetchCT(p.toString());const studies=d.studies||[];
+    p.set('filter.overallStatus','COMPLETED');
+    const d=await fetchCT(p.toString());
+    const studies=d.studies||[];
+
+    // 결과 발표된 것만 캐시에 저장
+    _exploreCache = studies.filter(s=>!!s.resultsSection);
+    _exploreTerm  = eTerm;
+
     dot.className='api-dot live';
-    lbl.textContent=`연결됨 · ${(d.totalCount||studies.length).toLocaleString()}건`;
-    document.querySelectorAll('.filter-pill.loading').forEach(b=>b.classList.remove('loading'));
-    if(!studies.length){list.innerHTML='<div class="explore-empty">검색 결과가 없습니다.</div>';return;}
-    // 클라이언트 사이드 필터 (API filter 보완)
-    let filtered = ePhase ? studies.filter(s=>(s.protocolSection?.designModule?.phases||[]).includes(ePhase)) : studies;
-    if(eStatus) filtered = filtered.filter(s=>(s.protocolSection?.statusModule?.overallStatus||'')===eStatus);
-    if(ePhase){
-      const phNum=ePhase.replace('PHASE','');
-      const pbCls={1:'pb-1',2:'pb-2',3:'pb-3'}[phNum]||'pb-2';
-      list.innerHTML=`<div style="margin-bottom:8px"><div style="display:flex;align-items:center;gap:8px;padding:10px 0 6px"><span class="phase-badge ${pbCls}">PHASE ${phNum}</span><span style="font-family:var(--font-mono);font-size:0.6875rem;color:var(--t3)">${filtered.length}건</span></div>${filtered.map(cardHTML).join('')}</div>`;
-    } else {
-      const ph3=filtered.filter(s=>(s.protocolSection?.designModule?.phases||[]).includes('PHASE3'));
-      const ph2=filtered.filter(s=>{const ph=s.protocolSection?.designModule?.phases||[];return ph.includes('PHASE2')&&!ph.includes('PHASE3');});
-      const ph1=filtered.filter(s=>{const ph=s.protocolSection?.designModule?.phases||[];return ph.includes('PHASE1')&&!ph.includes('PHASE2')&&!ph.includes('PHASE3');});
-      const other=filtered.filter(s=>{const ph=s.protocolSection?.designModule?.phases||[];return !ph.some(p=>['PHASE1','PHASE2','PHASE3'].includes(p));});
-      list.innerHTML=phGroupHTML('PHASE 3','pb-3',ph3)+phGroupHTML('PHASE 2','pb-2',ph2)+phGroupHTML('PHASE 1','pb-1',ph1)+(other.length?phGroupHTML('기타','',other):'');
-    }
+    lbl.textContent=`연결됨 · ${_exploreCache.length}건`;
+    document.querySelectorAll('#ef-phase .filter-pill.loading').forEach(b=>b.classList.remove('loading'));
+    renderExplore();
   }catch(e){
     dot.className='api-dot error';lbl.textContent='연결 실패';retry.classList.add('show');
-    document.querySelectorAll('.filter-pill.loading').forEach(b=>b.classList.remove('loading'));
-    const phaseNums = ePhase ? [parseInt(ePhase.replace('PHASE',''))] : [3,2,1];
+    document.querySelectorAll('#ef-phase .filter-pill.loading').forEach(b=>b.classList.remove('loading'));
+    // 로컬 더미 데이터 fallback
+    const phaseNums=ePhase?[parseInt(ePhase.replace('PHASE',''))]:[3,2,1];
     const localByPhase=phaseNums.map(ph=>{
-      let items=TRIALS.filter(t=>t.ph===ph);
-      if(eStatus==='RECRUITING')items=items.filter(t=>t.st==='recruiting');
-      else if(eStatus==='COMPLETED')items=items.filter(t=>t.st==='completed');
-      else if(eStatus==='ACTIVE_NOT_RECRUITING')items=items.filter(t=>t.st==='active');
+      const items=TRIALS.filter(t=>t.ph===ph&&t.result);
       const pbCls={1:'pb-1',2:'pb-2',3:'pb-3'}[ph];
       return items.length?`<div style="margin-bottom:8px">
         <div style="display:flex;align-items:center;gap:8px;padding:10px 0 6px">
-          <span class="phase-badge ${pbCls}">PHASE ${ph}</span>
+          <span class="phase-badge ${pbCls}">${ph}상</span>
           <span style="font-family:var(--font-mono);font-size:0.6875rem;color:var(--t3)">${items.length}건</span>
         </div>
         ${items.map(t=>`<div class="explore-card" onclick="ripple(event);showDetail('${t.id}')">
           <div class="ec-row1"><div class="ec-title">${esc(t.co)} — ${esc(t.drug)}</div><span class="phase-badge pb-${t.ph}" style="flex-shrink:0">PH ${t.ph}</span></div>
-          <div class="ec-meta"><span class="ec-tag">${esc(t.ind)}</span></div>
+          <div class="ec-meta"><span class="ec-tag">${esc(t.ind)}</span><span class="ec-tag">✅ 결과 발표</span></div>
           <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
-            <span class="ec-nct">${t.id}</span><span style="font-size:0.5625rem;color:var(--t3)">출처: ClinicalTrials.gov</span>
+            <span class="ec-nct">${t.id}</span><span style="font-size:0.5625rem;color:var(--t3)">로컬 데이터</span>
           </div>
         </div>`).join('')}
       </div>`:'';
     }).join('');
-    list.innerHTML=`<div class="explore-empty" style="color:var(--t2);margin-bottom:8px">⚠ API 오류 — 로컬 데이터</div>${localByPhase}`;
+    list.innerHTML=`<div class="explore-empty" style="color:var(--t2);margin-bottom:8px">⚠ API 연결 실패 — 로컬 데이터</div>${localByPhase||'<div class="explore-empty">데이터 없음</div>'}`;
   }
 }
 

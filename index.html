@@ -2656,9 +2656,7 @@ async function loadTrending(){
 
   try{
     const params=new URLSearchParams({format:'json',pageSize:'100','filter.overallStatus':statuses,'query.cond':'cancer OR oncology OR tumor'});
-    const r=await fetch(`${CT}?${params}`);
-    if(!r.ok)throw new Error('HTTP '+r.status);
-    const d=await r.json();
+    const d=await fetchCT(params.toString());
     const studies=d.studies||[];
 
     // 분류: COMPLETED+결과없음=발표대기 / COMPLETED+결과있음=제외 / 나머지=진행중
@@ -2763,6 +2761,23 @@ function renderTrending(){loadTrending();}
    EXPLORE
    ══════════════════════════════════ */
 const CT='https://clinicaltrials.gov/api/v2/studies';
+const CT_PROXIES=[
+  u=>u,
+  u=>'https://corsproxy.io/?'+encodeURIComponent(u),
+  u=>'https://api.allorigins.win/raw?url='+encodeURIComponent(u)
+];
+async function fetchCT(params){
+  const url=`${CT}?${params}`;
+  for(const proxy of CT_PROXIES){
+    try{
+      const r=await fetch(proxy(url),{signal:AbortSignal.timeout(8000)});
+      if(!r.ok)continue;
+      const d=await r.json();
+      if(d&&(d.studies||d.totalCount!==undefined))return d;
+    }catch(e){continue;}
+  }
+  throw new Error('모든 연결 방법 실패');
+}
 let ePhase='',eStatus='',eTimer=null,eTerm='';
 
 function setEPhase(v,btn){
@@ -2830,27 +2845,34 @@ async function loadExplore(){
     else p.set('query.cond','cancer');
     if(ePhase)p.set('filter.phase',ePhase);
     if(eStatus)p.set('filter.overallStatus',eStatus);
-    const r=await fetch(`${CT}?${p.toString()}`);
-    if(!r.ok)throw new Error('HTTP '+r.status);
-    const d=await r.json();const studies=d.studies||[];
+    const d=await fetchCT(p.toString());const studies=d.studies||[];
     dot.className='api-dot live';
     lbl.textContent=`연결됨 · ${(d.totalCount||studies.length).toLocaleString()}건`;
     document.querySelectorAll('.filter-pill.loading').forEach(b=>b.classList.remove('loading'));
     if(!studies.length){list.innerHTML='<div class="explore-empty">검색 결과가 없습니다.</div>';return;}
+    // 클라이언트 사이드 필터 (API filter 보완)
+    let filtered = ePhase ? studies.filter(s=>(s.protocolSection?.designModule?.phases||[]).includes(ePhase)) : studies;
+    if(eStatus) filtered = filtered.filter(s=>(s.protocolSection?.statusModule?.overallStatus||'')===eStatus);
     if(ePhase){
-      list.innerHTML=studies.map(cardHTML).join('');
+      const phNum=ePhase.replace('PHASE','');
+      const pbCls={1:'pb-1',2:'pb-2',3:'pb-3'}[phNum]||'pb-2';
+      list.innerHTML=`<div style="margin-bottom:8px"><div style="display:flex;align-items:center;gap:8px;padding:10px 0 6px"><span class="phase-badge ${pbCls}">PHASE ${phNum}</span><span style="font-family:var(--font-mono);font-size:0.6875rem;color:var(--t3)">${filtered.length}건</span></div>${filtered.map(cardHTML).join('')}</div>`;
     } else {
-      const ph3=studies.filter(s=>(s.protocolSection?.designModule?.phases||[]).includes('PHASE3'));
-      const ph2=studies.filter(s=>{const ph=s.protocolSection?.designModule?.phases||[];return ph.includes('PHASE2')&&!ph.includes('PHASE3');});
-      const ph1=studies.filter(s=>{const ph=s.protocolSection?.designModule?.phases||[];return ph.includes('PHASE1')&&!ph.includes('PHASE2')&&!ph.includes('PHASE3');});
-      const other=studies.filter(s=>{const ph=s.protocolSection?.designModule?.phases||[];return !ph.some(p=>['PHASE1','PHASE2','PHASE3'].includes(p));});
+      const ph3=filtered.filter(s=>(s.protocolSection?.designModule?.phases||[]).includes('PHASE3'));
+      const ph2=filtered.filter(s=>{const ph=s.protocolSection?.designModule?.phases||[];return ph.includes('PHASE2')&&!ph.includes('PHASE3');});
+      const ph1=filtered.filter(s=>{const ph=s.protocolSection?.designModule?.phases||[];return ph.includes('PHASE1')&&!ph.includes('PHASE2')&&!ph.includes('PHASE3');});
+      const other=filtered.filter(s=>{const ph=s.protocolSection?.designModule?.phases||[];return !ph.some(p=>['PHASE1','PHASE2','PHASE3'].includes(p));});
       list.innerHTML=phGroupHTML('PHASE 3','pb-3',ph3)+phGroupHTML('PHASE 2','pb-2',ph2)+phGroupHTML('PHASE 1','pb-1',ph1)+(other.length?phGroupHTML('기타','',other):'');
     }
   }catch(e){
     dot.className='api-dot error';lbl.textContent='연결 실패';retry.classList.add('show');
     document.querySelectorAll('.filter-pill.loading').forEach(b=>b.classList.remove('loading'));
-    const localByPhase=[3,2,1].map(ph=>{
-      const items=TRIALS.filter(t=>t.ph===ph);
+    const phaseNums = ePhase ? [parseInt(ePhase.replace('PHASE',''))] : [3,2,1];
+    const localByPhase=phaseNums.map(ph=>{
+      let items=TRIALS.filter(t=>t.ph===ph);
+      if(eStatus==='RECRUITING')items=items.filter(t=>t.st==='recruiting');
+      else if(eStatus==='COMPLETED')items=items.filter(t=>t.st==='completed');
+      else if(eStatus==='ACTIVE_NOT_RECRUITING')items=items.filter(t=>t.st==='active');
       const pbCls={1:'pb-1',2:'pb-2',3:'pb-3'}[ph];
       return items.length?`<div style="margin-bottom:8px">
         <div style="display:flex;align-items:center;gap:8px;padding:10px 0 6px">

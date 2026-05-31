@@ -63,10 +63,10 @@
   --elev-focus: 0 0 0 3px rgba(91,107,255,0.35);
 
   /* Motion */
-  --dur-fast: 120ms;
-  --dur-base: 150ms;
-  --dur-slow: 240ms;
-  --ease:     cubic-bezier(0.2,0.6,0.2,1);
+  --dur-fast: 80ms;
+  --dur-base: 120ms;
+  --dur-slow: 200ms;
+  --ease:     cubic-bezier(0.25,0.46,0.45,0.94);
 
   /* Typography scale */
   --font-ui:   'Inter', -apple-system, sans-serif;
@@ -74,10 +74,11 @@
 }
 
 /* ─── Reset ─── */
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased;}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
 html,body{height:100dvh;font-family:var(--font-ui);background:var(--bg);color:var(--t1);overflow:hidden;font-size:15px;line-height:1.55;letter-spacing:-0.005em;}
-button{font-family:var(--font-ui);cursor:pointer;border:none;outline:none;}
-input,textarea{font-family:var(--font-ui);outline:none;}
+button{font-family:var(--font-ui);cursor:pointer;border:none;outline:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
+input,textarea{font-family:var(--font-ui);outline:none;touch-action:manipulation;}
+a{touch-action:manipulation;}
 svg{display:block;flex-shrink:0;}
 
 /* ─── Typography helpers ─── */
@@ -314,9 +315,9 @@ svg{display:block;flex-shrink:0;}
 .content{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:calc(64px + env(safe-area-inset-bottom,0px));}
 .content::-webkit-scrollbar{width:0;}
 
-.view{display:none;flex-direction:column;animation:viewIn var(--dur-slow) var(--ease);}
+.view{display:none;flex-direction:column;animation:viewIn 160ms var(--ease);}
 .view.active{display:flex;}
-@keyframes viewIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
+@keyframes viewIn{from{opacity:0;transform:translateY(3px);}to{opacity:1;transform:none;}}
 
 /* ── Section ── */
 .section{padding:var(--sp-lg) var(--sp-lg) 0;}
@@ -484,7 +485,7 @@ svg{display:block;flex-shrink:0;}
   transition:background var(--dur-base),border-color var(--dur-base),transform var(--dur-fast);
 }
 .t-trial-card:hover{background:var(--elevated);border-color:var(--border-strong);}
-.t-trial-card:active{transform:scale(0.985);}
+.t-trial-card:active{transform:scale(0.977);transition:transform 60ms ease;}
 .t-trial-card::before{
   content:'';position:absolute;top:0;left:0;right:0;height:1px;
   background:linear-gradient(90deg,transparent,rgba(91,107,255,0.3),transparent);
@@ -752,6 +753,21 @@ svg{display:block;flex-shrink:0;}
 .result-pill{font-size:0.625rem;font-weight:500;padding:2px 7px;border-radius:var(--r-full);}
 .rp-s{background:var(--success-alpha);color:var(--success);}
 .rp-f{background:var(--error-alpha);color:var(--error);}
+/* 임상 결과 색상 */
+.res-badge{display:inline-flex;align-items:center;gap:4px;font-size:.625rem;font-weight:700;padding:3px 9px;border-radius:var(--r-full);}
+.res-success{background:rgba(43,224,140,0.13);color:#2BE08C;border:1px solid rgba(43,224,140,0.28);}
+.res-fail{background:rgba(255,58,92,0.13);color:#FF3A5C;border:1px solid rgba(255,58,92,0.28);}
+.res-partial{background:rgba(255,100,60,0.10);color:#FF7055;border:1px solid rgba(255,100,60,0.22);}
+.res-neutral{background:rgba(92,97,112,0.15);color:var(--t2);border:1px solid var(--border);}
+/* 카드 왼쪽 색상 바 */
+.explore-card.rc-success{border-left:3px solid rgba(43,224,140,0.6);}
+.explore-card.rc-fail{border-left:3px solid rgba(255,58,92,0.6);}
+.explore-card.rc-partial{border-left:3px solid rgba(255,100,60,0.5);}
+/* 결과 요약 박스 */
+.result-summary-box{border-radius:var(--r-md);padding:10px 12px;margin-bottom:10px;font-size:.8125rem;line-height:1.6;}
+.result-summary-box.rs-success{background:rgba(43,224,140,0.07);border:1px solid rgba(43,224,140,0.2);}
+.result-summary-box.rs-fail{background:rgba(255,58,92,0.07);border:1px solid rgba(255,58,92,0.2);}
+.result-summary-box.rs-partial{background:rgba(255,100,60,0.07);border:1px solid rgba(255,100,60,0.18);}
 .rp-u{background:var(--warning-alpha);color:var(--warning);}
 .tr-chg{font-family:var(--font-mono);font-size:0.6875rem;font-weight:500;}
 .tr-chg.up{color:var(--success);}
@@ -910,7 +926,8 @@ svg{display:block;flex-shrink:0;}
   cursor:pointer;color:var(--t3);min-width:44px;position:relative;
   transition:color var(--dur-base);
 }
-.nav-item:active{opacity:.5;}
+.nav-item{touch-action:manipulation;}
+.nav-item:active{opacity:.6;transform:scale(0.92);transition:transform 60ms ease,opacity 60ms ease;}
 .nav-item.on{color:var(--primary-hover);}
 .nav-icon{width:22px;height:22px;transition:filter var(--dur-base), transform var(--dur-base);}
 .nav-item.on .nav-icon{filter:drop-shadow(0 0 4px rgba(91,107,255,0.5));transform:scale(1.05);}
@@ -1101,10 +1118,11 @@ svg{display:block;flex-shrink:0;}
 .success-sub { font-size:0.875rem; color:var(--t2); }
 
 /* ── Ripple click effect ── */
-@keyframes rippleAnim{from{transform:scale(0);opacity:.3;}to{transform:scale(4.5);opacity:0;}}
-.ripple-wave{position:absolute;border-radius:50%;background:rgba(255,255,255,0.2);pointer-events:none;animation:rippleAnim 0.5s ease-out forwards;z-index:99;}
+@keyframes rippleAnim{from{transform:scale(0);opacity:.25;}to{transform:scale(4);opacity:0;}}
+.ripple-wave{position:absolute;border-radius:50%;background:rgba(255,255,255,0.18);pointer-events:none;animation:rippleAnim 0.35s ease-out forwards;z-index:99;}
 .trial-card,.explore-card,.post-card,.upcoming-card,.notif-card,.trial-row{transition:background var(--dur-base),border-color var(--dur-base),transform var(--dur-fast);}
-.trial-card:active,.explore-card:active,.post-card:active,.upcoming-card:active,.notif-card:active,.trial-row:active{transform:scale(0.984);}
+.trial-card,.explore-card,.post-card,.upcoming-card,.notif-card,.trial-row,.t-trial-card{will-change:transform;}
+.trial-card:active,.explore-card:active,.post-card:active,.upcoming-card:active,.notif-card:active,.trial-row:active,.t-trial-card:active{transform:scale(0.977);transition:transform 60ms ease;}
 
 /* ══════════════════════════════════
    PROFILE VIEW
@@ -1171,12 +1189,6 @@ svg{display:block;flex-shrink:0;}
       </div>
       <div class="login-wordmark">Bio<em>Signal</em> X</div>
       <div class="login-sub">바이오 임상 발표 · 1/2/3상 분류 · 커뮤니티 분석</div>
-    </div>
-
-    <div class="login-stats">
-      <div class="ls-cell"><div class="ls-val">13</div><div class="ls-label">추적 임상</div></div>
-      <div class="ls-cell"><div class="ls-val success">5</div><div class="ls-label">성공 결과</div></div>
-      <div class="ls-cell"><div class="ls-val warning">6</div><div class="ls-label">발표 예정</div></div>
     </div>
 
     <div class="login-card">
@@ -2397,7 +2409,7 @@ function showDetailCT(nctId){
 
   const skSummary = 'tr-ds-'+nctId;
   const skOutcome = 'tr-do-'+nctId;
-  if(d.briefSummary) window._trText[skSummary] = d.briefSummary.slice(0,500);
+  if(d.briefSummary) window._trText[skSummary] = d.briefSummary;
   if(d.primaryOutcomes.length) window._trText[skOutcome] = d.primaryOutcomes.slice(0,2).map(o=>o.measure||'').join(' / ');
 
   const html=`<div style="padding:16px">
@@ -2416,6 +2428,7 @@ function showDetailCT(nctId){
       ${d.drugs.length?`<div style="font-size:.875rem;font-weight:500;color:var(--primary-hover);margin-bottom:4px">💊 ${esc(d.drugs.join(' · '))}</div>`:''}
       ${d.conditions?`<div style="font-size:.8125rem;color:var(--t2)">🦠 ${esc(d.conditions)}</div>`:''}
     </div>
+    ${(()=>{const sc=_scoreResult(s);if(!sc)return '';const color=sc.verdict==='success'?'#2BE08C':sc.verdict==='fail'?'#FF3A5C':sc.verdict==='partial'?'#FF7055':'var(--t2)';return `<div class="result-summary-box ${sc.boxCls}" style="margin-bottom:14px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="${sc.badgeCls}" style="font-size:.6875rem">${sc.icon} ${sc.label}</span></div><div style="font-size:.8125rem;color:${color};font-weight:500">${sc.reason}</div></div>`;})()}
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px">
       <div class="ttc-field"><div class="ttc-field-label">NCT ID</div><div class="ttc-field-val" style="font-family:var(--font-mono);color:var(--primary-hover)">${esc(d.nct)}</div></div>
       <div class="ttc-field"><div class="ttc-field-label">등록 인원</div><div class="ttc-field-val good">${d.enroll?Number(d.enroll).toLocaleString()+' 명':'—'}<span style="font-size:.5625rem;color:var(--t3);margin-left:4px">${d.enrollType==='ESTIMATED'?'예상':'실제'}</span></div></div>
@@ -2440,7 +2453,7 @@ function showDetailCT(nctId){
         <div class="ttc-endpoint-label">연구 요약</div>
         <button class="translate-btn" data-src="${skSummary}" onclick="doTranslate(this)">🌐 번역</button>
       </div>
-      <div class="ttc-endpoint-val" style="white-space:pre-line">${esc(d.briefSummary.length>500?d.briefSummary.slice(0,500)+'…':d.briefSummary)}</div>
+      <div class="ttc-endpoint-val" style="white-space:pre-line">${esc(d.briefSummary)}</div>
       <div id="${skSummary}" class="tr-box" style="display:none;margin-top:8px;margin-bottom:0"></div>
     </div>`:''}
     ${d.collaborators?`<div style="font-size:.75rem;color:var(--t3);padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);margin-bottom:12px">🤝 협력: ${esc(d.collaborators)}</div>`:''}
@@ -2790,6 +2803,64 @@ function _ctParse(s){
   return {nct,title,status,phases,phN,pbCls,stInfo,sponsor,drugs,drug,conditions,enroll,enrollType,startDate,endDate,locs,countries,primaryOutcomes,secondaryOutcomes,briefSummary,collaborators};
 }
 
+// 임상 결과 판정 — 오판 방지: 확실한 성공만 표시, 실패 딱지 금지
+function _scoreResult(s){
+  const rs = s.resultsSection;
+  if(!rs) return null;
+
+  const outcomes = rs.outcomeMeasuresModule?.outcomeMeasures||[];
+  const primary  = outcomes.find(o=>(o.type||'').toUpperCase()==='PRIMARY') || outcomes[0];
+  const analyses = primary?.analyses||[];
+
+  // p-value 수집 (명시적으로 < 기호 붙은 것 포함)
+  const pVals = analyses.map(a=>{
+    const raw=(a.pValue||'').trim();
+    // "<0.001" 같은 형태 처리
+    const num=parseFloat(raw.replace(/[<>≤≥\s]/g,''));
+    return isNaN(num)?null:num;
+  }).filter(v=>v!==null);
+
+  // HR 수집
+  const hrVals = analyses.filter(a=>{
+    const pt=(a.paramType||'').toLowerCase();
+    const sm=(a.statisticalMethod||'').toLowerCase();
+    return pt.includes('hazard')||pt.includes('hr')||sm.includes('cox');
+  }).map(a=>parseFloat(a.paramValue||'NaN')).filter(v=>!isNaN(v)&&v>0&&v<10);
+
+  const hasSig  = pVals.some(p=>p<0.05);
+  const bestHR  = hrVals.length ? Math.min(...hrVals) : null;
+
+  // 확실한 성공: p<0.05 + HR<0.85 (둘 다 확인돼야 초록)
+  if(hasSig && bestHR!==null && bestHR<0.85){
+    return {verdict:'success',label:'효과 입증',icon:'✅',
+      badgeCls:'res-badge res-success',cardCls:'rc-success',boxCls:'rs-success',
+      reason:`p<0.05 달성 · HR ${bestHR.toFixed(2)}`};
+  }
+
+  // p<0.05인데 HR 데이터 없는 경우 — 통계 유의성만 확인
+  if(hasSig && bestHR===null){
+    return {verdict:'success',label:'효과 입증',icon:'✅',
+      badgeCls:'res-badge res-success',cardCls:'rc-success',boxCls:'rs-success',
+      reason:'1차 평가변수 통계적 유의성 달성'};
+  }
+
+  // HR만 있고 매우 명확히 좋은 경우 (HR<0.65 — 35% 이상 위험 감소)
+  if(bestHR!==null && bestHR<0.65 && pVals.length===0){
+    return {verdict:'success',label:'효과 입증',icon:'✅',
+      badgeCls:'res-badge res-success',cardCls:'rc-success',boxCls:'rs-success',
+      reason:`HR ${bestHR.toFixed(2)} (위험 ${Math.round((1-bestHR)*100)}% 감소)`};
+  }
+
+  // 그 외 — 판정 불가, 중립 표시 (오판 방지)
+  if(rs){
+    const hint = bestHR!==null ? `HR ${bestHR.toFixed(2)}` : pVals.length?`p=${pVals[0].toFixed(3)}`:'';
+    return {verdict:'neutral',label:'결과 공개',icon:'📊',
+      badgeCls:'res-badge res-neutral',cardCls:'',boxCls:'',
+      reason:hint?`데이터 확인 필요 · ${hint}`:'상세 결과 ClinicalTrials.gov 참조'};
+  }
+  return null;
+}
+
 function _storeAndCard(s, cardFn){
   const nct = s.protocolSection?.identificationModule?.nctId;
   if(nct) window._ctStore.set(nct, s);
@@ -2817,11 +2888,11 @@ async function loadTrending(){
       const statusLabel = isPending ? '발표대기' : d.stInfo.label;
       const statusCls   = isPending ? 'sp-p'       : d.stInfo.cls;
       return `<div class="t-trial-card" onclick="ripple(event);showDetailCT('${d.nct}')">
+        ${d.conditions?`<div style="font-size:.6875rem;font-weight:600;color:var(--info);background:var(--info-alpha);border-radius:var(--r-sm) var(--r-sm) 0 0;padding:5px 12px;letter-spacing:.01em">🩺 ${esc(d.conditions)}</div>`:''}
         <div class="ttc-top">
           <div class="ttc-title-wrap">
             <div class="ttc-company">${esc(d.sponsor||d.title)}</div>
             ${d.drug?`<div class="ttc-drug">💊 ${esc(d.drug)}</div>`:''}
-            ${d.conditions?`<div class="ttc-indication">🦠 ${esc(d.conditions)}</div>`:''}
           </div>
           <div class="ttc-badges">
             ${d.phN&&d.pbCls?`<span class="phase-badge ${d.pbCls}">PH ${d.phN}</span>`:''}
@@ -2865,20 +2936,18 @@ async function loadTrending(){
     dot.className='trending-api-dot live';
     lbl.textContent=`연결됨 · ${active.length}건`;
 
-    const phFn=[
-      s=>(s.protocolSection?.designModule?.phases||[]).includes('PHASE3'),
-      s=>{const p=s.protocolSection?.designModule?.phases||[];return p.includes('PHASE2')&&!p.includes('PHASE3');},
-      s=>{const p=s.protocolSection?.designModule?.phases||[];return p.includes('PHASE1')&&!p.includes('PHASE2')&&!p.includes('PHASE3');}
-    ];
-
-    const activeByPh = phFn.map(fn=>active.filter(fn));
+    const ph3 = active.filter(s=>(s.protocolSection?.designModule?.phases||[]).includes('PHASE3'));
+    const ph2 = active.filter(s=>{const p=s.protocolSection?.designModule?.phases||[];return p.includes('PHASE2')&&!p.includes('PHASE3');});
+    const ph1 = active.filter(s=>{const p=s.protocolSection?.designModule?.phases||[];return p.includes('PHASE1')&&!p.includes('PHASE2')&&!p.includes('PHASE3');});
+    const phOther = active.filter(s=>{const p=s.protocolSection?.designModule?.phases||[];return !p.some(x=>['PHASE1','PHASE2','PHASE3'].includes(x));});
 
     if(!active.length){body.innerHTML='<div class="explore-empty">검색 결과가 없습니다.</div>';return;}
 
     let html='<div class="trending-wrap">';
-    html+=phGroup('PHASE 3','pb-3','대규모 효능 검증',activeByPh[0]);
-    html+=phGroup('PHASE 2','pb-2','탐색적 임상',activeByPh[1]);
-    html+=phGroup('PHASE 1','pb-1','안전성 확인',activeByPh[2]);
+    html+=phGroup('PHASE 3','pb-3','대규모 효능 검증',ph3);
+    html+=phGroup('PHASE 2','pb-2','탐색적 임상',ph2);
+    html+=phGroup('PHASE 1','pb-1','안전성 확인',ph1);
+    if(phOther.length) html+=phGroup('기타','pb-1','Phase 미분류',phOther);
     html+='</div>';
     body.innerHTML=html;
   }catch(e){
@@ -2938,15 +3007,24 @@ function setTrStatus(v,btn){
   loadTrending();
 }
 
-// ── 임상기록 캐시 (API 1회 호출 → 클라이언트 필터링) ──
-let _exploreCache = [];      // 전체 데이터 저장소
-let _exploreTerm  = null;    // 캐시된 검색어
+// ── 임상기록 캐시 (phase별 분리) ──
+let _exploreCaches = {};     // { 'ALL':[...], 'PHASE1':[...], 'PHASE2':[...], 'PHASE3':[...] }
+let _exploreCache  = [];     // 현재 활성 캐시 (renderExplore 참조용)
+let _exploreTerm   = null;
 
 function setEPhase(v,btn){
   ePhase=v;
   document.querySelectorAll('#ef-phase .filter-pill').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
-  renderExplore(); // API 재호출 없이 캐시에서 필터링
+  // 해당 phase 캐시가 있으면 재사용, 없으면 API 재호출
+  const cacheKey = ePhase||'ALL';
+  if(_exploreCaches[cacheKey] && _exploreTerm===eTerm){
+    _exploreCache = _exploreCaches[cacheKey];
+    renderExplore();
+  } else {
+    _exploreTerm = null; // 캐시 무효화 → API 재호출
+    loadExplore();
+  }
 }
 function onSearch(v){
   eTerm=v.trim();
@@ -2970,15 +3048,17 @@ function renderExplore(){
     const nct=s.protocolSection?.identificationModule?.nctId||'';
     if(nct)window._ctStore.set(nct,s);
     const d=_ctParse(s);
-    return `<div class="explore-card" onclick="ripple(event);showDetailCT('${d.nct}')">
+    const sc=_scoreResult(s);
+    return `<div class="explore-card ${sc?sc.cardCls:''}" onclick="ripple(event);showDetailCT('${d.nct}')">
+      ${d.conditions?`<div style="font-size:.6875rem;font-weight:600;color:var(--info);background:var(--info-alpha);border-radius:var(--r-sm) var(--r-sm) 0 0;padding:5px 12px;margin:-12px -12px 10px;letter-spacing:.01em">🩺 ${esc(d.conditions)}</div>`:''}
       <div class="ec-row1"><div class="ec-title">${esc(d.title)}</div>${d.phN&&d.pbCls?`<span class="phase-badge ${d.pbCls}" style="flex-shrink:0">PH ${d.phN}</span>`:''}</div>
       <div class="ec-meta">
         ${d.sponsor?`<span class="ec-tag">🏢 ${esc(d.sponsor)}</span>`:''}
         ${d.drug?`<span class="ec-tag">💊 ${esc(d.drug)}</span>`:''}
-        <span class="ec-status ${d.stInfo.cls}">${d.stInfo.label}</span>
+        ${sc?`<span class="${sc.badgeCls}">${sc.icon} ${sc.label}</span>`:`<span class="ec-status ${d.stInfo.cls}">${d.stInfo.label}</span>`}
         ${d.enroll?`<span class="ec-tag">👥 ${Number(d.enroll).toLocaleString()}</span>`:''}
       </div>
-      ${d.conditions?`<div class="ec-abstract">🦠 ${esc(d.conditions)}</div>`:''}
+      ${sc&&sc.reason?`<div style="font-size:.625rem;color:#2BE08C;margin-top:3px;padding-left:2px">${sc.reason}</div>`:''}
       <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
         <span class="ec-nct">${d.nct}</span>
         <span style="display:flex;align-items:center;gap:6px">
@@ -3000,9 +3080,8 @@ function renderExplore(){
     </div>`;
   }
 
-  // 캐시에서 필터링
-  let filtered = _exploreCache;
-  if(ePhase) filtered = filtered.filter(s=>(s.protocolSection?.designModule?.phases||[]).includes(ePhase));
+  // _exploreCache는 이미 API 단에서 phase 필터된 데이터
+  const filtered = _exploreCache;
   if(!filtered.length){list.innerHTML='<div class="explore-empty">검색 결과가 없습니다.</div>';return;}
 
   if(ePhase){
@@ -3036,11 +3115,18 @@ async function loadExplore(){
     else if(eTerm)p.set('query.term',eTerm.trim());
     else p.set('query.cond','cancer');
     p.set('filter.overallStatus','COMPLETED');
+    // aggFilters로 phase 필터 (filter.phase는 v2 미지원)
+    const aggParts=['results:with'];
+    if(ePhase) aggParts.push(`phase:${ePhase.replace('PHASE','')}`);
+    p.set('aggFilters', aggParts.join(','));
     const d=await fetchCT(p.toString());
     const studies=d.studies||[];
 
     // 결과 발표된 것만 캐시에 저장
-    _exploreCache = studies.filter(s=>!!s.resultsSection);
+    const valid = studies.filter(s=>!!s.resultsSection);
+    const cacheKey = ePhase||'ALL';
+    _exploreCaches[cacheKey] = valid;
+    _exploreCache = valid;
     _exploreTerm  = eTerm;
 
     dot.className='api-dot live';
@@ -3466,22 +3552,50 @@ function doTranslate(btn){
   translateAbstract(text,btn,targetId);
 }
 
-/* 논문 한국어 번역 */
+/* 논문 한국어 번역 — 500자 청크 단위 순차 번역 */
 const TRANSLATE_CACHE={};
+function _splitChunks(text, size=480){
+  // 문장 경계에서 끊기
+  const chunks=[];let i=0;
+  while(i<text.length){
+    if(i+size>=text.length){chunks.push(text.slice(i));break;}
+    let end=i+size;
+    // 마침표/줄바꿈 경계 찾기
+    const dot=text.lastIndexOf('. ',end);
+    const nl=text.lastIndexOf('\n',end);
+    const cut=Math.max(dot,nl);
+    if(cut>i+100)end=cut+1;
+    chunks.push(text.slice(i,end));i=end;
+  }
+  return chunks;
+}
 async function translateAbstract(text,btnEl,targetId){
+  if(!text||!text.trim()){toast('번역할 텍스트가 없습니다');return;}
   if(TRANSLATE_CACHE[text]){
-    const el=document.getElementById(targetId);if(el){el.textContent=TRANSLATE_CACHE[text];el.style.display='block';}
+    const el=document.getElementById(targetId);
+    if(el){el.innerHTML=TRANSLATE_CACHE[text].replace(/\n/g,'<br>');el.style.display='block';}
     if(btnEl)btnEl.textContent='번역 완료 ✓';return;
   }
   if(btnEl){btnEl.textContent='번역 중...';btnEl.disabled=true;}
+  const el=document.getElementById(targetId);
+  if(el){el.innerHTML='<span style="color:var(--t3);font-size:.75rem">번역 중...</span>';el.style.display='block';}
   try{
-    const url=`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text.substring(0,500))}&langpair=en|ko`;
-    const r=await fetch(url);const d=await r.json();
-    const translated=d.responseData?.translatedText||'번역 결과를 가져올 수 없습니다.';
-    TRANSLATE_CACHE[text]=translated;
-    const el=document.getElementById(targetId);if(el){el.textContent=translated;el.style.display='block';}
+    const chunks=_splitChunks(text);
+    const results=[];
+    for(const chunk of chunks){
+      const url=`https://api.mymemory.translated.net/get?q=${encodeURIComponent(chunk)}&langpair=en|ko`;
+      const r=await fetch(url);const d=await r.json();
+      const t=d.responseData?.translatedText||chunk;
+      results.push(t);
+      // 실시간 업데이트
+      if(el){el.innerHTML=results.join(' ').replace(/\n/g,'<br>');el.style.display='block';}
+    }
+    const full=results.join(' ');
+    TRANSLATE_CACHE[text]=full;
+    if(el){el.innerHTML=full.replace(/\n/g,'<br>');el.style.display='block';}
     if(btnEl){btnEl.textContent='번역 완료 ✓';btnEl.disabled=false;}
   }catch(err){
+    if(el){el.innerHTML='<span style="color:var(--error)">번역 실패 — 재시도해주세요</span>';el.style.display='block';}
     if(btnEl){btnEl.textContent='번역 실패 — 재시도';btnEl.disabled=false;}
   }
 }

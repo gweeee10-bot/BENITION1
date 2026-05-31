@@ -1415,7 +1415,6 @@ svg{display:block;flex-shrink:0;}
   <div class="content">
     <!-- HOME -->
     <div class="view active" id="v-home">
-      <div class="stat-grid" id="stat-grid"></div>
 
       <!-- Trending cards -->
       <div class="section" style="padding-bottom:14px;">
@@ -1771,8 +1770,7 @@ function doLogin(skipValidation=false){
     }
   }
   showScreen('s-app');
-  try{renderStats();}catch(e){}
-  try{renderTrendCards();}catch(e){}
+try{renderTrendCards();}catch(e){}
   try{renderHomeComm();}catch(e){}
   try{renderHomeUpcoming();}catch(e){}
   try{renderComm('all');}catch(e){}
@@ -1997,10 +1995,7 @@ function renderStats(){
   ];
   document.getElementById('stat-grid').innerHTML=tiles.map((tile)=>{
     return `<div class="stat-tile ${tile.acnt}">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-        <div class="st-label">${tile.label}</div>
-        <span class="status-badge-sm ${tile.statusCls}">${tile.statusBadge}</span>
-      </div>
+      <div class="st-label" style="margin-bottom:4px">${tile.label}</div>
       <div class="st-val ${tile.valCls||''}">${tile.val}</div>
     </div>`;
   }).join('');
@@ -2324,10 +2319,15 @@ function showDetailCT(nctId){
     ${d.collaborators?`<div style="font-size:.75rem;color:var(--t3);padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);margin-bottom:12px">🤝 협력: ${esc(d.collaborators)}</div>`:''}
     <div style="padding:14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);text-align:center;margin-bottom:12px">
       <div style="font-size:.75rem;color:var(--t3);margin-bottom:10px">ClinicalTrials.gov 원문에서 상세 정보 확인</div>
-      <a href="https://clinicaltrials.gov/study/${esc(d.nct)}" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:var(--primary);color:#fff;padding:9px 18px;border-radius:var(--r-md);font-size:.8125rem;font-weight:600;text-decoration:none">
-        원문 논문 보기
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
-      </a>
+      <div style="display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap">
+        <a href="https://clinicaltrials.gov/study/${esc(d.nct)}" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:var(--primary);color:#fff;padding:9px 18px;border-radius:var(--r-md);font-size:.8125rem;font-weight:600;text-decoration:none">
+          원문 논문 보기
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
+        </a>
+        <button onclick="openRepostByCT('${d.nct}','${(d.sponsor||'').replace(/'/g,'\\x27')}','${(d.drug||'').replace(/'/g,'\\x27')}')" style="display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);color:var(--t1);padding:9px 18px;border-radius:var(--r-md);font-size:.8125rem;font-weight:600;cursor:pointer">
+          🔁 커뮤니티에 공유
+        </button>
+      </div>
     </div>
     <div style="padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);font-size:.5625rem;color:var(--t3);line-height:1.5">본 정보는 ClinicalTrials.gov 공개 데이터 기반이며 의료 서비스가 아닙니다.</div>
   </div>`;
@@ -2437,7 +2437,10 @@ function renderPubMedPanel(drug, articles){
         </div>
         <div style="white-space:pre-wrap;margin-bottom:8px">${esc(a.abstract||'초록 정보가 없습니다.')}</div>
         <div id="tr-${idx}" class="tr-box" style="display:none"></div>
-        <button class="pubmed-item-btn" onclick="window.open('https://pubmed.ncbi.nlm.nih.gov/${a.pmid}','_blank')">PubMed에서 전체 보기 ↗</button>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+          <button class="pubmed-item-btn" onclick="window.open('https://pubmed.ncbi.nlm.nih.gov/${a.pmid}','_blank')">PubMed에서 전체 보기 ↗</button>
+          <button class="action-btn" onclick="openRepostByPaper('${a.pmid}','${esc(a.title||'').replace(/'/g,'\\x27')}','${esc(a.journal||'').replace(/'/g,'\\x27')}')" style="font-size:.7rem;padding:3px 8px">🔁 리포스트</button>
+        </div>
       </div>
     </div>`).join('');
   return `<div class="pubmed-panel">
@@ -2466,6 +2469,21 @@ function renderComm(filter){
   feed.innerHTML=filtered.map(p=>postHTML(p,true)).join('');
 }
 
+function replyItemHTML(r){
+  const avColors=[
+    {c:'var(--success)',bg:'var(--success-alpha)'},
+    {c:'var(--info)',bg:'var(--info-alpha)'},
+    {c:'var(--warning)',bg:'var(--warning-alpha)'},
+    {c:'var(--primary-hover)',bg:'var(--primary-alpha)'},
+    {c:'var(--error)',bg:'var(--error-alpha)'}
+  ];
+  const ac=avColors[Math.abs((r.u||'A').charCodeAt(0))%5];
+  return `<div class="reply-item">
+    <div class="reply-av" style="color:${ac.c};background:${ac.bg}">${(r.u||'U').slice(0,2)}</div>
+    <div class="reply-bub"><div class="reply-author">${esc(r.n)}</div><div class="reply-text">${esc(r.tx)}</div><div class="reply-ts">${esc(r.t)}</div></div>
+  </div>`;
+}
+
 function postHTML(p,withReply){
   const catChipCls={bull:'cc-bull',bear:'cc-bear',q:'cc-q',an:'cc-an',news:'cc-news'}[p.cat]||'cc-an';
   const catLabel={bull:'Bullish',bear:'Bearish',q:'질문',an:'분석',news:'뉴스'}[p.cat]||p.cat;
@@ -2480,24 +2498,39 @@ function postHTML(p,withReply){
   ];
   const avc=avColors[Math.abs(p.id||0)%5];
   const rd=REPLIES[p.id]||[];
-  const rl=rd.map(r=>`
-    <div class="reply-item">
-      <div class="reply-av" style="color:${avColors[Math.abs((r.u||'A').charCodeAt(0))%5].c};background:${avColors[Math.abs((r.u||'A').charCodeAt(0))%5].bg}">${(r.u||'U').slice(0,2)}</div>
-      <div class="reply-bub"><div class="reply-author">${esc(r.n)}</div><div class="reply-text">${esc(r.tx)}</div><div class="reply-ts">${esc(r.t)}</div></div>
-    </div>`).join('');
+  const totalCmts=(p.cmts||0)+rd.length;
+  // 답글 미리보기: 2개까지 기본 표시, 나머지는 더보기
+  const PREVIEW=2;
+  const previewReplies=rd.slice(0,PREVIEW);
+  const moreCount=rd.length-PREVIEW;
+  const previewHTML=previewReplies.map(replyItemHTML).join('');
+  const moreHTML=moreCount>0?`<div id="more-replies-${p.id}" style="display:none">${rd.slice(PREVIEW).map(replyItemHTML).join('')}</div>
+    <button class="reply-more-btn" id="more-btn-${p.id}" onclick="event.stopPropagation();toggleMoreReplies(${p.id},${rd.length})" style="font-size:.6875rem;color:var(--primary-hover);background:none;border:none;cursor:pointer;padding:4px 0;width:100%;text-align:left">▼ 답글 ${moreCount}개 더 보기</button>`:'';
   if(p.body){window._trText=window._trText||{};window._trText['tr-post-'+p.id]=p.body;}
-  const rzone=withReply?`<div class="reply-zone" id="rz-${p.id}">
-    <div class="reply-thread">${rl||'<div style="font-size:.75rem;color:var(--t3);text-align:center;padding:4px 0">첫 번째 댓글을 남겨보세요</div>'}</div>
+
+  // 답글 영역: 답글 있으면 기본으로 열려있음
+  const rzOpen=rd.length>0?'open':'';
+  const rzone=withReply?`<div class="reply-zone ${rzOpen}" id="rz-${p.id}">
+    <div class="reply-thread" id="rt-${p.id}">
+      ${previewHTML}
+      ${moreHTML}
+      ${rd.length===0?'<div style="font-size:.75rem;color:var(--t3);text-align:center;padding:4px 0">첫 번째 댓글을 남겨보세요</div>':''}
+    </div>
     <div class="reply-input-row">
-      <input class="reply-input" placeholder="댓글 입력..." id="ri-${p.id}">
+      <input class="reply-input" placeholder="댓글 입력..." id="ri-${p.id}" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendReply(${p.id});}">
       <button class="reply-send" onclick="sendReply(${p.id})">전송</button>
     </div>
   </div>`:'';
-  const rqBlock=p.repost?`<div class="repost-quote">
-    <div class="rq-author">🔁 ${esc(p.repost.n)} 원문 인용</div>
-    <div class="rq-body">${esc(p.repost.title)} — ${esc((p.repost.body||'').substring(0,80))}${(p.repost.body||'').length>80?'...':''}</div>
+
+  // 리포스트 인용 — NCT/pmid/일반 포스트 구분
+  const rqClick=p.repost?(/^NCT/i.test(p.repost.id)?`showDetailCT('${p.repost.id}')`:/^pmid-/i.test(p.repost.id)?`window.open('https://pubmed.ncbi.nlm.nih.gov/${p.repost.id.replace('pmid-','')}','_blank')`:`jumpToPost('${p.repost.id}')`):'';
+  const rqBlock=p.repost?`<div class="repost-quote" onclick="event.stopPropagation();${rqClick}" style="cursor:pointer" title="${/^NCT/i.test(p.repost.id)?'임상 상세 보기':/^pmid-/i.test(p.repost.id)?'논문 보기':'원본 게시글 보기'}">
+    <div class="rq-author">🔁 ${esc(p.repost.n)} 원문 인용${/^NCT/i.test(p.repost.id)?' · 임상시험':(/^pmid-/i.test(p.repost.id)?' · 논문':'')}</div>
+    <div class="rq-body">${esc(p.repost.title)}${p.repost.body?' — '+esc(p.repost.body.substring(0,60))+(p.repost.body.length>60?'...':''):''}</div>
+    <div style="font-size:.5625rem;color:var(--primary-hover);margin-top:3px">${/^NCT/i.test(p.repost.id)?'👆 클릭하여 임상 상세 보기':(/^pmid-/i.test(p.repost.id)?'👆 클릭하여 논문 보기':'👆 클릭하여 원본 글 보기')}</div>
   </div>`:'';
-  return `<div class="post-card cat-${p.cat}" onclick="ripple(event)">
+
+  return `<div class="post-card cat-${p.cat}" data-pid="${p.id}" onclick="ripple(event)">
     <div class="post-header">
       <div class="avatar" style="color:${avc.c};background:${avc.bg};border-color:${avc.c}33">${(p.u||'U').substring(0,2)}</div>
       <div class="post-meta"><div class="post-author">${esc(p.n)}</div><div class="post-time">${esc(p.t)}</div></div>
@@ -2507,17 +2540,17 @@ function postHTML(p,withReply){
     <div class="post-body">${esc(p.body)}</div>
     <div style="margin:-2px 0 8px"><button class="translate-btn" data-src="tr-post-${p.id}" onclick="event.stopPropagation();doTranslate(this)">🌐 번역</button><div id="tr-post-${p.id}" class="tr-box" style="display:none;margin-top:6px"></div></div>
     ${rqBlock}
-    ${p.ref?`<div class="ref-chip"><span class="phase-badge ${pbCls}" style="margin:0">PH ${p.ref.ph}</span><div><div class="ref-company">${esc(p.ref.co)}</div><div class="ref-drug">${esc(p.ref.drug)}</div></div></div>`:''}
+    ${p.ref?`<div class="ref-chip" onclick="event.stopPropagation()" style="cursor:default"><span class="phase-badge ${pbCls}" style="margin:0">PH ${p.ref.ph}</span><div><div class="ref-company">${esc(p.ref.co)}</div><div class="ref-drug">${esc(p.ref.drug)}</div></div></div>`:''}
     <div class="post-actions">
-      <button class="action-btn" id="like-${p.id}" onclick="likePost(this,${p.id})">
+      <button class="action-btn" id="like-${p.id}" onclick="event.stopPropagation();likePost(this,${p.id})">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
         <span class="ps-count">${p.likes||0}</span>
       </button>
-      <button class="action-btn" onclick="toggleReply(${p.id})">
+      <button class="action-btn" onclick="event.stopPropagation();toggleReply(${p.id})">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        <span id="rc-${p.id}">${(p.cmts||0)+(REPLIES[p.id]?.length||0)}</span>
+        <span id="rc-${p.id}">${totalCmts}</span>
       </button>
-      <button class="action-btn" onclick="openRepostById('${p.id}')" title="리포스트">
+      <button class="action-btn" onclick="event.stopPropagation();openRepostById('${p.id}')" title="리포스트">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
         리포스트
       </button>
@@ -2531,21 +2564,52 @@ function likePost(btn,id){
   const s=btn.querySelector('.ps-count');const n=parseInt(s.textContent);
   btn._l=!btn._l;s.textContent=btn._l?n+1:n-1;btn.classList.toggle('liked',btn._l);
 }
+function toggleMoreReplies(pid, total){
+  const more=document.getElementById('more-replies-'+pid);
+  const btn=document.getElementById('more-btn-'+pid);
+  if(!more||!btn)return;
+  const isOpen=more.style.display!=='none';
+  more.style.display=isOpen?'none':'block';
+  const PREVIEW=2;
+  const moreCount=total-PREVIEW;
+  btn.textContent=isOpen?`▼ 답글 ${moreCount}개 더 보기`:'▲ 접기';
+}
 function toggleReply(id){
-  const rz=document.getElementById('rz-'+id);if(rz){rz.classList.toggle('open');if(rz.classList.contains('open')){const inp=document.getElementById('ri-'+id);if(inp)setTimeout(()=>inp.focus(),80);}}
+  const rz=document.getElementById('rz-'+id);
+  if(rz){rz.classList.toggle('open');if(rz.classList.contains('open')){const inp=document.getElementById('ri-'+id);if(inp)setTimeout(()=>inp.focus(),80);}}
 }
 function sendReply(pid){
   const inp=document.getElementById('ri-'+pid);
   if(!inp||!inp.value.trim()){toast('댓글을 입력해주세요');return;}
   if(!REPLIES[pid])REPLIES[pid]=[];
-  REPLIES[pid].push({u:'ME',n:'나 (게스트)',t:'방금',tx:inp.value.trim()});
+  const newR={u:'ME',n:'나 (게스트)',t:'방금',tx:inp.value.trim()};
+  REPLIES[pid].push(newR);
   const cnt=document.getElementById('rc-'+pid);if(cnt)cnt.textContent=parseInt(cnt.textContent)+1;
   inp.value='';
+  // 새 답글 DOM에 바로 추가
+  const rt=document.getElementById('rt-'+pid);
+  if(rt){
+    // 빈 댓글 안내 제거
+    const empty=rt.querySelector('div[style*="첫 번째"]');if(empty)empty.remove();
+    const newEl=document.createElement('div');
+    newEl.innerHTML=replyItemHTML(newR);
+    const firstChild=newEl.firstElementChild;
+    if(firstChild){firstChild.style.animation='none';rt.appendChild(firstChild);}
+    // more-replies 있으면 거기에도 추가
+    const moreDiv=document.getElementById('more-replies-'+pid);
+    if(moreDiv&&moreDiv.style.display==='none'){
+      // 더보기 버튼 카운트 업데이트
+      const moreBtn=document.getElementById('more-btn-'+pid);
+      if(moreBtn){const m=moreBtn.textContent.match(/\d+/);if(m)moreBtn.textContent=moreBtn.textContent.replace(/\d+/,parseInt(m[0])+1);}
+    }
+    // 새 답글로 스크롤
+    rt.lastElementChild?.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
   const rz=document.getElementById('rz-'+pid);
   if(rz){
     let th=rz.querySelector('.reply-thread');
     if(!th){th=document.createElement('div');th.className='reply-thread';rz.insertBefore(th,rz.firstChild);}
-    th.innerHTML=REPLIES[pid].map(r=>`<div class="reply-item"><div class="reply-av">${(r.u||'U').slice(0,2)}</div><div class="reply-bub"><div class="reply-author">${esc(r.n)}</div><div class="reply-text">${esc(r.tx)}</div><div class="reply-ts">${esc(r.t)}</div></div></div>`).join('');
+    // 이미 위에서 추가했으므로 여기선 스킵
   }
   toast('댓글이 등록되었습니다');
 }
@@ -2997,8 +3061,25 @@ function closeModal(){
 }
 function selCat(c,btn){selCatVal=c;document.querySelectorAll('.cat-pill').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');}
 
+function jumpToPost(pid){
+  // NCT → 임상 상세
+  if(/^NCT/i.test(String(pid))){showDetailCT(String(pid));return;}
+  // pmid → PubMed
+  if(/^pmid-/i.test(String(pid))){window.open('https://pubmed.ncbi.nlm.nih.gov/'+String(pid).replace(/^pmid-/i,''),'_blank');return;}
+  // 일반 커뮤니티 포스트
+  goNav('community');
+  renderComm(commFilter);
+  setTimeout(()=>{
+    const el=[...document.querySelectorAll('.post-card')].find(e=>e.dataset.pid===String(pid));
+    if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.style.outline='2px solid var(--primary)';setTimeout(()=>el.style.outline='',1800);}
+  },150);
+}
 function openRepostByCT(nct,company,drug){
   pendingRepost={id:nct,n:company||nct,title:(drug?drug+' · ':'')+nct,body:company||''};
+  openModal();
+}
+function openRepostByPaper(pmid,title,journal){
+  pendingRepost={id:'pmid-'+pmid,n:journal||'PubMed',title:title||pmid,body:'PMID '+pmid};
   openModal();
 }
 function openRepostById(pid){
